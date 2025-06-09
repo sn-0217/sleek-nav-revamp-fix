@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Server, Info, Clock, Calendar, MessageSquare, Send, RotateCcw, Layers, List, CheckCircle, XCircle, Timer, User, Mail } from 'lucide-react';
+import { ArrowLeft, Server, Info, Clock, Calendar, MessageSquare, Send, RotateCcw, Layers, List, CheckCircle, XCircle, Timer, User, Mail, Shield, Zap, Database, Globe, FileText } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -35,16 +35,18 @@ const AppDetail = () => {
   // Mock change request data
   const [changeRequest] = useState<ChangeRequest>({
     changeNo: `CHG-2024-${Math.floor(Math.random() * 999) + 1}`,
-    requestedBy: 'DevOps Team',
+    requestedBy: 'DevOps Engineering Team',
     requestDate: new Date().toLocaleDateString(),
-    deploymentWindow: 'Off-hours (8 PM - 6 AM)',
-    description: `Critical security update and performance improvements for ${appName}. This update includes security patches, database optimizations, and enhanced monitoring capabilities.`,
+    deploymentWindow: 'Maintenance Window (8 PM - 6 AM)',
+    description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
     affectedServers: [
       `${appName?.toLowerCase()}-web-01.prod.company.com`,
       `${appName?.toLowerCase()}-web-02.prod.company.com`,
       `${appName?.toLowerCase()}-api-01.prod.company.com`,
+      `${appName?.toLowerCase()}-api-02.prod.company.com`,
       `${appName?.toLowerCase()}-db-01.prod.company.com`,
-      `${appName?.toLowerCase()}-cache-01.prod.company.com`
+      `${appName?.toLowerCase()}-cache-01.prod.company.com`,
+      `${appName?.toLowerCase()}-lb-01.prod.company.com`
     ]
   });
 
@@ -107,7 +109,7 @@ const AppDetail = () => {
     setIsSubmitting(true);
 
     // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Create submission object
     const submission = {
@@ -162,7 +164,8 @@ const AppDetail = () => {
         hoverGradient: 'from-emerald-600 to-green-700',
         bgColor: 'bg-emerald-50',
         borderColor: 'border-emerald-200',
-        textColor: 'text-emerald-700'
+        textColor: 'text-emerald-700',
+        glowColor: 'shadow-emerald-200'
       },
       Rejected: {
         icon: XCircle,
@@ -170,7 +173,8 @@ const AppDetail = () => {
         hoverGradient: 'from-rose-600 to-red-700',
         bgColor: 'bg-rose-50',
         borderColor: 'border-rose-200',
-        textColor: 'text-rose-700'
+        textColor: 'text-rose-700',
+        glowColor: 'shadow-rose-200'
       },
       Timed: {
         icon: Timer,
@@ -178,7 +182,8 @@ const AppDetail = () => {
         hoverGradient: 'from-amber-600 to-orange-700',
         bgColor: 'bg-amber-50',
         borderColor: 'border-amber-200',
-        textColor: 'text-amber-700'
+        textColor: 'text-amber-700',
+        glowColor: 'shadow-amber-200'
       }
     };
     return configs[decision];
@@ -191,38 +196,43 @@ const AppDetail = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-info">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Server className="w-6 h-6 text-white" />
+              <div className="relative">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
+                  <Zap className="w-3 h-3 text-white" />
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appName} - Change Request</h1>
-                <p className="text-slate-600 text-sm">Review and approve change requests</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appName} - Change Approval</h1>
+                <p className="text-slate-600 text-sm">Enterprise change management workflow</p>
               </div>
             </div>
             <div className="flex items-center gap-3" data-section="header-actions">
-              <Badge variant="secondary" className="gap-2 px-3 py-1.5">
-                <Layers className="w-4 h-4" />
+              <Badge variant="secondary" className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200">
+                <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="gap-2 hover:scale-105 transition-transform"
+                className="gap-2 hover:scale-105 transition-transform shadow-sm"
                 onClick={() => navigate('/')}
                 data-action="view-submissions"
               >
                 <List className="w-4 h-4" />
-                Submissions
+                Analytics
               </Button>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="gap-2 hover:scale-105 transition-transform"
+                className="gap-2 hover:scale-105 transition-transform shadow-sm"
                 onClick={() => navigate('/home')}
                 data-action="back-home"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Back
+                Dashboard
               </Button>
             </div>
           </div>
@@ -232,82 +242,122 @@ const AppDetail = () => {
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Change Details Card with Enhanced Styling */}
-          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm" data-card="change-details">
-            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 border-b">
+          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm relative overflow-hidden" data-card="change-details">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 border-b relative z-10">
               <CardTitle className="flex items-center gap-3 text-slate-900">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <Info className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Info className="w-5 h-5 text-white" />
                 </div>
-                Change Details
+                <div>
+                  <span className="text-lg">Change Request Details</span>
+                  <p className="text-sm text-slate-600 font-normal">Review change specifications</p>
+                </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6 space-y-6" data-content="change-info">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2" data-field="change-number">
-                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Change Number</p>
-                  <p className="font-bold text-slate-900 text-lg">{changeRequest.changeNo}</p>
+            <CardContent className="p-8 space-y-8 relative z-10" data-content="change-info">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-3" data-field="change-number">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Change Number</p>
+                  </div>
+                  <p className="font-bold text-slate-900 text-xl">{changeRequest.changeNo}</p>
                 </div>
-                <div className="space-y-2" data-field="requested-by">
-                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Requested By</p>
+                <div className="space-y-3" data-field="requested-by">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
+                      <User className="w-4 h-4 text-emerald-600" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Requested By</p>
+                  </div>
                   <p className="font-semibold text-slate-900">{changeRequest.requestedBy}</p>
                 </div>
-                <div className="space-y-2" data-field="request-date">
-                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Request Date</p>
+                <div className="space-y-3" data-field="request-date">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-4 h-4 text-purple-600" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Request Date</p>
+                  </div>
                   <p className="font-semibold text-slate-900">{changeRequest.requestDate}</p>
                 </div>
-                <div className="space-y-2" data-field="deployment-window">
-                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Deployment Window</p>
+                <div className="space-y-3" data-field="deployment-window">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-4 h-4 text-amber-600" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Deployment Window</p>
+                  </div>
                   <p className="font-semibold text-slate-900">{changeRequest.deploymentWindow}</p>
                 </div>
               </div>
               
-              <div className="space-y-3" data-field="description">
-                <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Description</p>
-                <div className="bg-slate-50 rounded-lg p-4 border-l-4 border-blue-500">
+              <div className="space-y-4" data-field="description">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                    <MessageSquare className="w-4 h-4 text-indigo-600" />
+                  </div>
+                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Description</p>
+                </div>
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border-l-4 border-blue-500 shadow-sm">
                   <p className="text-slate-700 leading-relaxed">{changeRequest.description}</p>
                 </div>
               </div>
 
-              <div className="space-y-4" data-section="affected-servers">
-                <h3 className="flex items-center gap-2 font-semibold text-slate-900">
-                  <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-md flex items-center justify-center">
-                    <Server className="w-3 h-3 text-white" />
+              <div className="space-y-5" data-section="affected-servers">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+                    <Database className="w-4 h-4 text-green-600" />
                   </div>
-                  Affected Servers
-                </h3>
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 max-h-48 overflow-y-auto border">
-                  <ul className="space-y-2">
+                  <h3 className="font-semibold text-slate-900">Infrastructure Impact</h3>
+                </div>
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 max-h-64 overflow-y-auto border shadow-sm">
+                  <div className="space-y-3">
                     {changeRequest.affectedServers.map((server, index) => (
-                      <li 
+                      <div 
                         key={index} 
-                        className="text-sm text-slate-700 py-2 px-3 bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow font-mono"
+                        className="flex items-center gap-3 p-4 bg-white rounded-lg border hover:shadow-md transition-shadow font-mono text-sm group"
                         data-server={`server-${index}`}
                       >
-                        {server}
-                      </li>
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Globe className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-slate-700 group-hover:text-slate-900 transition-colors">{server}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Enhanced Approval Form */}
-          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm" data-card="approval-form">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b">
+          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm relative overflow-hidden" data-card="approval-form">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-pink-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b relative z-10">
               <CardTitle className="flex items-center gap-3 text-slate-900">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <CheckCircle className="w-5 h-5 text-white" />
                 </div>
-                Approver Action
+                <div>
+                  <span className="text-lg">Approval Decision</span>
+                  <p className="text-sm text-slate-600 font-normal">Process change request</p>
+                </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-6" data-form="approval">
-                <div className="space-y-5">
-                  <div className="space-y-2" data-field="approver-name">
-                    <label htmlFor="approver-name" className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                      <User className="w-4 h-4 text-slate-500" />
+            <CardContent className="p-8 relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-8" data-form="approval">
+                <div className="space-y-6">
+                  <div className="space-y-3" data-field="approver-name">
+                    <label htmlFor="approver-name" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                      <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <User className="w-4 h-4 text-blue-600" />
+                      </div>
                       Approver Name
                     </label>
                     <Input
@@ -317,14 +367,16 @@ const AppDetail = () => {
                       value={approverName}
                       onChange={(e) => setApproverName(e.target.value)}
                       required
-                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/80 hover:bg-white"
                       data-input="approver-name"
                     />
                   </div>
 
-                  <div className="space-y-2" data-field="approver-email">
-                    <label htmlFor="approver-email" className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                      <Mail className="w-4 h-4 text-slate-500" />
+                  <div className="space-y-3" data-field="approver-email">
+                    <label htmlFor="approver-email" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                      <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <Mail className="w-4 h-4 text-emerald-600" />
+                      </div>
                       Approver Email
                     </label>
                     <Input
@@ -334,14 +386,19 @@ const AppDetail = () => {
                       value={approverEmail}
                       onChange={(e) => setApproverEmail(e.target.value)}
                       required
-                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/80 hover:bg-white"
                       data-input="approver-email"
                     />
                   </div>
 
-                  <div className="space-y-3" data-field="decision">
-                    <label className="text-sm font-medium text-slate-700">Decision</label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="space-y-4" data-field="decision">
+                    <label className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                      <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <CheckCircle className="w-4 h-4 text-purple-600" />
+                      </div>
+                      Decision
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       {(['Approved', 'Rejected', 'Timed'] as const).map((decision) => {
                         const config = getDecisionConfig(decision);
                         const Icon = config.icon;
@@ -353,21 +410,19 @@ const AppDetail = () => {
                             type="button"
                             onClick={() => handleDecisionSelect(decision)}
                             className={`
-                              relative overflow-hidden group/btn p-4 rounded-xl border-2 font-medium transition-all duration-300
-                              hover:scale-105 hover:shadow-lg active:scale-95
+                              relative overflow-hidden group/btn p-5 rounded-xl border-2 font-semibold transition-all duration-300
+                              hover:scale-105 active:scale-95 min-h-[80px] flex flex-col items-center justify-center gap-2
                               ${isSelected 
-                                ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg` 
-                                : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-md`
+                                ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg ${config.glowColor} shadow-lg` 
+                                : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-lg hover:${config.bgColor}`
                               }
                             `}
                             data-decision={decision.toLowerCase()}
                           >
-                            <div className="flex items-center justify-center gap-2 relative z-10">
-                              <Icon className="w-5 h-5" />
-                              {decision}
-                            </div>
+                            <Icon className={`w-6 h-6 ${isSelected ? 'text-white' : config.textColor}`} />
+                            <span className="text-sm">{decision}</span>
                             {isSelected && (
-                              <div className="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
                             )}
                           </button>
                         );
@@ -376,17 +431,23 @@ const AppDetail = () => {
                   </div>
 
                   {selectedDecision === 'Timed' && (
-                    <Card className="animate-in fade-in-50 duration-500 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200" data-section="timed-approval">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="flex items-center gap-2 text-amber-800 text-lg">
-                          <Calendar className="w-5 h-5" />
-                          Time Window Configuration
+                    <Card className="animate-in fade-in-50 duration-500 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 shadow-lg" data-section="timed-approval">
+                      <CardHeader className="pb-4">
+                        <CardTitle className="flex items-center gap-3 text-amber-800 text-lg">
+                          <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                            <Calendar className="w-5 h-5 text-amber-600" />
+                          </div>
+                          <div>
+                            <span>Time Window Configuration</span>
+                            <p className="text-sm text-amber-700 font-normal">Define approval schedule</p>
+                          </div>
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <label htmlFor="start-time" className="text-sm font-medium text-amber-700">
+                      <CardContent className="space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                          <div className="space-y-3">
+                            <label htmlFor="start-time" className="flex items-center gap-2 text-sm font-semibold text-amber-700">
+                              <Clock className="w-4 h-4" />
                               Start Date & Time
                             </label>
                             <Input
@@ -394,12 +455,13 @@ const AppDetail = () => {
                               type="datetime-local"
                               value={startTime}
                               onChange={(e) => setStartTime(e.target.value)}
-                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20"
+                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-12"
                               data-input="start-time"
                             />
                           </div>
-                          <div className="space-y-2">
-                            <label htmlFor="end-time" className="text-sm font-medium text-amber-700">
+                          <div className="space-y-3">
+                            <label htmlFor="end-time" className="flex items-center gap-2 text-sm font-semibold text-amber-700">
+                              <Clock className="w-4 h-4" />
                               End Date & Time
                             </label>
                             <Input
@@ -407,7 +469,7 @@ const AppDetail = () => {
                               type="datetime-local"
                               value={endTime}
                               onChange={(e) => setEndTime(e.target.value)}
-                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20"
+                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-12"
                               data-input="end-time"
                             />
                           </div>
@@ -416,29 +478,31 @@ const AppDetail = () => {
                     </Card>
                   )}
 
-                  <div className="space-y-2" data-field="comments">
-                    <label htmlFor="comments" className="flex items-center gap-2 text-sm font-medium text-slate-700">
-                      <MessageSquare className="w-4 h-4 text-slate-500" />
+                  <div className="space-y-3" data-field="comments">
+                    <label htmlFor="comments" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
+                      <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                        <MessageSquare className="w-4 h-4 text-indigo-600" />
+                      </div>
                       Additional Comments
                     </label>
                     <Textarea
                       id="comments"
-                      placeholder="Add any additional comments or notes..."
+                      placeholder="Add any additional comments, notes, or requirements..."
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
-                      rows={4}
-                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none"
+                      rows={5}
+                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white/80 hover:bg-white"
                       data-input="comments"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-6 border-t border-slate-200" data-actions="form-buttons">
+                <div className="flex gap-4 pt-8 border-t border-slate-200" data-actions="form-buttons">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handleReset}
-                    className="flex-1 gap-2 hover:scale-105 transition-transform"
+                    className="flex-1 gap-2 hover:scale-105 transition-transform h-12 bg-white/80 hover:bg-white"
                     data-action="reset"
                   >
                     <RotateCcw className="w-4 h-4" />
@@ -447,13 +511,13 @@ const AppDetail = () => {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="flex-1 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-2 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed h-12 min-w-[200px]"
                     data-action="submit"
                   >
                     {isSubmitting ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Submitting...
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Processing...
                       </>
                     ) : (
                       <>
