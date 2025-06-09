@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -333,7 +332,7 @@ const Home = () => {
         </div>
       </footer>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fadeInUp {
           from {
             opacity: 0;
