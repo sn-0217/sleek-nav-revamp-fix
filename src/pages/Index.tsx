@@ -24,7 +24,7 @@ interface Submission {
 const Index = () => {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentEnv] = useState('PROD'); // This would come from context/localStorage in real app
 
   // Mock data for demonstration
@@ -99,7 +99,7 @@ const Index = () => {
         submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesStatus = !statusFilter || submission.decision.toLowerCase() === statusFilter;
+      const matchesStatus = statusFilter === 'all' || submission.decision.toLowerCase() === statusFilter;
       
       return matchesSearch && matchesStatus;
     });
@@ -261,7 +261,7 @@ const Index = () => {
                   <SelectValue placeholder="All Decisions" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Decisions</SelectItem>
+                  <SelectItem value="all">All Decisions</SelectItem>
                   <SelectItem value="approved">Approved</SelectItem>
                   <SelectItem value="rejected">Rejected</SelectItem>
                   <SelectItem value="timed">Timed</SelectItem>
