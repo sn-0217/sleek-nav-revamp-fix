@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Server, Info, Clock, Calendar, MessageSquare, Send, RotateCcw, Layers, List, CheckCircle, XCircle, Timer } from 'lucide-react';
+import { ArrowLeft, Server, Info, Clock, Calendar, MessageSquare, Send, RotateCcw, Layers, List, CheckCircle, XCircle, Timer, User, Mail } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
 
 interface ChangeRequest {
@@ -29,6 +30,7 @@ const AppDetail = () => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [comments, setComments] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Mock change request data
   const [changeRequest] = useState<ChangeRequest>({
@@ -86,7 +88,7 @@ const AppDetail = () => {
     return true;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!approverName || !approverEmail || !selectedDecision) {
@@ -101,6 +103,11 @@ const AppDetail = () => {
     if (!validateTimedApproval()) {
       return;
     }
+
+    setIsSubmitting(true);
+
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     // Create submission object
     const submission = {
@@ -135,6 +142,7 @@ const AppDetail = () => {
     setStartTime('');
     setEndTime('');
     setComments('');
+    setIsSubmitting(false);
   };
 
   const handleReset = () => {
@@ -146,51 +154,72 @@ const AppDetail = () => {
     setComments('');
   };
 
-  const getDecisionButtonClass = (decision: 'Approved' | 'Rejected' | 'Timed') => {
-    const isSelected = selectedDecision === decision;
-    const baseClass = "flex items-center justify-center gap-2 px-4 py-3 rounded-lg border-2 font-medium transition-all duration-200";
-    
-    if (isSelected) {
-      return `${baseClass} bg-primary text-primary-foreground border-primary shadow-lg`;
-    }
-    
-    return `${baseClass} bg-background text-foreground border-border hover:border-primary/50 hover:bg-primary/5`;
+  const getDecisionConfig = (decision: 'Approved' | 'Rejected' | 'Timed') => {
+    const configs = {
+      Approved: {
+        icon: CheckCircle,
+        gradient: 'from-emerald-500 to-green-600',
+        hoverGradient: 'from-emerald-600 to-green-700',
+        bgColor: 'bg-emerald-50',
+        borderColor: 'border-emerald-200',
+        textColor: 'text-emerald-700'
+      },
+      Rejected: {
+        icon: XCircle,
+        gradient: 'from-rose-500 to-red-600',
+        hoverGradient: 'from-rose-600 to-red-700',
+        bgColor: 'bg-rose-50',
+        borderColor: 'border-rose-200',
+        textColor: 'text-rose-700'
+      },
+      Timed: {
+        icon: Timer,
+        gradient: 'from-amber-500 to-orange-600',
+        hoverGradient: 'from-amber-600 to-orange-700',
+        bgColor: 'bg-amber-50',
+        borderColor: 'border-amber-200',
+        textColor: 'text-amber-700'
+      }
+    };
+    return configs[decision];
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="app-detail">
+      {/* Modern Header with Glass Effect */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+            <div className="flex items-center gap-4" data-section="header-info">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
                 <Server className="w-6 h-6 text-white" />
               </div>
-              <div className="text-white">
-                <h1 className="text-xl font-bold">{appName} - Change Request</h1>
-                <p className="text-purple-100 text-sm">Review and approve change requests</p>
+              <div>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appName} - Change Request</h1>
+                <p className="text-slate-600 text-sm">Review and approve change requests</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/20 rounded-full backdrop-blur-sm">
-                <Layers className="w-4 h-4 text-white" />
-                <span className="text-sm font-medium text-white">{currentEnv}</span>
-              </div>
+            <div className="flex items-center gap-3" data-section="header-actions">
+              <Badge variant="secondary" className="gap-2 px-3 py-1.5">
+                <Layers className="w-4 h-4" />
+                {currentEnv}
+              </Badge>
               <Button 
-                variant="secondary" 
+                variant="outline" 
                 size="sm" 
-                className="gap-2 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                className="gap-2 hover:scale-105 transition-transform"
                 onClick={() => navigate('/')}
+                data-action="view-submissions"
               >
                 <List className="w-4 h-4" />
-                View Submissions
+                Submissions
               </Button>
               <Button 
-                variant="secondary" 
+                variant="outline" 
                 size="sm" 
-                className="gap-2 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                className="gap-2 hover:scale-105 transition-transform"
                 onClick={() => navigate('/home')}
+                data-action="back-home"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back
@@ -200,50 +229,60 @@ const AppDetail = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Change Details */}
-          <Card className="bg-white/70 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900">
-                <Info className="w-5 h-5 text-purple-600" />
+          {/* Change Details Card with Enhanced Styling */}
+          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm" data-card="change-details">
+            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 border-b">
+              <CardTitle className="flex items-center gap-3 text-slate-900">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Info className="w-4 h-4 text-white" />
+                </div>
                 Change Details
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Change Number</p>
-                  <p className="font-semibold text-slate-900">{changeRequest.changeNo}</p>
+            <CardContent className="p-6 space-y-6" data-content="change-info">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2" data-field="change-number">
+                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Change Number</p>
+                  <p className="font-bold text-slate-900 text-lg">{changeRequest.changeNo}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Requested By</p>
+                <div className="space-y-2" data-field="requested-by">
+                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Requested By</p>
                   <p className="font-semibold text-slate-900">{changeRequest.requestedBy}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Request Date</p>
+                <div className="space-y-2" data-field="request-date">
+                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Request Date</p>
                   <p className="font-semibold text-slate-900">{changeRequest.requestDate}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Deployment Window</p>
+                <div className="space-y-2" data-field="deployment-window">
+                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Deployment Window</p>
                   <p className="font-semibold text-slate-900">{changeRequest.deploymentWindow}</p>
                 </div>
               </div>
               
-              <div>
-                <p className="text-sm font-medium text-muted-foreground mb-2">Description</p>
-                <p className="text-slate-700 leading-relaxed">{changeRequest.description}</p>
+              <div className="space-y-3" data-field="description">
+                <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Description</p>
+                <div className="bg-slate-50 rounded-lg p-4 border-l-4 border-blue-500">
+                  <p className="text-slate-700 leading-relaxed">{changeRequest.description}</p>
+                </div>
               </div>
 
-              <div>
-                <h3 className="flex items-center gap-2 font-semibold text-slate-900 mb-3">
-                  <Server className="w-4 h-4 text-purple-600" />
+              <div className="space-y-4" data-section="affected-servers">
+                <h3 className="flex items-center gap-2 font-semibold text-slate-900">
+                  <div className="w-6 h-6 bg-gradient-to-br from-green-500 to-emerald-600 rounded-md flex items-center justify-center">
+                    <Server className="w-3 h-3 text-white" />
+                  </div>
                   Affected Servers
                 </h3>
-                <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto">
+                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 max-h-48 overflow-y-auto border">
                   <ul className="space-y-2">
                     {changeRequest.affectedServers.map((server, index) => (
-                      <li key={index} className="text-sm text-slate-700 py-1 px-2 bg-white rounded border">
+                      <li 
+                        key={index} 
+                        className="text-sm text-slate-700 py-2 px-3 bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow font-mono"
+                        data-server={`server-${index}`}
+                      >
                         {server}
                       </li>
                     ))}
@@ -253,87 +292,101 @@ const AppDetail = () => {
             </CardContent>
           </Card>
 
-          {/* Approval Form */}
-          <Card className="bg-white/70 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-slate-900">
-                <CheckCircle className="w-5 h-5 text-purple-600" />
+          {/* Enhanced Approval Form */}
+          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm" data-card="approval-form">
+            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b">
+              <CardTitle className="flex items-center gap-3 text-slate-900">
+                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center">
+                  <CheckCircle className="w-4 h-4 text-white" />
+                </div>
                 Approver Action
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="approver-name" className="block text-sm font-medium text-slate-700 mb-2">
+            <CardContent className="p-6">
+              <form onSubmit={handleSubmit} className="space-y-6" data-form="approval">
+                <div className="space-y-5">
+                  <div className="space-y-2" data-field="approver-name">
+                    <label htmlFor="approver-name" className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                      <User className="w-4 h-4 text-slate-500" />
                       Approver Name
                     </label>
                     <Input
                       id="approver-name"
                       type="text"
-                      placeholder="Enter Approver Name"
+                      placeholder="Enter your full name"
                       value={approverName}
                       onChange={(e) => setApproverName(e.target.value)}
                       required
-                      className="bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100"
+                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      data-input="approver-name"
                     />
                   </div>
 
-                  <div>
-                    <label htmlFor="approver-email" className="block text-sm font-medium text-slate-700 mb-2">
+                  <div className="space-y-2" data-field="approver-email">
+                    <label htmlFor="approver-email" className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                      <Mail className="w-4 h-4 text-slate-500" />
                       Approver Email
                     </label>
                     <Input
                       id="approver-email"
                       type="email"
-                      placeholder="Enter Approver Email"
+                      placeholder="Enter your email address"
                       value={approverEmail}
                       onChange={(e) => setApproverEmail(e.target.value)}
                       required
-                      className="bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100"
+                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
+                      data-input="approver-email"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-3">Decision</label>
+                  <div className="space-y-3" data-field="decision">
+                    <label className="text-sm font-medium text-slate-700">Decision</label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => handleDecisionSelect('Approved')}
-                        className={getDecisionButtonClass('Approved')}
-                      >
-                        <CheckCircle className="w-4 h-4" />
-                        Approve
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDecisionSelect('Rejected')}
-                        className={getDecisionButtonClass('Rejected')}
-                      >
-                        <XCircle className="w-4 h-4" />
-                        Reject
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDecisionSelect('Timed')}
-                        className={getDecisionButtonClass('Timed')}
-                      >
-                        <Timer className="w-4 h-4" />
-                        Timed
-                      </button>
+                      {(['Approved', 'Rejected', 'Timed'] as const).map((decision) => {
+                        const config = getDecisionConfig(decision);
+                        const Icon = config.icon;
+                        const isSelected = selectedDecision === decision;
+                        
+                        return (
+                          <button
+                            key={decision}
+                            type="button"
+                            onClick={() => handleDecisionSelect(decision)}
+                            className={`
+                              relative overflow-hidden group/btn p-4 rounded-xl border-2 font-medium transition-all duration-300
+                              hover:scale-105 hover:shadow-lg active:scale-95
+                              ${isSelected 
+                                ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg` 
+                                : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-md`
+                              }
+                            `}
+                            data-decision={decision.toLowerCase()}
+                          >
+                            <div className="flex items-center justify-center gap-2 relative z-10">
+                              <Icon className="w-5 h-5" />
+                              {decision}
+                            </div>
+                            {isSelected && (
+                              <div className="absolute inset-0 bg-white/20 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                            )}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
                   {selectedDecision === 'Timed' && (
-                    <Card className="bg-purple-50 border-purple-200">
-                      <CardContent className="p-4">
-                        <h4 className="flex items-center gap-2 font-medium text-slate-900 mb-3">
-                          <Calendar className="w-4 h-4 text-purple-600" />
-                          Time Window
-                        </h4>
+                    <Card className="animate-in fade-in-50 duration-500 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200" data-section="timed-approval">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="flex items-center gap-2 text-amber-800 text-lg">
+                          <Calendar className="w-5 h-5" />
+                          Time Window Configuration
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div>
-                            <label htmlFor="start-time" className="block text-sm font-medium text-slate-700 mb-1">
+                          <div className="space-y-2">
+                            <label htmlFor="start-time" className="text-sm font-medium text-amber-700">
                               Start Date & Time
                             </label>
                             <Input
@@ -341,11 +394,12 @@ const AppDetail = () => {
                               type="datetime-local"
                               value={startTime}
                               onChange={(e) => setStartTime(e.target.value)}
-                              className="bg-white border-purple-200 focus:border-purple-400"
+                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20"
+                              data-input="start-time"
                             />
                           </div>
-                          <div>
-                            <label htmlFor="end-time" className="block text-sm font-medium text-slate-700 mb-1">
+                          <div className="space-y-2">
+                            <label htmlFor="end-time" className="text-sm font-medium text-amber-700">
                               End Date & Time
                             </label>
                             <Input
@@ -353,7 +407,8 @@ const AppDetail = () => {
                               type="datetime-local"
                               value={endTime}
                               onChange={(e) => setEndTime(e.target.value)}
-                              className="bg-white border-purple-200 focus:border-purple-400"
+                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20"
+                              data-input="end-time"
                             />
                           </div>
                         </div>
@@ -361,38 +416,51 @@ const AppDetail = () => {
                     </Card>
                   )}
 
-                  <div>
-                    <label htmlFor="comments" className="block text-sm font-medium text-slate-700 mb-2">
-                      <MessageSquare className="w-4 h-4 inline mr-1" />
-                      Comments
+                  <div className="space-y-2" data-field="comments">
+                    <label htmlFor="comments" className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                      <MessageSquare className="w-4 h-4 text-slate-500" />
+                      Additional Comments
                     </label>
                     <Textarea
                       id="comments"
-                      placeholder="Your comments..."
+                      placeholder="Add any additional comments or notes..."
                       value={comments}
                       onChange={(e) => setComments(e.target.value)}
                       rows={4}
-                      className="bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100"
+                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none"
+                      data-input="comments"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-3 pt-4 border-t border-slate-200">
+                <div className="flex gap-3 pt-6 border-t border-slate-200" data-actions="form-buttons">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={handleReset}
-                    className="flex-1 gap-2"
+                    className="flex-1 gap-2 hover:scale-105 transition-transform"
+                    data-action="reset"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    Reset
+                    Reset Form
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    disabled={isSubmitting}
+                    className="flex-1 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    data-action="submit"
                   >
-                    <Send className="w-4 h-4" />
-                    Submit
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        Submit Decision
+                      </>
+                    )}
                   </Button>
                 </div>
               </form>
