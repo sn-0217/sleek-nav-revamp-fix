@@ -1,11 +1,12 @@
 
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers } from 'lucide-react';
+import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface Submission {
   id: string;
@@ -22,73 +23,19 @@ interface Submission {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [currentEnv] = useState('PROD'); // This would come from context/localStorage in real app
+  const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
 
-  // Mock data for demonstration
+  // Load submissions from localStorage
   useEffect(() => {
-    const mockSubmissions: Submission[] = [
-      {
-        id: '1',
-        appName: 'Payment Gateway',
-        changeNo: 'CHG-2024-001',
-        approverName: 'Sarah Johnson',
-        approverEmail: 'sarah.johnson@company.com',
-        decision: 'Approved',
-        timestamp: '2024-06-09T10:30:00Z',
-        comments: 'Approved after thorough security review. All compliance checks passed.',
-        environment: 'PROD'
-      },
-      {
-        id: '2',
-        appName: 'User Authentication',
-        changeNo: 'CHG-2024-002',
-        approverName: 'Mike Chen',
-        approverEmail: 'mike.chen@company.com',
-        decision: 'Rejected',
-        timestamp: '2024-06-09T09:15:00Z',
-        comments: 'Insufficient testing documentation. Please provide comprehensive test results.',
-        environment: 'PROD'
-      },
-      {
-        id: '3',
-        appName: 'API Gateway',
-        changeNo: 'CHG-2024-003',
-        approverName: 'System Auto-Approval',
-        decision: 'Timed',
-        timestamp: '2024-06-09T08:00:00Z',
-        startTime: '2024-06-09T20:00:00Z',
-        endTime: '2024-06-09T22:00:00Z',
-        environment: 'PROD'
-      },
-      {
-        id: '4',
-        appName: 'Database Migration',
-        changeNo: 'CHG-2024-004',
-        approverName: 'Lisa Rodriguez',
-        approverEmail: 'lisa.rodriguez@company.com',
-        decision: 'Approved',
-        timestamp: '2024-06-08T16:45:00Z',
-        comments: 'Migration plan looks solid. Proceed with deployment.',
-        environment: 'PROD'
-      },
-      {
-        id: '5',
-        appName: 'Frontend Update',
-        changeNo: 'CHG-2024-005',
-        approverName: 'David Kim',
-        approverEmail: 'david.kim@company.com',
-        decision: 'Timed',
-        timestamp: '2024-06-08T14:20:00Z',
-        startTime: '2024-06-08T23:00:00Z',
-        endTime: '2024-06-09T01:00:00Z',
-        environment: 'PROD'
-      }
-    ];
-    setSubmissions(mockSubmissions);
-  }, []);
+    const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+    // Filter submissions by current environment
+    const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
+    setSubmissions(envSubmissions);
+  }, [currentEnv]);
 
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
@@ -153,30 +100,35 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-slate-200 sticky top-0 z-50">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-                  <FileText className="w-4 h-4 text-white" />
+                <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
+                  <FileText className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                  <h1 className="text-2xl font-bold text-white">
                     Submission History
                   </h1>
-                  <p className="text-sm text-muted-foreground">View all processed approval requests</p>
+                  <p className="text-sm text-purple-100">View all processed approval requests</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-full">
-                <Layers className="w-4 h-4 text-slate-600" />
-                <span className="text-sm font-medium text-slate-700">{currentEnv}</span>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/20 rounded-full backdrop-blur-sm">
+                <Layers className="w-4 h-4 text-white" />
+                <span className="text-sm font-medium text-white">{currentEnv}</span>
               </div>
-              <Button variant="ghost" size="sm" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                Back
+              <Button 
+                variant="secondary" 
+                size="sm" 
+                className="gap-2 bg-white/20 hover:bg-white/30 text-white border-white/30"
+                onClick={() => navigate('/home')}
+              >
+                <Home className="w-4 h-4" />
+                Home
               </Button>
             </div>
           </div>
