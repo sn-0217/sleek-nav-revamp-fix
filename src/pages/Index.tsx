@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -5,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Submission {
   id: string;
@@ -23,48 +24,21 @@ interface Submission {
 
 const Index = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
   const [isLoading, setIsLoading] = useState(true);
-  const [highlightedSubmission, setHighlightedSubmission] = useState<string | null>(null);
 
-  // Load submissions from localStorage and handle query parameters
+  // Load submissions from localStorage
   useEffect(() => {
     const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+    // Filter submissions by current environment
     const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
     setSubmissions(envSubmissions);
-
-    // Handle query parameters for highlighting specific submission
-    const appFromQuery = searchParams.get('app');
-    const statusFromQuery = searchParams.get('status');
-    
-    if (appFromQuery) {
-      setSearchTerm(appFromQuery);
-    }
-    
-    if (statusFromQuery) {
-      setStatusFilter(statusFromQuery);
-    }
-
-    // Find and highlight the specific submission
-    if (appFromQuery && statusFromQuery) {
-      const targetSubmission = envSubmissions.find((sub: Submission) => 
-        sub.appName.toLowerCase() === appFromQuery.toLowerCase() && 
-        sub.decision.toLowerCase() === statusFromQuery.toLowerCase()
-      );
-      
-      if (targetSubmission) {
-        setHighlightedSubmission(targetSubmission.id);
-        // Remove highlight after 3 seconds
-        setTimeout(() => setHighlightedSubmission(null), 3000);
-      }
-    }
-
+    // Simulate loading for smooth animation
     setTimeout(() => setIsLoading(false), 600);
-  }, [currentEnv, searchParams]);
+  }, [currentEnv]);
 
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
@@ -338,26 +312,15 @@ const Index = () => {
               .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
               .map((submission, index) => {
                 const statusConfig = getStatusConfig(submission.decision);
-                const isHighlighted = highlightedSubmission === submission.id;
-                
                 return (
                   <Card 
                     key={submission.id} 
-                    className={`group bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden ${
-                      isHighlighted ? 'ring-4 ring-purple-500 ring-opacity-50 bg-gradient-to-r from-purple-50 to-blue-50' : ''
-                    }`}
+                    className="group bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden"
                     style={{ animationDelay: `${index * 100}ms` }}
                     data-submission={submission.id}
                   >
-                    {/* Enhanced gradient accent line for highlighted submission */}
-                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform transition-transform duration-500 origin-left ${
-                      isHighlighted ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
-                    }`} />
-                    
-                    {/* Highlight pulse animation */}
-                    {isHighlighted && (
-                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-blue-500/10 animate-pulse" />
-                    )}
+                    {/* Gradient accent line */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                     
                     <CardContent className="p-8">
                       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
