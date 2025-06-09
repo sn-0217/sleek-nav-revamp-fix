@@ -2,119 +2,227 @@ import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
-interface AppStatus {
-  text: string;
-  color: string;
-  icon: React.ReactNode;
-  bgColor: string;
-  borderColor: string;
+interface Application {
+  name: string;
+  description: string;
+  status: 'Approved' | 'Rejected' | 'Timed' | 'Pending';
+  environment: string;
+  version: string;
+  lastDeployed: string;
+  team: string;
+  server: string;
 }
+
+const mockApplications: Application[] = [
+  {
+    name: 'Knitwell Portal',
+    description: 'Customer engagement and service platform',
+    status: 'Approved',
+    environment: 'Production',
+    version: '2.5.1',
+    lastDeployed: '2024-08-15',
+    team: 'Customer Experience',
+    server: 'web-01.prod.company.com'
+  },
+  {
+    name: 'StitchLink API',
+    description: 'Integration layer for supply chain',
+    status: 'Rejected',
+    environment: 'Staging',
+    version: '1.0.9',
+    lastDeployed: '2024-09-01',
+    team: 'Supply Chain',
+    server: 'api-03.stage.company.com'
+  },
+  {
+    name: 'FabricFlow Engine',
+    description: 'Workflow automation for manufacturing',
+    status: 'Timed',
+    environment: 'Development',
+    version: '3.2.0-beta',
+    lastDeployed: '2024-09-10',
+    team: 'Manufacturing',
+    server: 'dev-wf-07.dev.company.com'
+  },
+  {
+    name: 'YarnStats Dashboard',
+    description: 'Real-time analytics for yarn production',
+    status: 'Approved',
+    environment: 'Production',
+    version: '1.8.4',
+    lastDeployed: '2024-09-18',
+    team: 'Analytics',
+    server: 'yarn-stats-prod-12.company.com'
+  },
+  {
+    name: 'ThreadSafe Security',
+    description: 'Threat detection and prevention system',
+    status: 'Pending',
+    environment: 'QA',
+    version: '1.1.2',
+    lastDeployed: '2024-09-22',
+    team: 'Security',
+    server: 'threadsafe-qa-01.company.com'
+  },
+  {
+    name: 'ColorMatch AI',
+    description: 'AI-powered color matching service',
+    status: 'Approved',
+    environment: 'Production',
+    version: '2.0.0',
+    lastDeployed: '2024-09-25',
+    team: 'Innovation',
+    server: 'colormatch-ai-prod-05.company.com'
+  },
+  {
+    name: 'WeaveSync Data',
+    description: 'Data synchronization service for weaving machines',
+    status: 'Rejected',
+    environment: 'Staging',
+    version: '1.5.6',
+    lastDeployed: '2024-10-01',
+    team: 'Data Engineering',
+    server: 'weavesync-stage-09.company.com'
+  },
+  {
+    name: 'PatternGen Tool',
+    description: 'Automated pattern generation tool',
+    status: 'Timed',
+    environment: 'Development',
+    version: '4.0.0-alpha',
+    lastDeployed: '2024-10-05',
+    team: 'Design',
+    server: 'patterngen-dev-14.company.com'
+  }
+];
 
 const Home = () => {
   const navigate = useNavigate();
+  const [applications, setApplications] = useState<Application[]>(mockApplications);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv] = useState('DEV');
-  const [isLoading, setIsLoading] = useState(true);
+  const [environmentFilter, setEnvironmentFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
 
-  const apps = [
-    "WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot",
-    "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL",
-    "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch",
-    "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"
-  ];
+  const filteredApplications = applications.filter(app => {
+    const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          app.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesEnvironment = environmentFilter === 'all' || app.environment === environmentFilter;
+    const matchesStatus = statusFilter === 'all' || app.status.toLowerCase() === statusFilter;
 
-  useEffect(() => {
-    localStorage.setItem('currentEnv', currentEnv);
-    // Simulate loading for smooth animation
-    setTimeout(() => setIsLoading(false), 800);
-  }, [currentEnv]);
+    return matchesSearch && matchesEnvironment && matchesStatus;
+  });
 
-  const getAppStatus = (appName: string): AppStatus => {
-    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
-    
-    if (appSubmissions.length === 0) {
-      return { 
-        text: 'No Changes', 
-        color: 'text-slate-600',
-        icon: <Activity className="w-4 h-4" />,
-        bgColor: 'bg-slate-50',
-        borderColor: 'border-slate-200'
-      };
-    }
-
-    const latestSubmission = appSubmissions.sort((a: any, b: any) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    )[0];
-
-    switch (latestSubmission.decision) {
+  const getStatusIcon = (status: string) => {
+    switch (status) {
       case 'Approved':
-        return { 
-          text: 'Approved', 
-          color: 'text-emerald-700',
-          icon: <CheckCircle className="w-4 h-4" />,
-          bgColor: 'bg-emerald-50',
-          borderColor: 'border-emerald-200'
-        };
+        return <CheckCircle className="w-4 h-4" />;
       case 'Rejected':
-        return { 
-          text: 'Rejected', 
-          color: 'text-rose-700',
-          icon: <XCircle className="w-4 h-4" />,
-          bgColor: 'bg-rose-50',
-          borderColor: 'border-rose-200'
-        };
+        return <XCircle className="w-4 h-4" />;
       case 'Timed':
-        return { 
-          text: 'Timed Approval', 
-          color: 'text-amber-700',
-          icon: <Clock className="w-4 h-4" />,
-          bgColor: 'bg-amber-50',
-          borderColor: 'border-amber-200'
-        };
+        return <Clock className="w-4 h-4" />;
+      case 'Pending':
+        return <Sparkles className="w-4 h-4" />;
       default:
-        return { 
-          text: 'Pending', 
-          color: 'text-slate-600',
-          icon: <Activity className="w-4 h-4" />,
-          bgColor: 'bg-slate-50',
-          borderColor: 'border-slate-200'
-        };
+        return null;
     }
   };
 
-  const filteredApps = apps
-    .filter(app => app.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => a.localeCompare(b));
-
-  const handleAppClick = (appName: string) => {
-    navigate(`/app/${encodeURIComponent(appName)}`);
+  const getStatusConfig = (status: string) => {
+    switch (status) {
+      case 'Approved':
+        return { className: 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200 transition-colors' };
+      case 'Rejected':
+        return { className: 'bg-rose-100 text-rose-800 border-rose-200 hover:bg-rose-200 transition-colors' };
+      case 'Timed':
+        return { className: 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 transition-colors' };
+      case 'Pending':
+        return { className: 'bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200 transition-colors' };
+      default:
+        return { className: '' };
+    }
   };
 
-  const handleViewSubmissions = () => {
-    navigate('/');
+  const handleStatusClick = (appName: string, status: string) => {
+    // Navigate to submissions page with query parameter to highlight the specific submission
+    navigate(`/?app=${encodeURIComponent(appName)}&status=${status.toLowerCase()}`);
   };
 
-  if (isLoading) {
+  const renderAppCard = (app: Application, index: number) => {
+    const statusConfig = getStatusConfig(app.status);
+
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
-        <div className="text-center space-y-6">
-          <div className="relative">
-            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+      <Card 
+        key={app.name} 
+        className="group relative overflow-hidden bg-white/80 backdrop-blur-sm border-0 shadow-lg hover:shadow-2xl transition-all duration-700 hover:-translate-y-3 cursor-pointer transform perspective-1000"
+        style={{ animationDelay: `${index * 150}ms` }}
+        onClick={() => navigate(`/app/${app.name}`)}
+        data-app={app.name}
+      >
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-500 opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+        
+        {/* Subtle 3D Hover Effect */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-sm opacity-0 group-hover:opacity-80 transition-opacity duration-500"></div>
+
+        {/* Animated Border on Hover */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 to-blue-600 transform scale-x-0 origin-left transition-transform duration-500 group-hover:scale-x-100"></div>
+        
+        <CardContent className="p-8 relative z-20">
+          <div className="flex items-start justify-between mb-6">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                <Layers className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 group-hover:text-purple-900 transition-colors">{app.name}</h3>
+                <p className="text-slate-600 group-hover:text-slate-700 transition-colors">{app.description}</p>
+              </div>
+            </div>
+            <Badge 
+              className={`gap-2 px-4 py-2 text-sm font-semibold shadow-lg hover:scale-110 transition-all duration-300 cursor-pointer ${statusConfig.className}`}
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent card click
+                handleStatusClick(app.name, app.status);
+              }}
+              data-status={app.status.toLowerCase()}
+            >
+              {getStatusIcon(app.status)}
+              {app.status}
+            </Badge>
           </div>
-          <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Initializing Dashboard...</p>
-            <p className="text-slate-500 text-sm">Loading application portfolio</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center gap-3">
+              <Server className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-700">Server: <span className="font-semibold">{app.server}</span></span>
+            </div>
+            <div className="flex items-center gap-3">
+              <List className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-700">Version: <span className="font-semibold">{app.version}</span></span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Shield className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-700">Environment: <span className="font-semibold">{app.environment}</span></span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Activity className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-700">Last Deployed: <span className="font-semibold">{app.lastDeployed}</span></span>
+            </div>
+            <div className="flex items-center gap-3">
+              <Workflow className="w-4 h-4 text-slate-400" />
+              <span className="text-slate-700">Team: <span className="font-semibold">{app.team}</span></span>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     );
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
@@ -124,28 +232,28 @@ const Home = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                  <Workflow className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Layers className="w-6 h-6 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-pulse">
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
                   <Zap className="w-3 h-3 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Apptech Knitwell</h1>
-                <p className="text-slate-600 text-sm">Enterprise Change Management</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Application Dashboard</h1>
+                <p className="text-slate-600 text-sm">Monitor and manage your applications</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200">
                 <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md"
-                onClick={handleViewSubmissions}
+                className="gap-2 hover:scale-105 transition-transform shadow-sm"
+                onClick={() => navigate('/')}
                 data-action="view-submissions"
               >
                 <List className="w-4 h-4" />
@@ -156,164 +264,60 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8" data-main="home-content">
-        {/* Enhanced Dashboard Header */}
-        <div className="text-center mb-12 space-y-6">
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <CheckCircle className="w-10 h-10 text-white" />
+      <div className="max-w-7xl mx-auto px-6 py-8" data-main="dashboard-content">
+        {/* Enhanced Filters */}
+        <Card className="mb-8 bg-white/70 backdrop-blur-sm border-0 shadow-xl" data-section="filters">
+          <CardContent className="p-6">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                <Search className="w-5 h-5 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-bounce">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
-                <Zap className="w-3 h-3 text-white" />
+              <div>
+                <h3 className="font-semibold text-slate-900">Filter Applications</h3>
+                <p className="text-sm text-slate-600">Find applications based on your criteria</p>
               </div>
             </div>
-            <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
-                Change Control Center
-              </h1>
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse"></div>
-                <span className="text-lg text-slate-600 font-medium">Enterprise Ready • Secure • Compliant</span>
-                <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <Input
+                type="text"
+                placeholder="Search by application name or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-12 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300"
+                data-input="search"
+              />
+              <Select value={environmentFilter} onValueChange={setEnvironmentFilter}>
+                <SelectTrigger className="h-12 bg-white/50 border-slate-200">
+                  <SelectValue placeholder="Select Environment" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Environments</SelectItem>
+                  <SelectItem value="Development">Development</SelectItem>
+                  <SelectItem value="QA">QA</SelectItem>
+                  <SelectItem value="Staging">Staging</SelectItem>
+                  <SelectItem value="Production">Production</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="h-12 bg-white/50 border-slate-200">
+                  <SelectValue placeholder="Select Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Statuses</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="timed">Timed</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-slate-600 leading-relaxed mb-6">
-              Streamline your change approval workflow with our intelligent platform. Review, approve, and track change requests across your entire application portfolio with enhanced visibility and control.
-            </p>
-            <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                <span>Real-time Processing</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span>Audit Trail</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span>Automated Workflows</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Enhanced Applications Section */}
-        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
-          {/* Subtle animated background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
-          
-          <CardContent className="p-8 relative z-10">
-            <div className="flex items-center justify-between mb-8" data-section="apps-header">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <Server className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
-                    {filteredApps.length}
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-900">Application Portfolio</h2>
-                  <p className="text-slate-600 text-sm">Select an application to initiate change requests</p>
-                </div>
-              </div>
-              <div className="relative group" data-component="search">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors duration-300" />
-                <Input
-                  placeholder="Search applications..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70"
-                  data-input="search"
-                />
-              </div>
-            </div>
-
-            {/* Enhanced Apps Grid */}
-            {filteredApps.length === 0 ? (
-              <div className="text-center py-20" data-state="no-results">
-                <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <Search className="w-12 h-12 text-slate-400" />
-                  </div>
-                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                    <XCircle className="w-4 h-4 text-white" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
-                <p className="text-slate-500 max-w-md mx-auto mb-6">
-                  Your search didn't match any applications in the current environment. Try adjusting your search criteria.
-                </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setSearchTerm('')}
-                  className="gap-2 hover:scale-105 transition-transform"
-                >
-                  <XCircle className="w-4 h-4" />
-                  Clear Search
-                </Button>
-              </div>
-            ) : (
-              <div 
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                data-grid="applications"
-              >
-                {filteredApps.map((app, index) => {
-                  const status = getAppStatus(app);
-                  return (
-                    <Card 
-                      key={app} 
-                      className="group cursor-pointer hover:shadow-xl transition-all duration-500 hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative"
-                      style={{ 
-                        animationDelay: `${index * 50}ms`,
-                        animation: 'fadeInUp 0.6s ease-out forwards'
-                      }}
-                      onClick={() => handleAppClick(app)}
-                      data-app={app.toLowerCase().replace(/\s+/g, '-')}
-                    >
-                      {/* Gradient overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
-                      
-                      <CardContent className="p-6 text-center relative z-10">
-                        <div className="relative mb-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
-                            <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
-                          </div>
-                          {/* Status indicator dot */}
-                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${
-                            status.text === 'Approved' ? 'bg-emerald-500' :
-                            status.text === 'Rejected' ? 'bg-rose-500' :
-                            status.text === 'Timed Approval' ? 'bg-amber-500' :
-                            'bg-slate-400'
-                          } group-hover:scale-125 transition-transform`}></div>
-                        </div>
-                        <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
-                        <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md`}
-                          data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
-                        >
-                          {status.icon}
-                          {status.text}
-                        </Badge>
-                      </CardContent>
-                      
-                      {/* Animated bottom accent line */}
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
           </CardContent>
         </Card>
+
+        {/* Application Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-section="applications-grid">
+          {filteredApplications.map((app, index) => renderAppCard(app, index))}
+        </div>
       </div>
 
       {/* Enhanced Footer */}
@@ -324,26 +328,13 @@ const Home = () => {
               © 2025 Apptech Knitwell. All rights reserved.
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-slate-500">Enterprise-Grade Change Management Platform</span>
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
+              <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
+              <span className="text-xs text-slate-500">Powered by Modern Web Technologies</span>
+              <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
             </div>
           </div>
         </div>
       </footer>
-
-      <style>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 };
