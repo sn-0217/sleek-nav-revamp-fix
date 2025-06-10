@@ -92,14 +92,32 @@ const Home = () => {
     .sort((a, b) => a.localeCompare(b));
 
   const handleAppClick = (appName: string) => {
-    // Navigate to analytics page with search query for the specific app
-    navigate(`/?search=${encodeURIComponent(appName)}`);
+    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
+    
+    // Only navigate if there are submissions with approved/rejected/timed status
+    const hasValidSubmissions = appSubmissions.some((s: any) => 
+      s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
+    );
+    
+    if (hasValidSubmissions) {
+      navigate(`/?search=${encodeURIComponent(appName)}`);
+    }
   };
 
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent triggering the app click
-    // Navigate to analytics page with search query for the specific app
-    navigate(`/?search=${encodeURIComponent(appName)}`);
+    e.stopPropagation();
+    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
+    
+    // Only navigate if there are submissions with approved/rejected/timed status
+    const hasValidSubmissions = appSubmissions.some((s: any) => 
+      s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
+    );
+    
+    if (hasValidSubmissions) {
+      navigate(`/?search=${encodeURIComponent(appName)}`);
+    }
   };
 
   const handleViewSubmissions = () => {
@@ -275,10 +293,18 @@ const Home = () => {
               >
                 {filteredApps.map((app, index) => {
                   const status = getAppStatus(app);
+                  const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+                  const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
+                  const hasValidSubmissions = appSubmissions.some((s: any) => 
+                    s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
+                  );
+                  
                   return (
                     <Card 
                       key={app} 
-                      className="group cursor-pointer hover:shadow-xl transition-all duration-500 hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative"
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative ${
+                        hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
+                      }`}
                       style={{ 
                         animationDelay: `${index * 50}ms`,
                         animation: 'fadeInUp 0.6s ease-out forwards'
@@ -304,7 +330,10 @@ const Home = () => {
                         </div>
                         <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
                         <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md`}
+                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${
+                            hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
+                          }`}
+                          onClick={(e) => handleStatusClick(app, e)}
                           data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
                         >
                           {status.icon}
@@ -356,3 +385,5 @@ const Home = () => {
 };
 
 export default Home;
+
+</edits_to_apply>
