@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -93,7 +92,8 @@ const Home = () => {
     .sort((a, b) => a.localeCompare(b));
 
   const handleAppClick = (appName: string) => {
-    navigate(`/app/${encodeURIComponent(appName)}`);
+    // Navigate to analytics page with search query for the specific app
+    navigate(`/?search=${encodeURIComponent(appName)}`);
   };
 
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
@@ -304,9 +304,8 @@ const Home = () => {
                         </div>
                         <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
                         <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md cursor-pointer hover:shadow-lg`}
+                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md`}
                           data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
-                          onClick={(e) => handleStatusClick(app, e)}
                         >
                           {status.icon}
                           {status.text}
@@ -357,3 +356,5 @@ const Home = () => {
 };
 
 export default Home;
+
+</edits_to_apply>
