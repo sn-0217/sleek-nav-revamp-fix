@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 interface Submission {
   id: string;
@@ -24,6 +23,7 @@ interface Submission {
 
 const Index = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -36,9 +36,16 @@ const Index = () => {
     // Filter submissions by current environment
     const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
     setSubmissions(envSubmissions);
+    
+    // Check for search parameter in URL
+    const searchQuery = searchParams.get('search');
+    if (searchQuery) {
+      setSearchTerm(searchQuery);
+    }
+    
     // Simulate loading for smooth animation
     setTimeout(() => setIsLoading(false), 600);
-  }, [currentEnv]);
+  }, [currentEnv, searchParams]);
 
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
