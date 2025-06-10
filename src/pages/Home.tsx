@@ -95,13 +95,22 @@ const Home = () => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
     
-    // Only navigate if there are submissions with approved/rejected/timed status
+    if (appSubmissions.length === 0) {
+      // No submissions exist - redirect to form for new submission
+      navigate(`/app/${encodeURIComponent(appName)}`);
+      return;
+    }
+
+    // Only navigate to submissions if there are submissions with approved/rejected/timed status
     const hasValidSubmissions = appSubmissions.some((s: any) => 
       s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
     );
     
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
+    } else {
+      // Has submissions but none with valid status - redirect to form
+      navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
 
@@ -110,13 +119,22 @@ const Home = () => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
     
-    // Only navigate if there are submissions with approved/rejected/timed status
+    if (appSubmissions.length === 0) {
+      // No submissions exist - redirect to form for new submission
+      navigate(`/app/${encodeURIComponent(appName)}`);
+      return;
+    }
+
+    // Only navigate to submissions if there are submissions with approved/rejected/timed status
     const hasValidSubmissions = appSubmissions.some((s: any) => 
       s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
     );
     
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
+    } else {
+      // Has submissions but none with valid status - redirect to form
+      navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
 
