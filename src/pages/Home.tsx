@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,10 +42,10 @@ const Home = () => {
     if (appSubmissions.length === 0) {
       return { 
         text: 'No Changes', 
-        color: 'text-slate-600',
+        color: 'text-muted-foreground',
         icon: <Activity className="w-4 h-4" />,
-        bgColor: 'bg-slate-50',
-        borderColor: 'border-slate-200'
+        bgColor: 'bg-muted',
+        borderColor: 'border-border'
       };
     }
 
@@ -56,34 +57,34 @@ const Home = () => {
       case 'Approved':
         return { 
           text: 'Approved', 
-          color: 'text-emerald-700',
+          color: 'text-green-700 dark:text-green-300',
           icon: <CheckCircle className="w-4 h-4" />,
-          bgColor: 'bg-emerald-50',
-          borderColor: 'border-emerald-200'
+          bgColor: 'bg-green-50 dark:bg-green-950',
+          borderColor: 'border-green-200 dark:border-green-800'
         };
       case 'Rejected':
         return { 
           text: 'Rejected', 
-          color: 'text-rose-700',
+          color: 'text-red-700 dark:text-red-300',
           icon: <XCircle className="w-4 h-4" />,
-          bgColor: 'bg-rose-50',
-          borderColor: 'border-rose-200'
+          bgColor: 'bg-red-50 dark:bg-red-950',
+          borderColor: 'border-red-200 dark:border-red-800'
         };
       case 'Timed':
         return { 
           text: 'Timed Approval', 
-          color: 'text-amber-700',
+          color: 'text-amber-700 dark:text-amber-300',
           icon: <Clock className="w-4 h-4" />,
-          bgColor: 'bg-amber-50',
-          borderColor: 'border-amber-200'
+          bgColor: 'bg-amber-50 dark:bg-amber-950',
+          borderColor: 'border-amber-200 dark:border-amber-800'
         };
       default:
         return { 
           text: 'Pending', 
-          color: 'text-slate-600',
+          color: 'text-muted-foreground',
           icon: <Activity className="w-4 h-4" />,
-          bgColor: 'bg-slate-50',
-          borderColor: 'border-slate-200'
+          bgColor: 'bg-muted',
+          borderColor: 'border-border'
         };
     }
   };
@@ -145,15 +146,15 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+            <div className="w-20 h-20 border-4 border-muted border-t-primary rounded-full animate-spin mx-auto"></div>
             <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Initializing Dashboard...</p>
-            <p className="text-slate-500 text-sm">Loading application portfolio</p>
+            <p className="text-foreground font-semibold text-lg">Initializing Dashboard...</p>
+            <p className="text-muted-foreground text-sm">Loading application portfolio</p>
           </div>
         </div>
       </div>
@@ -161,9 +162,9 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" data-page="home">
+    <div className="min-h-screen bg-background" data-page="home">
       {/* Enhanced Header with Glass Effect */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
@@ -176,8 +177,8 @@ const Home = () => {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Apptech Knitwell</h1>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">Enterprise Change Management</p>
+                <h1 className="text-xl font-bold text-foreground tracking-tight">Apptech Knitwell</h1>
+                <p className="text-muted-foreground text-sm">Enterprise Change Management</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
@@ -218,21 +219,21 @@ const Home = () => {
               </div>
             </div>
             <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 dark:from-slate-100 dark:via-purple-100 dark:to-slate-100 bg-clip-text text-transparent mb-2">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-foreground via-purple-900 dark:via-purple-100 to-foreground bg-clip-text text-transparent mb-2">
                 Change Control Center
               </h1>
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse"></div>
-                <span className="text-lg text-slate-600 dark:text-slate-400 font-medium">Enterprise Ready • Secure • Compliant</span>
+                <span className="text-lg text-muted-foreground font-medium">Enterprise Ready • Secure • Compliant</span>
                 <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
           <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+            <p className="text-xl text-muted-foreground leading-relaxed mb-6">
               Streamline your change approval workflow with our intelligent platform. Review, approve, and track change requests across your entire application portfolio with enhanced visibility and control.
             </p>
-            <div className="flex items-center justify-center gap-8 text-sm text-slate-500 dark:text-slate-500">
+            <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                 <span>Real-time Processing</span>
@@ -250,7 +251,7 @@ const Home = () => {
         </div>
 
         {/* Enhanced Applications Section */}
-        <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
+        <Card className="bg-card/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
           {/* Subtle animated background */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
           
@@ -266,17 +267,17 @@ const Home = () => {
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">Application Portfolio</h2>
-                  <p className="text-slate-600 text-sm">Select an application to initiate change requests</p>
+                  <h2 className="text-2xl font-bold text-foreground">Application Portfolio</h2>
+                  <p className="text-muted-foreground text-sm">Select an application to initiate change requests</p>
                 </div>
               </div>
               <div className="relative group" data-component="search">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors duration-300" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-purple-600 transition-colors duration-300" />
                 <Input
                   placeholder="Search applications..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70"
+                  className="pl-12 w-80 bg-background/50 border-border focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-background/70"
                   data-input="search"
                 />
               </div>
@@ -286,15 +287,15 @@ const Home = () => {
             {filteredApps.length === 0 ? (
               <div className="text-center py-20" data-state="no-results">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <Search className="w-12 h-12 text-slate-400" />
+                  <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Search className="w-12 h-12 text-muted-foreground" />
                   </div>
                   <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
                     <XCircle className="w-4 h-4 text-white" />
                   </div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
-                <p className="text-slate-500 max-w-md mx-auto mb-6">
+                <h3 className="text-2xl font-bold text-foreground mb-3">No Applications Found</h3>
+                <p className="text-muted-foreground max-w-md mx-auto mb-6">
                   Your search didn't match any applications in the current environment. Try adjusting your search criteria.
                 </p>
                 <Button 
@@ -322,9 +323,7 @@ const Home = () => {
                   return (
                     <Card 
                       key={app} 
-                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${
-                        hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
-                      }`}
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-card/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden cursor-pointer`}
                       style={{ 
                         animationDelay: `${index * 50}ms`,
                         animation: 'fadeInUp 0.6s ease-out forwards'
@@ -337,22 +336,20 @@ const Home = () => {
                       
                       <CardContent className="p-6 text-center relative z-10">
                         <div className="relative mb-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
-                            <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
+                          <div className="w-16 h-16 bg-muted group-hover:bg-purple-100 dark:group-hover:bg-purple-900 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
+                            <Server className="w-8 h-8 text-muted-foreground group-hover:text-purple-600 transition-colors" />
                           </div>
                           {/* Status indicator dot */}
-                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${
+                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-background shadow-lg ${
                             status.text === 'Approved' ? 'bg-emerald-500' :
-                            status.text === 'Rejected' ? 'bg-rose-500' :
+                            status.text === 'Rejected' ? 'bg-red-500' :
                             status.text === 'Timed Approval' ? 'bg-amber-500' :
-                            'bg-slate-400'
+                            'bg-muted-foreground'
                           } group-hover:scale-125 transition-transform`}></div>
                         </div>
-                        <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
+                        <h3 className="font-bold text-foreground mb-3 text-lg group-hover:text-purple-600 transition-colors leading-tight">{app}</h3>
                         <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${
-                            hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
-                          }`}
+                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md cursor-pointer`}
                           onClick={(e) => handleStatusClick(app, e)}
                           data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
                         >
@@ -373,15 +370,15 @@ const Home = () => {
       </div>
 
       {/* Enhanced Footer */}
-      <footer className="mt-16 border-t border-slate-200 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+      <footer className="mt-16 border-t border-border bg-background/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
-            <p className="text-slate-600 text-sm">
+            <p className="text-muted-foreground text-sm">
               © 2025 Apptech Knitwell. All rights reserved.
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-slate-500">Enterprise-Grade Change Management Platform</span>
+              <span className="text-xs text-muted-foreground">Enterprise-Grade Change Management Platform</span>
               <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
             </div>
           </div>
