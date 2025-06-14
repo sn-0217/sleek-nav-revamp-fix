@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -167,9 +168,11 @@ const Home = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                  <Workflow className="w-6 h-6 text-white" />
-                </div>
+                <img 
+                  src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
+                  alt="Knitwell Group Logo"
+                  className="w-12 h-12 object-contain hover:scale-110 transition-transform"
+                />
                 <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
                   <Zap className="w-3 h-3 text-white" />
                 </div>
@@ -205,8 +208,12 @@ const Home = () => {
         <div className="text-center mb-12 space-y-6">
           <div className="flex items-center justify-center gap-6 mb-8">
             <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <CheckCircle className="w-10 h-10 text-white" />
+              <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 p-2">
+                <img 
+                  src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
+                  alt="Knitwell Group Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
                 <Sparkles className="w-4 h-4 text-white" />
@@ -256,8 +263,12 @@ const Home = () => {
             <div className="flex items-center justify-between mb-8" data-section="apps-header">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <Server className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg p-2">
+                    <img 
+                      src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
+                      alt="Knitwell Group Logo"
+                      className="w-full h-full object-contain"
+                    />
                   </div>
                   <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
                     {filteredApps.length}
@@ -374,6 +385,14 @@ const Home = () => {
       <footer className="mt-16 border-t border-slate-200 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <img 
+                src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
+                alt="Knitwell Group Logo"
+                className="w-6 h-6 object-contain"
+              />
+              <span className="text-slate-600 text-sm font-medium">Knitwell Group</span>
+            </div>
             <p className="text-slate-600 text-sm">
               © 2025 Apptech Knitwell. All rights reserved.
             </p>
