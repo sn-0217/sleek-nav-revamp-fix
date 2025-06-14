@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface AppStatus {
   text: string;
@@ -13,17 +14,59 @@ interface AppStatus {
   bgColor: string;
   borderColor: string;
 }
+
 const Home = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentEnv] = useState('DEV');
   const [isLoading, setIsLoading] = useState(true);
-  const apps = ["WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot", "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL", "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch", "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"];
+  const [apps, setApps] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch apps from API
   useEffect(() => {
+    const fetchApps = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await fetch('/get-apps');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Assuming the API returns an array of app names or objects with name property
+        if (Array.isArray(data)) {
+          const appNames = data.map(app => typeof app === 'string' ? app : app.name);
+          setApps(appNames);
+        } else {
+          throw new Error('Invalid response format');
+        }
+      } catch (err) {
+        console.error('Failed to fetch apps:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load applications');
+        
+        // Fallback to hardcoded apps for development
+        const fallbackApps = ["WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot", "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL", "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch", "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"];
+        setApps(fallbackApps);
+        
+        toast({
+          title: "Warning",
+          description: "Failed to load apps from server. Using fallback data.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
     localStorage.setItem('currentEnv', currentEnv);
-    // Simulate loading for smooth animation
-    setTimeout(() => setIsLoading(false), 800);
-  }, [currentEnv]);
+    fetchApps();
+  }, [currentEnv, toast]);
+
   const getAppStatus = (appName: string): AppStatus => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
@@ -72,7 +115,9 @@ const Home = () => {
         };
     }
   };
+
   const filteredApps = apps.filter(app => app.toLowerCase().includes(searchTerm.toLowerCase())).sort((a, b) => a.localeCompare(b));
+  
   const handleAppClick = (appName: string) => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
@@ -91,6 +136,7 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
+  
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
@@ -110,12 +156,16 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
+  
   const handleViewSubmissions = () => {
     navigate('/');
   };
+  
   const handleAdminClick = () => {
     navigate('/admin');
   };
+
+  // Enhanced loading screen with error handling
   if (isLoading) {
     return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
@@ -127,13 +177,37 @@ const Home = () => {
           }}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Initializing Dashboard...</p>
-            <p className="text-slate-500 text-sm">Loading application portfolio</p>
+            <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
+            <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
           </div>
         </div>
       </div>;
   }
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
+
+  // Error state
+  if (error && apps.length === 0) {
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+        <div className="text-center space-y-6 max-w-md mx-auto px-6">
+          <div className="relative">
+            <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto">
+              <XCircle className="w-10 h-10 text-red-600" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-slate-900 font-bold text-xl">Failed to Load Applications</h2>
+            <p className="text-slate-600 text-sm">Unable to connect to the server. Please try again later.</p>
+            <p className="text-slate-500 text-xs mt-2">Error: {error}</p>
+          </div>
+          <Button onClick={() => window.location.reload()} className="gap-2">
+            <Activity className="w-4 h-4" />
+            Retry
+          </Button>
+        </div>
+      </div>;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
       {/* Enhanced Header with Glass Effect */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -324,6 +398,8 @@ const Home = () => {
           }
         }
       `}</style>
-    </div>;
+    </div>
+  );
 };
+
 export default Home;
