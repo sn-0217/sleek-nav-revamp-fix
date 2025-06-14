@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -121,7 +122,7 @@ const Home = () => {
 
     const hasValidSubmissions = appSubmissions.some(s => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
-      navigate(`/?search=${encodeURIComponent(appName)}`);
+      navigate(`/submissions?search=${encodeURIComponent(appName)}`);
     } else {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
@@ -137,14 +138,14 @@ const Home = () => {
 
     const hasValidSubmissions = appSubmissions.some(s => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
-      navigate(`/?search=${encodeURIComponent(appName)}`);
+      navigate(`/submissions?search=${encodeURIComponent(appName)}`);
     } else {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
   
   const handleViewSubmissions = () => {
-    navigate('/');
+    navigate('/submissions');
   };
   
   const handleAdminClick = () => {
