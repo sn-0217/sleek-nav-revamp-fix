@@ -82,19 +82,23 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
     // Simulate API call delay
     await new Promise(resolve => setTimeout(resolve, 2000));
 
-    // Create submission object
+    // Create comprehensive submission object with all change request details
     const submission = {
       id: Date.now().toString(),
       appName: appName || '',
-      changeNo: changeNo,
-      approverName,
-      approverEmail,
+      changeNumber: changeNo,
+      requester: 'DevOps Engineering Team',
+      title: `Critical security update and performance optimizations for ${appName}`,
+      description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
+      impact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com, ${appName?.toLowerCase()}-api-01.prod.company.com, ${appName?.toLowerCase()}-api-02.prod.company.com, ${appName?.toLowerCase()}-db-01.prod.company.com, ${appName?.toLowerCase()}-cache-01.prod.company.com, ${appName?.toLowerCase()}-lb-01.prod.company.com`,
       decision: selectedDecision,
       timestamp: new Date().toISOString(),
+      scheduledDate: selectedDecision === 'Timed' ? startTime : undefined,
       comments: comments || undefined,
-      startTime: selectedDecision === 'Timed' ? startTime : undefined,
-      endTime: selectedDecision === 'Timed' ? endTime : undefined,
-      environment: currentEnv
+      approverName,
+      approverEmail,
+      environment: currentEnv,
+      deploymentWindow: 'Maintenance Window (8 PM - 6 AM)'
     };
 
     // Save to localStorage
