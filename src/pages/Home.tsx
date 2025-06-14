@@ -1,12 +1,12 @@
 
 import { useState, useEffect } from 'react';
-import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow, Settings, AlertTriangle } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import HomeHeader from '@/components/HomeHeader';
+import HomeHero from '@/components/HomeHero';
+import ApplicationsGrid from '@/components/ApplicationsGrid';
+import HomeFooter from '@/components/HomeFooter';
 
 interface AppStatus {
   text: string;
@@ -159,236 +159,29 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
-      {/* Enhanced Header with Glass Effect */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4" data-section="header-brand">
-              <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                  <Workflow className="w-6 h-6 text-white" />
-                </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
-                  <Zap className="w-3 h-3 text-white" />
-                </div>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Apptech Knitwell</h1>
-                <p className="text-slate-600 text-sm">Enterprise Change Management</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-violet-100 via-purple-100 to-fuchsia-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
-                <Shield className="w-4 h-4" />
-                {currentEnv}
-              </Badge>
-              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md" onClick={handleViewSubmissions} data-action="view-submissions">
-                <List className="w-4 h-4" />
-                Analytics
-              </Button>
-              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 text-orange-700 hover:from-orange-100 hover:to-red-100" onClick={handleAdminClick} data-action="admin">
-                <Settings className="w-4 h-4" />
-                Admin
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <HomeHeader 
+        currentEnv={currentEnv}
+        onViewSubmissions={handleViewSubmissions}
+        onAdminClick={handleAdminClick}
+      />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="home-content">
-        {/* Enhanced Dashboard Header */}
-        <div className="text-center mb-12 space-y-6">
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                <CheckCircle className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
-                <Sparkles className="w-4 h-4 text-white" />
-              </div>
-              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                <Zap className="w-3 h-3 text-white" />
-              </div>
-            </div>
-            <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2 mx-0 my-0 py-[11px]">
-                Change Control Center
-              </h1>
-              
-            </div>
-          </div>
-          <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-slate-600 leading-relaxed mb-6">
-              Streamline your change approval workflow with our intelligent platform. Review, approve, and track change requests across your entire application portfolio with enhanced visibility and control.
-            </p>
-            <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                <span>Real-time Processing</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span>Audit Trail</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span>Automated Workflows</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <HomeHero />
 
-        {/* Enhanced Applications Section */}
-        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
-          {/* Subtle animated background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
-          
-          <CardContent className="p-8 relative z-10">
-            <div className="flex items-center justify-between mb-8" data-section="apps-header">
-              <div className="flex items-center gap-4">
-                <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <Layers className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
-                    {!error && !isLoading ? filteredApps.length : '0'}
-                  </div>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-900">Application Portfolio</h2>
-                  <p className="text-slate-600 text-sm">Select an application to initiate change requests</p>
-                </div>
-              </div>
-              <div className="relative group" data-component="search">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors duration-300" />
-                <Input placeholder="Search applications..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70" data-input="search" />
-              </div>
-            </div>
-
-            {/* Enhanced Apps Grid */}
-            {isLoading ? (
-              <div className="text-center py-20" data-state="loading">
-                <div className="relative">
-                  <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-                  <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
-                    animationDirection: 'reverse',
-                    animationDuration: '1.5s'
-                  }}></div>
-                </div>
-                <div className="space-y-2 mt-6">
-                  <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
-                  <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
-                </div>
-              </div>
-            ) : error ? (
-              <div className="text-center py-20" data-state="error">
-                <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <AlertTriangle className="w-12 h-12 text-red-600" />
-                  </div>
-                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-red-500 to-rose-500 rounded-full flex items-center justify-center">
-                    <XCircle className="w-4 h-4 text-white" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-700 mb-3">Failed to Load Applications</h3>
-                <p className="text-slate-600 max-w-md mx-auto mb-2">
-                  Unable to connect to the server. Please contact admin for assistance.
-                </p>
-                <p className="text-slate-500 text-xs mb-6">Error: {error}</p>
-                <Button 
-                  onClick={() => window.location.reload()} 
-                  className="gap-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white"
-                >
-                  <Activity className="w-4 h-4" />
-                  Retry
-                </Button>
-              </div>
-            ) : filteredApps.length === 0 ? (
-              <div className="text-center py-20" data-state="no-results">
-                <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <Search className="w-12 h-12 text-slate-400" />
-                  </div>
-                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                    <XCircle className="w-4 h-4 text-white" />
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
-                <p className="text-slate-500 max-w-md mx-auto mb-6">
-                  Your search didn't match any applications in the current environment. Try adjusting your search criteria.
-                </p>
-                <Button variant="outline" onClick={() => setSearchTerm('')} className="gap-2 hover:scale-105 transition-transform">
-                  <XCircle className="w-4 h-4" />
-                  Clear Search
-                </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
-                {filteredApps.map((app, index) => {
-                  const status = getAppStatus(app);
-                  const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-                  const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
-                  const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
-                  return (
-                    <Card 
-                      key={app} 
-                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} 
-                      style={{
-                        animationDelay: `${index * 50}ms`,
-                        animation: 'fadeInUp 0.6s ease-out forwards'
-                      }} 
-                      onClick={() => handleAppClick(app)} 
-                      data-app={app.toLowerCase().replace(/\s+/g, '-')}
-                    >
-                      {/* Gradient overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
-                      
-                      <CardContent className="p-6 text-center relative z-10">
-                        <div className="relative mb-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
-                            <Layers className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
-                          </div>
-                          {/* Status indicator dot */}
-                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${status.text === 'Approved' ? 'bg-emerald-500' : status.text === 'Rejected' ? 'bg-rose-500' : status.text === 'Timed Approval' ? 'bg-amber-500' : 'bg-slate-400'} group-hover:scale-125 transition-transform`}></div>
-                        </div>
-                        <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
-                        <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} 
-                          onClick={e => handleStatusClick(app, e)} 
-                          data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
-                        >
-                          {status.icon}
-                          {status.text}
-                        </Badge>
-                      </CardContent>
-                      
-                      {/* Animated bottom accent line */}
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <ApplicationsGrid 
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          isLoading={isLoading}
+          error={error}
+          filteredApps={filteredApps}
+          getAppStatus={getAppStatus}
+          handleAppClick={handleAppClick}
+          handleStatusClick={handleStatusClick}
+        />
       </div>
 
-      {/* Enhanced Footer */}
-      <footer className="mt-16 border-t border-slate-200 bg-white/50 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="text-center">
-            <p className="text-slate-600 text-sm">
-              © 2025 Apptech Knitwell. All rights reserved.
-            </p>
-            <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
-              <span className="text-xs text-slate-500">Enterprise-Grade Change Management Platform</span>
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <HomeFooter />
 
       <style>{`
         @keyframes fadeInUp {
