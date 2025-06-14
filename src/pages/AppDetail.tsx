@@ -50,14 +50,26 @@ const AppDetail = () => {
           if (response.status === 404) {
             throw new Error('Application not found');
           }
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`Failed to load application details (HTTP ${response.status})`);
         }
         
         const data = await response.json();
         setAppData(data);
       } catch (err) {
         console.error('Failed to fetch app details:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load application details');
+        let errorMessage = 'Unable to connect to the server. Using default values.';
+        
+        if (err instanceof Error) {
+          if (err.message.includes('JSON')) {
+            errorMessage = 'Server response format error. Using default values.';
+          } else if (err.message.includes('fetch')) {
+            errorMessage = 'Network connection failed. Using default values.';
+          } else {
+            errorMessage = err.message;
+          }
+        }
+        
+        setError(errorMessage);
         // Set default "NA" data when there's an error
         setAppData({
           appName: appName || 'N/A',
