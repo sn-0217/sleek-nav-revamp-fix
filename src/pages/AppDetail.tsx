@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Info, List, Shield, Zap, FileText } from 'lucide-react';
@@ -105,17 +106,9 @@ const AppDetail = () => {
                   <p className="text-sm text-slate-600 font-normal mt-1">Review details and provide approval decision</p>
                 </div>
               </div>
-              <div className="relative group/badge">
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-blue-500 to-purple-600 rounded-2xl blur-sm opacity-75 group-hover/badge:opacity-100 transition-opacity"></div>
-                <Badge className="relative bg-white/95 backdrop-blur-sm text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 border-2 border-white/50 px-6 py-3 text-base font-bold tracking-wide shadow-xl hover:scale-105 transition-all duration-300 rounded-2xl">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full animate-pulse"></div>
-                    <span className="bg-gradient-to-r from-emerald-600 via-blue-600 to-purple-600 bg-clip-text text-transparent font-mono">
-                      {changeRequest.changeNo}
-                    </span>
-                  </div>
-                </Badge>
-              </div>
+              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 text-sm font-semibold">
+                {changeRequest.changeNo}
+              </Badge>
             </CardTitle>
           </CardHeader>
 
