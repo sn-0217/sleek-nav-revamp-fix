@@ -34,15 +34,7 @@ const ChangeRequestDetails = ({
               </div>
               <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.requestedBy}</p>
             </div>
-            <div className="space-y-1.5" data-field="request-date">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-2.5 h-2.5 text-purple-600" />
-                </div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Request Date</p>
-              </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.requestDate}</p>
-            </div>
+            
           </div>
 
           <div className="mt-4 space-y-1.5" data-field="deployment-window">
