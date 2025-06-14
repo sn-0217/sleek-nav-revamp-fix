@@ -1,6 +1,8 @@
 
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 interface ChangeRequest {
   changeNo: string;
   requestedBy: string;
@@ -9,13 +11,16 @@ interface ChangeRequest {
   description: string;
   affectedServers: string[];
 }
+
 interface ChangeRequestDetailsProps {
   changeRequest: ChangeRequest;
 }
+
 const ChangeRequestDetails = ({
   changeRequest
 }: ChangeRequestDetailsProps) => {
-  return <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
+  return (
+    <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -70,17 +75,23 @@ const ChangeRequestDetails = ({
               </div>
               <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
             </div>
-            <div className="bg-white rounded-lg p-3 border border-slate-200">
-              <div className="grid grid-cols-1 gap-1">
-                {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
-                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
-                    <span className="font-mono">{server}</span>
-                  </div>)}
-              </div>
+            <div className="bg-white rounded-lg border border-slate-200">
+              <ScrollArea className="h-[400px] p-3">
+                <div className="space-y-1">
+                  {changeRequest.affectedServers.map((server, index) => (
+                    <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
+                      <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
+                      <span className="font-mono">{server}</span>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
             </div>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default ChangeRequestDetails;
