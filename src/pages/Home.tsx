@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
-import { ThemeToggle } from '@/components/theme-toggle';
 
 interface AppStatus {
   text: string;
@@ -161,9 +160,9 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900" data-page="home">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
       {/* Enhanced Header with Glass Effect */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
@@ -176,16 +175,15 @@ const Home = () => {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 tracking-tight">Apptech Knitwell</h1>
-                <p className="text-slate-600 dark:text-slate-400 text-sm">Enterprise Change Management</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Apptech Knitwell</h1>
+                <p className="text-slate-600 text-sm">Enterprise Change Management</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900 dark:to-blue-900 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700 hover:scale-105 transition-transform">
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
                 <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
-              <ThemeToggle />
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -218,21 +216,21 @@ const Home = () => {
               </div>
             </div>
             <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 dark:from-slate-100 dark:via-purple-100 dark:to-slate-100 bg-clip-text text-transparent mb-2">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
                 Change Control Center
               </h1>
               <div className="flex items-center gap-3">
                 <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse"></div>
-                <span className="text-lg text-slate-600 dark:text-slate-400 font-medium">Enterprise Ready • Secure • Compliant</span>
+                <span className="text-lg text-slate-600 font-medium">Enterprise Ready • Secure • Compliant</span>
                 <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
           <div className="max-w-4xl mx-auto">
-            <p className="text-xl text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+            <p className="text-xl text-slate-600 leading-relaxed mb-6">
               Streamline your change approval workflow with our intelligent platform. Review, approve, and track change requests across your entire application portfolio with enhanced visibility and control.
             </p>
-            <div className="flex items-center justify-center gap-8 text-sm text-slate-500 dark:text-slate-500">
+            <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
                 <span>Real-time Processing</span>
@@ -250,7 +248,7 @@ const Home = () => {
         </div>
 
         {/* Enhanced Applications Section */}
-        <Card className="bg-white/70 dark:bg-slate-800/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
+        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
           {/* Subtle animated background */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
           
@@ -322,7 +320,7 @@ const Home = () => {
                   return (
                     <Card 
                       key={app} 
-                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative ${
                         hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
                       }`}
                       style={{ 
@@ -373,7 +371,7 @@ const Home = () => {
       </div>
 
       {/* Enhanced Footer */}
-      <footer className="mt-16 border-t border-slate-200 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+      <footer className="mt-16 border-t border-slate-200 bg-white/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
             <p className="text-slate-600 text-sm">
