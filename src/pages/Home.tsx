@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useToastContext } from '@/contexts/ToastContext';
 import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
@@ -19,7 +18,7 @@ interface AppStatus {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { showError } = useToastContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentEnv] = useState('PROD');
   const [isLoading, setIsLoading] = useState(true);
@@ -51,18 +50,17 @@ const Home = () => {
       } catch (err) {
         console.error('Failed to load data:', err);
         setError('Failed to load applications');
-        toast({
-          title: "Error",
-          description: "Failed to load applications. Please try again.",
-          variant: "destructive",
-        });
+        showError(
+          'Failed to Load Applications',
+          'Unable to fetch applications. Please check your connection and try again.'
+        );
       } finally {
         setTimeout(() => setIsLoading(false), 800);
       }
     };
 
     fetchData();
-  }, [currentEnv, toast]);
+  }, [currentEnv, showError]);
 
   const getAppStatus = (appName: string): AppStatus => {
     const appSubmissions = submissions.filter(s => s.appName === appName);

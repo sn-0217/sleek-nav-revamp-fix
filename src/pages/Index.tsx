@@ -1,10 +1,9 @@
-
 import { useState, useEffect, useMemo } from 'react';
 import { BarChart3, TrendingUp, Layers, Home } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useToastContext } from '@/contexts/ToastContext';
 import { loadSubmissions } from '@/utils/testData';
 import SubmissionStatistics from '@/components/SubmissionStatistics';
 import SubmissionFilters from '@/components/SubmissionFilters';
@@ -26,7 +25,7 @@ interface Submission {
 
 const Index = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const { showError } = useToastContext();
   const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -54,11 +53,10 @@ const Index = () => {
       } catch (error) {
         console.error('Failed to load submissions:', error);
         setSubmissions([]);
-        toast({
-          title: "Error",
-          description: "Failed to load submissions. Please try again.",
-          variant: "destructive",
-        });
+        showError(
+          'Failed to Load Submissions',
+          'Unable to fetch submission data. Please check your connection and try again.'
+        );
       } finally {
         // Check for search parameter in URL
         const searchQuery = searchParams.get('search');
@@ -70,7 +68,7 @@ const Index = () => {
       }
     };
     fetchSubmissions();
-  }, [currentEnv, searchParams, toast]);
+  }, [currentEnv, searchParams, showError]);
 
   const handleStatisticClick = (filterType: string) => {
     setStatusFilter(filterType);
