@@ -1,5 +1,3 @@
-
-
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 interface ChangeRequest {
@@ -78,7 +76,7 @@ const ChangeRequestDetails = ({
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-xl"></div>
               <div className="relative bg-white/80 backdrop-blur-sm rounded-xl border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-green-500 to-emerald-600"></div>
+                <div className="absolute top-0 left-0 w-1 bg-gradient-to-b from-green-500 to-emerald-600" style={{height: '100%'}}></div>
                 <div className="max-h-40 overflow-y-auto p-3 pl-6">
                   <div className="space-y-1">
                     {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
@@ -95,4 +93,3 @@ const ChangeRequestDetails = ({
     </div>;
 };
 export default ChangeRequestDetails;
-
