@@ -95,64 +95,21 @@ const AppDetail = () => {
         <Card className="group hover:shadow-2xl transition-all duration-700 border-0 shadow-xl bg-white/90 backdrop-blur-lg relative overflow-hidden" data-card="unified-workflow">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
           
-          <CardHeader className="relative z-10 border-b border-slate-200/30 overflow-hidden">
-            {/* Modern background with subtle patterns */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white via-blue-50/30 to-purple-50/30"></div>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),transparent_50%)]"></div>
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-blue-400/50 to-transparent"></div>
-            
-            <div className="relative z-10 px-8 py-8">
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-6">
-                  {/* Enhanced icon with modern styling */}
-                  <div className="relative group/icon">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl blur-xl opacity-30 group-hover/icon:opacity-50 transition-opacity"></div>
-                    <div className="relative w-16 h-16 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-3xl flex items-center justify-center shadow-2xl transform group-hover/icon:scale-110 transition-all duration-500">
-                      <div className="absolute inset-0.5 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
-                      <Info className="w-8 h-8 text-white relative z-10" />
-                    </div>
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full flex items-center justify-center shadow-lg">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                    </div>
-                  </div>
-                  
-                  {/* Modern typography and layout */}
-                  <div className="space-y-3">
-                    <div>
-                      <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent leading-tight">
-                        Change Request Workflow
-                      </h1>
-                      <div className="flex items-center gap-3 mt-2">
-                        <div className="h-px bg-gradient-to-r from-blue-500/50 to-purple-500/50 flex-1 max-w-24"></div>
-                        <p className="text-slate-600 text-sm font-medium">Review details and provide approval decision</p>
-                        <div className="h-px bg-gradient-to-r from-purple-500/50 to-pink-500/50 flex-1 max-w-24"></div>
-                      </div>
-                    </div>
-                    
-                    {/* Enhanced status indicators */}
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-full">
-                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                        <span className="text-xs font-medium text-slate-700">Active</span>
-                      </div>
-                      <div className="w-1 h-4 bg-slate-300 rounded-full"></div>
-                      <div className="text-xs text-slate-500 font-medium">
-                        Priority: <span className="text-orange-600 font-semibold">High</span>
-                      </div>
-                    </div>
-                  </div>
+          <CardHeader className="bg-gradient-to-r from-slate-50/90 to-blue-50/90 border-b border-slate-200/50 relative z-10 backdrop-blur-sm px-8 py-6">
+            <CardTitle className="flex items-center justify-between text-slate-900">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Info className="w-6 h-6 text-white" />
                 </div>
-                
-                {/* Modern badge design */}
-                <div className="relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur-lg opacity-30"></div>
-                  <Badge className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-6 py-3 text-base font-bold shadow-xl rounded-2xl transform hover:scale-105 transition-all duration-300">
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent rounded-2xl"></div>
-                    <span className="relative z-10">{changeRequest.changeNo}</span>
-                  </Badge>
+                <div>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Change Request Workflow</span>
+                  <p className="text-sm text-slate-600 font-normal mt-1">Review details and provide approval decision</p>
                 </div>
-              </CardTitle>
-            </div>
+              </div>
+              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 text-sm font-semibold">
+                {changeRequest.changeNo}
+              </Badge>
+            </CardTitle>
           </CardHeader>
 
           <CardContent className="p-0 relative z-10">
