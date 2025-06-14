@@ -15,10 +15,11 @@ function App() {
       <ToastProvider>
         <div className="App">
           <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/submissions" element={<Index />} />
             <Route path="/home" element={<Home />} />
             <Route path="/app/:appName" element={<AppDetail />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/" element={<Index />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
