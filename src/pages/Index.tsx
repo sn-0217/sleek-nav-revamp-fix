@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -242,7 +243,6 @@ const Index = () => {
               </div>
               <div>
                 <h3 className="font-semibold text-slate-900">Filter & Search</h3>
-                <p className="text-sm text-slate-600">Find specific submissions quickly</p>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
