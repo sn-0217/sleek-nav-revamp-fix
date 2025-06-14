@@ -32,21 +32,45 @@ const Index = () => {
   const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load submissions from localStorage
+  // Load submissions with API first, localStorage as fallback
   useEffect(() => {
-    const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    // Filter submissions by current environment
-    const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
-    setSubmissions(envSubmissions);
-    
-    // Check for search parameter in URL
-    const searchQuery = searchParams.get('search');
-    if (searchQuery) {
-      setSearchTerm(searchQuery);
-    }
-    
-    // Simulate loading for smooth animation
-    setTimeout(() => setIsLoading(false), 600);
+    const fetchSubmissions = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Try API first
+        const response = await fetch('/get-all-submissions');
+        if (response.ok) {
+          const apiSubmissions = await response.json();
+          console.log('Fetched submissions from API:', apiSubmissions);
+          
+          // Filter by current environment
+          const envSubmissions = apiSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
+          setSubmissions(envSubmissions);
+        } else {
+          throw new Error(`API call failed with status: ${response.status}`);
+        }
+      } catch (error) {
+        console.log('API fetch failed, falling back to localStorage:', error);
+        
+        // Fallback to localStorage
+        const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+        // Filter submissions by current environment
+        const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
+        setSubmissions(envSubmissions);
+      } finally {
+        // Check for search parameter in URL
+        const searchQuery = searchParams.get('search');
+        if (searchQuery) {
+          setSearchTerm(searchQuery);
+        }
+        
+        // Simulate loading for smooth animation
+        setTimeout(() => setIsLoading(false), 600);
+      }
+    };
+
+    fetchSubmissions();
   }, [currentEnv, searchParams]);
 
   const filteredSubmissions = useMemo(() => {
