@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -219,9 +220,9 @@ const Home = () => {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
                 Change Control Center
               </h1>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center gap-3">
                 <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full animate-pulse"></div>
-                <span className="text-lg text-slate-600 font-medium">Enterprise Ready • Secure • Compliant</span>
+                <span className="text-lg text-slate-600 font-medium text-center">Enterprise Ready • Secure • Compliant</span>
                 <div className="w-3 h-3 bg-gradient-to-r from-violet-500 to-purple-600 rounded-full animate-pulse"></div>
               </div>
             </div>
