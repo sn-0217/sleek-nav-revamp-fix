@@ -1,4 +1,3 @@
-
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 interface ChangeRequest {
@@ -43,7 +42,7 @@ const ChangeRequestDetails = ({
                 </div>
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTENANCE WINDOW</p>
               </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">25 June 10:00AM to 30 June 10:00PM EST</p>
+              <p className="font-medium text-slate-900 text-sm pl-6">June 25, 10:00 AM - June 26, 11:00 PM</p>
             </div>
           </div>
           
