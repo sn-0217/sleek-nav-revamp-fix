@@ -16,7 +16,7 @@ const ChangeRequestDetails = ({
 }: ChangeRequestDetailsProps) => {
   return <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
       <div className="space-y-3">
-        <div className="flex items-center gap-2 mb-3">
+        <div className="flex items-center gap-2 mb-3 py-[12px]">
           <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
             <MessageSquare className="w-3.5 h-3.5 text-white" />
           </div>
