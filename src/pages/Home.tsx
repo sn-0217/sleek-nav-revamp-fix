@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +48,8 @@ const Home = () => {
       } catch (err) {
         console.error('Failed to fetch apps:', err);
         setError(err instanceof Error ? err.message : 'Failed to load applications');
-        setApps([]); // Clear apps on error
+        // Add test app for testing purposes when API fails
+        setApps(['Test Application']);
       } finally {
         setIsLoading(false);
       }
