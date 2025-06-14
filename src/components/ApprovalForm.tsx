@@ -86,7 +86,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
     const submission = {
       id: Date.now().toString(),
       appName: appName || '',
-      changeNumber: changeNo,
+      changeNo: changeNo,
       requester: 'DevOps Engineering Team',
       title: `Critical security update and performance optimizations for ${appName}`,
       description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
