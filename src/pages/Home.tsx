@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow, Settings } from 'lucide-react';
+import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow, Settings, AlertTriangle } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -48,16 +49,7 @@ const Home = () => {
       } catch (err) {
         console.error('Failed to fetch apps:', err);
         setError(err instanceof Error ? err.message : 'Failed to load applications');
-        
-        // Fallback to hardcoded apps for development
-        const fallbackApps = ["WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot", "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL", "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch", "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"];
-        setApps(fallbackApps);
-        
-        toast({
-          title: "Warning",
-          description: "Failed to load apps from server. Using fallback data.",
-          variant: "destructive",
-        });
+        setApps([]); // Clear apps on error
       } finally {
         setIsLoading(false);
       }
@@ -65,7 +57,7 @@ const Home = () => {
 
     localStorage.setItem('currentEnv', currentEnv);
     fetchApps();
-  }, [currentEnv, toast]);
+  }, [currentEnv]);
 
   const getAppStatus = (appName: string): AppStatus => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
@@ -165,47 +157,6 @@ const Home = () => {
     navigate('/admin');
   };
 
-  // Enhanced loading screen with error handling
-  if (isLoading) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
-        <div className="text-center space-y-6">
-          <div className="relative">
-            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
-            animationDirection: 'reverse',
-            animationDuration: '1.5s'
-          }}></div>
-          </div>
-          <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
-            <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
-          </div>
-        </div>
-      </div>;
-  }
-
-  // Error state
-  if (error && apps.length === 0) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
-        <div className="text-center space-y-6 max-w-md mx-auto px-6">
-          <div className="relative">
-            <div className="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto">
-              <XCircle className="w-10 h-10 text-red-600" />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-slate-900 font-bold text-xl">Failed to Load Applications</h2>
-            <p className="text-slate-600 text-sm">Unable to connect to the server. Please try again later.</p>
-            <p className="text-slate-500 text-xs mt-2">Error: {error}</p>
-          </div>
-          <Button onClick={() => window.location.reload()} className="gap-2">
-            <Activity className="w-4 h-4" />
-            Retry
-          </Button>
-        </div>
-      </div>;
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
       {/* Enhanced Header with Glass Effect */}
@@ -301,7 +252,7 @@ const Home = () => {
                     <Layers className="w-6 h-6 text-white" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
-                    {filteredApps.length}
+                    {!error && !isLoading ? filteredApps.length : '0'}
                   </div>
                 </div>
                 <div>
@@ -316,7 +267,45 @@ const Home = () => {
             </div>
 
             {/* Enhanced Apps Grid */}
-            {filteredApps.length === 0 ? <div className="text-center py-20" data-state="no-results">
+            {isLoading ? (
+              <div className="text-center py-20" data-state="loading">
+                <div className="relative">
+                  <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+                  <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+                    animationDirection: 'reverse',
+                    animationDuration: '1.5s'
+                  }}></div>
+                </div>
+                <div className="space-y-2 mt-6">
+                  <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
+                  <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
+                </div>
+              </div>
+            ) : error ? (
+              <div className="text-center py-20" data-state="error">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <AlertTriangle className="w-12 h-12 text-red-600" />
+                  </div>
+                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-red-500 to-rose-500 rounded-full flex items-center justify-center">
+                    <XCircle className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-slate-700 mb-3">Failed to Load Applications</h3>
+                <p className="text-slate-600 max-w-md mx-auto mb-2">
+                  Unable to connect to the server. Please contact admin for assistance.
+                </p>
+                <p className="text-slate-500 text-xs mb-6">Error: {error}</p>
+                <Button 
+                  onClick={() => window.location.reload()} 
+                  className="gap-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white"
+                >
+                  <Activity className="w-4 h-4" />
+                  Retry
+                </Button>
+              </div>
+            ) : filteredApps.length === 0 ? (
+              <div className="text-center py-20" data-state="no-results">
                 <div className="relative mb-8">
                   <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
                     <Search className="w-12 h-12 text-slate-400" />
@@ -333,16 +322,25 @@ const Home = () => {
                   <XCircle className="w-4 h-4" />
                   Clear Search
                 </Button>
-              </div> : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
                 {filteredApps.map((app, index) => {
-              const status = getAppStatus(app);
-              const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-              const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
-              const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
-              return <Card key={app} className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} style={{
-                animationDelay: `${index * 50}ms`,
-                animation: 'fadeInUp 0.6s ease-out forwards'
-              }} onClick={() => handleAppClick(app)} data-app={app.toLowerCase().replace(/\s+/g, '-')}>
+                  const status = getAppStatus(app);
+                  const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+                  const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
+                  const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
+                  return (
+                    <Card 
+                      key={app} 
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} 
+                      style={{
+                        animationDelay: `${index * 50}ms`,
+                        animation: 'fadeInUp 0.6s ease-out forwards'
+                      }} 
+                      onClick={() => handleAppClick(app)} 
+                      data-app={app.toLowerCase().replace(/\s+/g, '-')}
+                    >
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
                       
@@ -355,7 +353,11 @@ const Home = () => {
                           <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${status.text === 'Approved' ? 'bg-emerald-500' : status.text === 'Rejected' ? 'bg-rose-500' : status.text === 'Timed Approval' ? 'bg-amber-500' : 'bg-slate-400'} group-hover:scale-125 transition-transform`}></div>
                         </div>
                         <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
-                        <Badge className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} onClick={e => handleStatusClick(app, e)} data-status={status.text.toLowerCase().replace(/\s+/g, '-')}>
+                        <Badge 
+                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} 
+                          onClick={e => handleStatusClick(app, e)} 
+                          data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
+                        >
                           {status.icon}
                           {status.text}
                         </Badge>
@@ -363,9 +365,11 @@ const Home = () => {
                       
                       {/* Animated bottom accent line */}
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                    </Card>;
-            })}
-              </div>}
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
