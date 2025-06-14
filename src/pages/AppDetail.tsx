@@ -193,7 +193,7 @@ const AppDetail = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="app-detail">
       {/* Modern Header with Glass Effect */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="max-w-5xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-info">
               <div className="relative">
@@ -239,298 +239,299 @@ const AppDetail = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Change Details Card with Enhanced Styling */}
-          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm relative overflow-hidden" data-card="change-details">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-transparent to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <CardHeader className="bg-gradient-to-r from-slate-50 to-blue-50 border-b relative z-10">
-              <CardTitle className="flex items-center gap-3 text-slate-900">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Info className="w-5 h-5 text-white" />
+      <div className="max-w-5xl mx-auto px-6 py-8" data-main="app-detail-content">
+        {/* Unified Change Request & Approval Card */}
+        <Card className="group hover:shadow-2xl transition-all duration-700 border-0 shadow-xl bg-white/80 backdrop-blur-lg relative overflow-hidden" data-card="unified-workflow">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/3 via-purple-600/3 to-pink-600/3 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
+          
+          <CardHeader className="bg-gradient-to-r from-slate-50/90 to-blue-50/90 border-b border-slate-200/50 relative z-10 backdrop-blur-sm">
+            <CardTitle className="flex items-center justify-between text-slate-900">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Info className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <span className="text-lg">Change Request Details</span>
-                  <p className="text-sm text-slate-600 font-normal">Review change specifications</p>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 space-y-8 relative z-10" data-content="change-info">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-3" data-field="change-number">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <FileText className="w-4 h-4 text-blue-600" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Change Number</p>
-                  </div>
-                  <p className="font-bold text-slate-900 text-xl">{changeRequest.changeNo}</p>
-                </div>
-                <div className="space-y-3" data-field="requested-by">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
-                      <User className="w-4 h-4 text-emerald-600" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Requested By</p>
-                  </div>
-                  <p className="font-semibold text-slate-900">{changeRequest.requestedBy}</p>
-                </div>
-                <div className="space-y-3" data-field="request-date">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <Calendar className="w-4 h-4 text-purple-600" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Request Date</p>
-                  </div>
-                  <p className="font-semibold text-slate-900">{changeRequest.requestDate}</p>
-                </div>
-                <div className="space-y-3" data-field="deployment-window">
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center">
-                      <Clock className="w-4 h-4 text-amber-600" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Deployment Window</p>
-                  </div>
-                  <p className="font-semibold text-slate-900">{changeRequest.deploymentWindow}</p>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Change Request Workflow</span>
+                  <p className="text-sm text-slate-600 font-normal mt-1">Review details and provide approval decision</p>
                 </div>
               </div>
-              
-              <div className="space-y-4" data-field="description">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <MessageSquare className="w-4 h-4 text-indigo-600" />
-                  </div>
-                  <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Description</p>
-                </div>
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 border-l-4 border-blue-500 shadow-sm">
-                  <p className="text-slate-700 leading-relaxed">{changeRequest.description}</p>
-                </div>
-              </div>
+              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 text-sm font-semibold">
+                {changeRequest.changeNo}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
 
-              <div className="space-y-5" data-section="affected-servers">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
-                    <Database className="w-4 h-4 text-green-600" />
+          <CardContent className="p-0 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
+              {/* Left Side - Change Details */}
+              <div className="p-8 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
+                <div className="space-y-8">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-900">Request Details</h3>
                   </div>
-                  <h3 className="font-semibold text-slate-900">Infrastructure Impact</h3>
-                </div>
-                <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-6 max-h-64 overflow-y-auto border shadow-sm">
-                  <div className="space-y-3">
-                    {changeRequest.affectedServers.map((server, index) => (
-                      <div 
-                        key={index} 
-                        className="flex items-center gap-3 p-4 bg-white rounded-lg border hover:shadow-md transition-shadow font-mono text-sm group"
-                        data-server={`server-${index}`}
-                      >
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Globe className="w-4 h-4 text-blue-600" />
+
+                  <div className="grid grid-cols-1 gap-6" data-content="change-info">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-3" data-field="requested-by">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
+                            <User className="w-4 h-4 text-emerald-600" />
+                          </div>
+                          <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Requested By</p>
                         </div>
-                        <span className="text-slate-700 group-hover:text-slate-900 transition-colors">{server}</span>
+                        <p className="font-semibold text-slate-900 text-sm">{changeRequest.requestedBy}</p>
                       </div>
-                    ))}
+                      <div className="space-y-3" data-field="request-date">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <Calendar className="w-4 h-4 text-purple-600" />
+                          </div>
+                          <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Request Date</p>
+                        </div>
+                        <p className="font-semibold text-slate-900 text-sm">{changeRequest.requestDate}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3" data-field="deployment-window">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center">
+                          <Clock className="w-4 h-4 text-amber-600" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Deployment Window</p>
+                      </div>
+                      <p className="font-semibold text-slate-900 text-sm">{changeRequest.deploymentWindow}</p>
+                    </div>
+                    
+                    <div className="space-y-4" data-field="description">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
+                          <MessageSquare className="w-4 h-4 text-indigo-600" />
+                        </div>
+                        <p className="text-sm font-medium text-slate-500 uppercase tracking-wide">Description</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 border-l-4 border-blue-500 shadow-sm">
+                        <p className="text-slate-700 leading-relaxed text-sm">{changeRequest.description}</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4" data-section="affected-servers">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+                          <Database className="w-4 h-4 text-green-600" />
+                        </div>
+                        <h4 className="font-semibold text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
+                      </div>
+                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl p-4 max-h-48 overflow-y-auto border shadow-sm">
+                        <div className="space-y-2">
+                          {changeRequest.affectedServers.map((server, index) => (
+                            <div 
+                              key={index} 
+                              className="flex items-center gap-2 p-2 bg-white rounded-lg border hover:shadow-md transition-shadow font-mono text-xs group"
+                              data-server={`server-${index}`}
+                            >
+                              <div className="w-6 h-6 bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Globe className="w-3 h-3 text-blue-600" />
+                              </div>
+                              <span className="text-slate-700 group-hover:text-slate-900 transition-colors truncate">{server}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
 
-          {/* Enhanced Approval Form */}
-          <Card className="group hover:shadow-xl transition-all duration-500 border-0 shadow-lg bg-white/70 backdrop-blur-sm relative overflow-hidden" data-card="approval-form">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-pink-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b relative z-10">
-              <CardTitle className="flex items-center gap-3 text-slate-900">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <CheckCircle className="w-5 h-5 text-white" />
+              {/* Right Side - Approval Form */}
+              <div className="p-8 bg-gradient-to-br from-white/50 to-slate-50/30" data-section="approval-form">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900">Approval Decision</h3>
                 </div>
-                <div>
-                  <span className="text-lg">Approval Decision</span>
-                  <p className="text-sm text-slate-600 font-normal">Process change request</p>
-                </div>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-8 relative z-10">
-              <form onSubmit={handleSubmit} className="space-y-8" data-form="approval">
-                <div className="space-y-6">
-                  <div className="space-y-3" data-field="approver-name">
-                    <label htmlFor="approver-name" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                      <div className="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <User className="w-4 h-4 text-blue-600" />
-                      </div>
-                      Approver Name
-                    </label>
-                    <Input
-                      id="approver-name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={approverName}
-                      onChange={(e) => setApproverName(e.target.value)}
-                      required
-                      className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/80 hover:bg-white"
-                      data-input="approver-name"
-                    />
-                  </div>
 
-                  <div className="space-y-3" data-field="approver-email">
-                    <label htmlFor="approver-email" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                      <div className="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
-                        <Mail className="w-4 h-4 text-emerald-600" />
-                      </div>
-                      Approver Email
-                    </label>
-                    <Input
-                      id="approver-email"
-                      type="email"
-                      placeholder="Enter your email address"
-                      value={approverEmail}
-                      onChange={(e) => setApproverEmail(e.target.value)}
-                      required
-                      className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/80 hover:bg-white"
-                      data-input="approver-email"
-                    />
-                  </div>
-
-                  <div className="space-y-4" data-field="decision">
-                    <label className="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                      <div className="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <CheckCircle className="w-4 h-4 text-purple-600" />
-                      </div>
-                      Decision
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      {(['Approved', 'Rejected', 'Timed'] as const).map((decision) => {
-                        const config = getDecisionConfig(decision);
-                        const Icon = config.icon;
-                        const isSelected = selectedDecision === decision;
-                        
-                        return (
-                          <button
-                            key={decision}
-                            type="button"
-                            onClick={() => handleDecisionSelect(decision)}
-                            className={`
-                              relative overflow-hidden group/btn p-5 rounded-xl border-2 font-semibold transition-all duration-300
-                              hover:scale-105 active:scale-95 min-h-[80px] flex flex-col items-center justify-center gap-2
-                              ${isSelected 
-                                ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg ${config.glowColor} shadow-lg` 
-                                : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-lg hover:${config.bgColor}`
-                              }
-                            `}
-                            data-decision={decision.toLowerCase()}
-                          >
-                            <Icon className={`w-6 h-6 ${isSelected ? 'text-white' : config.textColor}`} />
-                            <span className="text-sm">{decision}</span>
-                            {isSelected && (
-                              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {selectedDecision === 'Timed' && (
-                    <Card className="animate-in fade-in-50 duration-500 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 shadow-lg" data-section="timed-approval">
-                      <CardHeader className="pb-4">
-                        <CardTitle className="flex items-center gap-3 text-amber-800 text-lg">
-                          <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
-                            <Calendar className="w-5 h-5 text-amber-600" />
-                          </div>
-                          <div>
-                            <span>Time Window Configuration</span>
-                            <p className="text-sm text-amber-700 font-normal">Define approval schedule</p>
-                          </div>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-5">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                          <div className="space-y-3">
-                            <label htmlFor="start-time" className="flex items-center gap-2 text-sm font-semibold text-amber-700">
-                              <Clock className="w-4 h-4" />
-                              Start Date & Time
-                            </label>
-                            <Input
-                              id="start-time"
-                              type="datetime-local"
-                              value={startTime}
-                              onChange={(e) => setStartTime(e.target.value)}
-                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-12"
-                              data-input="start-time"
-                            />
-                          </div>
-                          <div className="space-y-3">
-                            <label htmlFor="end-time" className="flex items-center gap-2 text-sm font-semibold text-amber-700">
-                              <Clock className="w-4 h-4" />
-                              End Date & Time
-                            </label>
-                            <Input
-                              id="end-time"
-                              type="datetime-local"
-                              value={endTime}
-                              onChange={(e) => setEndTime(e.target.value)}
-                              className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-12"
-                              data-input="end-time"
-                            />
-                          </div>
+                <form onSubmit={handleSubmit} className="space-y-6" data-form="approval">
+                  <div className="space-y-4">
+                    <div className="space-y-3" data-field="approver-name">
+                      <label htmlFor="approver-name" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
+                          <User className="w-3 h-3 text-blue-600" />
                         </div>
-                      </CardContent>
-                    </Card>
-                  )}
+                        Approver Name
+                      </label>
+                      <Input
+                        id="approver-name"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={approverName}
+                        onChange={(e) => setApproverName(e.target.value)}
+                        required
+                        className="h-11 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200"
+                        data-input="approver-name"
+                      />
+                    </div>
 
-                  <div className="space-y-3" data-field="comments">
-                    <label htmlFor="comments" className="flex items-center gap-3 text-sm font-semibold text-slate-700">
-                      <div className="w-6 h-6 bg-indigo-100 rounded-lg flex items-center justify-center">
-                        <MessageSquare className="w-4 h-4 text-indigo-600" />
+                    <div className="space-y-3" data-field="approver-email">
+                      <label htmlFor="approver-email" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <div className="w-5 h-5 bg-emerald-100 rounded-lg flex items-center justify-center">
+                          <Mail className="w-3 h-3 text-emerald-600" />
+                        </div>
+                        Approver Email
+                      </label>
+                      <Input
+                        id="approver-email"
+                        type="email"
+                        placeholder="Enter your email address"
+                        value={approverEmail}
+                        onChange={(e) => setApproverEmail(e.target.value)}
+                        required
+                        className="h-11 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200"
+                        data-input="approver-email"
+                      />
+                    </div>
+
+                    <div className="space-y-4" data-field="decision">
+                      <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <div className="w-5 h-5 bg-purple-100 rounded-lg flex items-center justify-center">
+                          <CheckCircle className="w-3 h-3 text-purple-600" />
+                        </div>
+                        Decision
+                      </label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {(['Approved', 'Rejected', 'Timed'] as const).map((decision) => {
+                          const config = getDecisionConfig(decision);
+                          const Icon = config.icon;
+                          const isSelected = selectedDecision === decision;
+                          
+                          return (
+                            <button
+                              key={decision}
+                              type="button"
+                              onClick={() => handleDecisionSelect(decision)}
+                              className={`
+                                relative overflow-hidden group/btn p-4 rounded-xl border-2 font-semibold transition-all duration-300
+                                hover:scale-105 active:scale-95 min-h-[70px] flex flex-col items-center justify-center gap-2
+                                ${isSelected 
+                                  ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg ${config.glowColor} shadow-lg` 
+                                  : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-lg hover:${config.bgColor}`
+                                }
+                              `}
+                              data-decision={decision.toLowerCase()}
+                            >
+                              <Icon className={`w-5 h-5 ${isSelected ? 'text-white' : config.textColor}`} />
+                              <span className="text-xs font-medium">{decision}</span>
+                              {isSelected && (
+                                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
+                              )}
+                            </button>
+                          );
+                        })}
                       </div>
-                      Additional Comments
-                    </label>
-                    <Textarea
-                      id="comments"
-                      placeholder="Add any additional comments, notes, or requirements..."
-                      value={comments}
-                      onChange={(e) => setComments(e.target.value)}
-                      rows={5}
-                      className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white/80 hover:bg-white"
-                      data-input="comments"
-                    />
-                  </div>
-                </div>
+                    </div>
 
-                <div className="flex gap-4 pt-8 border-t border-slate-200" data-actions="form-buttons">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={handleReset}
-                    className="flex-1 gap-2 hover:scale-105 transition-transform h-12 bg-white/80 hover:bg-white"
-                    data-action="reset"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                    Reset Form
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="flex-2 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed h-12 min-w-[200px]"
-                    data-action="submit"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        Submit Decision
-                      </>
+                    {selectedDecision === 'Timed' && (
+                      <Card className="animate-in fade-in-50 duration-500 bg-gradient-to-br from-amber-50 to-orange-50 border-amber-200 shadow-sm" data-section="timed-approval">
+                        <CardHeader className="pb-3">
+                          <CardTitle className="flex items-center gap-2 text-amber-800 text-lg">
+                            <div className="w-6 h-6 bg-amber-100 rounded-lg flex items-center justify-center">
+                              <Calendar className="w-4 h-4 text-amber-600" />
+                            </div>
+                            <span className="text-sm">Time Window</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid grid-cols-1 gap-4">
+                            <div className="space-y-2">
+                              <label htmlFor="start-time" className="flex items-center gap-2 text-xs font-semibold text-amber-700">
+                                <Clock className="w-3 h-3" />
+                                Start Date & Time
+                              </label>
+                              <Input
+                                id="start-time"
+                                type="datetime-local"
+                                value={startTime}
+                                onChange={(e) => setStartTime(e.target.value)}
+                                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-10 text-sm"
+                                data-input="start-time"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label htmlFor="end-time" className="flex items-center gap-2 text-xs font-semibold text-amber-700">
+                                <Clock className="w-3 h-3" />
+                                End Date & Time
+                              </label>
+                              <Input
+                                id="end-time"
+                                type="datetime-local"
+                                value={endTime}
+                                onChange={(e) => setEndTime(e.target.value)}
+                                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-10 text-sm"
+                                data-input="end-time"
+                              />
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
                     )}
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
+
+                    <div className="space-y-3" data-field="comments">
+                      <label htmlFor="comments" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
+                        <div className="w-5 h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
+                          <MessageSquare className="w-3 h-3 text-indigo-600" />
+                        </div>
+                        Additional Comments
+                      </label>
+                      <Textarea
+                        id="comments"
+                        placeholder="Add any additional comments, notes, or requirements..."
+                        value={comments}
+                        onChange={(e) => setComments(e.target.value)}
+                        rows={4}
+                        className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white/90 hover:bg-white border-slate-200 text-sm"
+                        data-input="comments"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3 pt-6 border-t border-slate-200/50" data-actions="form-buttons">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleReset}
+                      className="flex-1 gap-2 hover:scale-105 transition-transform h-11 bg-white/90 hover:bg-white border-slate-200"
+                      data-action="reset"
+                    >
+                      <RotateCcw className="w-4 h-4" />
+                      Reset
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="flex-2 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed h-11 min-w-[160px]"
+                      data-action="submit"
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Submit Decision
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
