@@ -422,12 +422,12 @@ const Index = () => {
                                         </div>
                                         <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
                                       </div>
-                                      <div className="bg-white rounded-lg p-4 max-h-40 overflow-y-auto border border-slate-200">
-                                        <div className="space-y-2">
+                                      <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-slate-300 shadow-inner">
+                                        <div className="space-y-3">
                                           {changeRequestDetails.affectedServers.map((server, serverIndex) => (
-                                            <div key={serverIndex} className="flex items-center gap-2 py-1 text-xs text-slate-600">
-                                              <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
-                                              <span className="font-mono">{server}</span>
+                                            <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                              <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                                              <span className="font-mono text-sm text-slate-700">{server}</span>
                                             </div>
                                           ))}
                                         </div>
