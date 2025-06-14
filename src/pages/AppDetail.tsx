@@ -5,6 +5,7 @@ import { ArrowLeft, Info, List, Shield, Zap, FileText, AlertTriangle } from 'luc
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import ChangeRequestDetails from '@/components/ChangeRequestDetails';
 import ApprovalForm from '@/components/ApprovalForm';
 
@@ -57,6 +58,16 @@ const AppDetail = () => {
       } catch (err) {
         console.error('Failed to fetch app details:', err);
         setError(err instanceof Error ? err.message : 'Failed to load application details');
+        // Set default "NA" data when there's an error
+        setAppData({
+          appName: appName || 'N/A',
+          changeNumber: 'N/A',
+          applicationOwner: 'N/A',
+          maintenanceWindow: 'N/A',
+          changeDescription: 'N/A',
+          infrastructureImpact: 'N/A',
+          hosts: []
+        });
       } finally {
         setIsLoading(false);
       }
@@ -101,7 +112,7 @@ const AppDetail = () => {
     );
   }
 
-  if (error || !changeRequest) {
+  if (!changeRequest) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-8">
@@ -112,7 +123,7 @@ const AppDetail = () => {
           </div>
           <h3 className="text-2xl font-bold text-slate-700 mb-3">Application Not Found</h3>
           <p className="text-slate-600 mb-6">
-            {error || `The application "${appName}" could not be found or is not available.`}
+            The application "{appName}" could not be found or is not available.
           </p>
           <div className="space-y-3">
             <Button 
@@ -186,6 +197,16 @@ const AppDetail = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
+        {/* Error Alert */}
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTriangle className="h-4 w-4" />
+            <AlertDescription>
+              Failed to load application details: {error}. Showing default values.
+            </AlertDescription>
+          </Alert>
+        )}
+
         {/* Unified Change Request & Approval Card */}
         <Card className="group hover:shadow-2xl transition-all duration-700 border-0 shadow-xl bg-white/90 backdrop-blur-lg relative overflow-hidden" data-card="unified-workflow">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
