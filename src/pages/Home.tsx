@@ -182,11 +182,7 @@ const Home = () => {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2 mx-0 my-0 py-[11px]">
                 Change Control Center
               </h1>
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full animate-pulse"></div>
-                <span className="text-lg text-slate-600 font-medium text-center">Enterprise Ready • Secure • Compliant</span>
-                <div className="w-3 h-3 bg-gradient-to-r from-violet-500 to-purple-600 rounded-full animate-pulse"></div>
-              </div>
+              
             </div>
           </div>
           <div className="max-w-4xl mx-auto">
