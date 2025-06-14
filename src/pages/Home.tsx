@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
+import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -266,7 +266,7 @@ const Home = () => {
               <div className="flex items-center gap-4">
                 <div className="relative">
                   <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <Server className="w-6 h-6" style={{ fill: 'url(#server-gradient)', stroke: 'url(#server-gradient)' }} />
+                    <Layers className="w-6 h-6" style={{ fill: 'url(#server-gradient)', stroke: 'url(#server-gradient)' }} />
                   </div>
                   <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
                     {filteredApps.length}
@@ -317,7 +317,7 @@ const Home = () => {
                       <CardContent className="p-6 text-center relative z-10">
                         <div className="relative mb-4">
                           <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
-                            <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
+                            <Layers className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
                           </div>
                           {/* Status indicator dot */}
                           <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${status.text === 'Approved' ? 'bg-gradient-to-r from-emerald-500 to-green-500' : status.text === 'Rejected' ? 'bg-gradient-to-r from-rose-500 to-red-500' : status.text === 'Timed Approval' ? 'bg-gradient-to-r from-amber-500 to-orange-500' : 'bg-gradient-to-r from-slate-400 to-slate-500'} group-hover:scale-125 transition-transform`}></div>
