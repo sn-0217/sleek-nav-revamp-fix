@@ -67,6 +67,11 @@ const Index = () => {
     fetchSubmissions();
   }, [currentEnv, searchParams]);
 
+  // Handle statistic card clicks for filtering
+  const handleStatisticClick = (filterType: string) => {
+    setStatusFilter(filterType);
+  };
+
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
       const matchesSearch = !searchTerm || submission.appName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.changeNo.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
