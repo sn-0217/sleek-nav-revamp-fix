@@ -81,18 +81,16 @@ const ChangeRequestDetails = ({ changeRequest }: ChangeRequestDetailsProps) => {
               </div>
               <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2.5 max-h-40 overflow-y-auto border shadow-sm">
-              <div className="space-y-1.5">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-3 max-h-40 overflow-y-auto border shadow-sm">
+              <div className="space-y-1">
                 {changeRequest.affectedServers.map((server, index) => (
                   <div 
                     key={index} 
-                    className="flex items-center gap-2 p-1.5 bg-white rounded-md border hover:shadow-sm transition-shadow font-mono text-xs group"
+                    className="flex items-center gap-2 py-1 text-xs font-mono text-slate-600 hover:text-slate-800 transition-colors"
                     data-server={`server-${index}`}
                   >
-                    <div className="w-4 h-4 bg-gradient-to-br from-blue-100 to-blue-200 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform">
-                      <Globe className="w-2 h-2 text-blue-600" />
-                    </div>
-                    <span className="text-slate-700 group-hover:text-slate-900 transition-colors truncate flex-1">{server}</span>
+                    <div className="w-1.5 h-1.5 bg-blue-400 rounded-full flex-shrink-0"></div>
+                    <span className="truncate">{server}</span>
                   </div>
                 ))}
               </div>
