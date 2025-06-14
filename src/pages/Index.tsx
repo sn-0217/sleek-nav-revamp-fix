@@ -343,107 +343,119 @@ const Index = () => {
                     
                     <CardContent className="p-8">
                       <div className="flex-1 space-y-6">
-                        <div className="flex items-center gap-4 mb-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg">
-                            <FileText className="w-6 h-6 text-slate-600 group-hover:text-purple-600 transition-colors" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center gap-3">
-                                <h3 className="text-xl font-bold text-slate-900 group-hover:text-purple-900 transition-colors">{submission.appName}</h3>
-                                <Badge variant="outline" className="font-mono text-xs bg-slate-50 hover:bg-slate-100 transition-colors">
+                        {/* Header Section with improved layout */}
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg">
+                              <FileText className="w-6 h-6 text-slate-600 group-hover:text-purple-600 transition-colors" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-3 mb-2">
+                                <h3 className="text-xl font-bold text-slate-900 group-hover:text-purple-900 transition-colors truncate">{submission.appName}</h3>
+                                <Badge variant="outline" className="font-mono text-xs bg-slate-50 hover:bg-slate-100 transition-colors flex-shrink-0">
                                   {submission.changeNo}
                                 </Badge>
                               </div>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    className="gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
-                                  >
-                                    <Info className="w-4 h-4" />
-                                    Request Details
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                                  <DialogHeader>
-                                    <DialogTitle className="flex items-center gap-3 text-xl">
-                                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <Info className="w-4 h-4 text-white" />
+                              <div className="flex items-center gap-3">
+                                <Badge className={`gap-2 ${statusConfig.className}`}>
+                                  {getStatusIcon(submission.decision)}
+                                  {submission.decision}
+                                </Badge>
+                                {submission.decision === 'Timed' && submission.startTime && submission.endTime && (
+                                  <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
+                                    <Clock className="w-3 h-3" />
+                                    <span className="font-medium">Scheduled</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* Request Details Button - Better positioned */}
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                className="flex-shrink-0 gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
+                              >
+                                <Info className="w-4 h-4" />
+                                Details
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-3 text-xl">
+                                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <Info className="w-4 h-4 text-white" />
+                                  </div>
+                                  Change Request Details - {submission.changeNo}
+                                </DialogTitle>
+                              </DialogHeader>
+                              
+                              <div className="space-y-6 mt-6">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                        <User className="w-2.5 h-2.5 text-emerald-600" />
                                       </div>
-                                      Change Request Details - {submission.changeNo}
-                                    </DialogTitle>
-                                  </DialogHeader>
+                                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
+                                    </div>
+                                    <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.requestedBy}</p>
+                                  </div>
                                   
-                                  <div className="space-y-6 mt-6">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                      <div className="space-y-3">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                            <User className="w-2.5 h-2.5 text-emerald-600" />
-                                          </div>
-                                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
-                                        </div>
-                                        <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.requestedBy}</p>
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
+                                        <Clock className="w-2.5 h-2.5 text-amber-600" />
                                       </div>
-                                      
-                                      <div className="space-y-3">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
-                                            <Clock className="w-2.5 h-2.5 text-amber-600" />
-                                          </div>
-                                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance Window</p>
-                                        </div>
-                                        <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.deploymentWindow}</p>
-                                      </div>
+                                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance Window</p>
                                     </div>
-                                    
-                                    <Separator />
+                                    <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.deploymentWindow}</p>
+                                  </div>
+                                </div>
+                                
+                                <Separator />
 
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                          <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
-                                        </div>
-                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
-                                      </div>
-                                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
-                                        <p className="text-slate-700 leading-relaxed text-sm">{changeRequestDetails.description}</p>
-                                      </div>
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                      <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
                                     </div>
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
+                                  </div>
+                                  <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
+                                    <p className="text-slate-700 leading-relaxed text-sm">{changeRequestDetails.description}</p>
+                                  </div>
+                                </div>
 
-                                    <Separator />
+                                <Separator />
 
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
-                                          <Database className="w-2.5 h-2.5 text-green-600" />
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
+                                      <Database className="w-2.5 h-2.5 text-green-600" />
+                                    </div>
+                                    <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
+                                  </div>
+                                  <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-slate-200 shadow-inner">
+                                    <div className="space-y-2">
+                                      {changeRequestDetails.affectedServers.map((server, serverIndex) => (
+                                        <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                          <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                                          <span className="font-mono text-sm text-slate-700">{server}</span>
                                         </div>
-                                        <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
-                                      </div>
-                                      <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-slate-300 shadow-inner">
-                                        <div className="space-y-3">
-                                          {changeRequestDetails.affectedServers.map((server, serverIndex) => (
-                                            <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                                              <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
-                                              <span className="font-mono text-sm text-slate-700">{server}</span>
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </div>
+                                      ))}
                                     </div>
                                   </div>
-                                </DialogContent>
-                              </Dialog>
-                            </div>
-                            <Badge className={`gap-2 ${statusConfig.className}`}>
-                              {getStatusIcon(submission.decision)}
-                              {submission.decision}
-                            </Badge>
-                          </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                         
+                        {/* Information Grid */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-sm">
                           <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                             <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -476,41 +488,42 @@ const Index = () => {
                           </div>
                         </div>
                         
-                        {(submission.comments || submission.decision === 'Timed') && (
+                        {/* Enhanced Timed Approval Section */}
+                        {submission.decision === 'Timed' && submission.startTime && submission.endTime && (
+                          <div className="mt-6 p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 shadow-sm">
+                            <div className="flex items-center gap-3 text-sm font-semibold text-amber-800 mb-4">
+                              <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shadow-sm">
+                                <Calendar className="w-4 h-4 text-amber-600" />
+                              </div>
+                              <span>Scheduled Maintenance Window</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="bg-white rounded-lg p-4 border border-amber-200">
+                                <p className="text-xs text-amber-600 font-medium mb-1">START TIME</p>
+                                <p className="text-sm font-semibold text-slate-900">{formatDate(submission.startTime)}</p>
+                              </div>
+                              <div className="bg-white rounded-lg p-4 border border-amber-200">
+                                <p className="text-xs text-amber-600 font-medium mb-1">END TIME</p>
+                                <p className="text-sm font-semibold text-slate-900">{formatDate(submission.endTime)}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {/* Comments Section */}
+                        {submission.comments && (
                           <div className="mt-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
-                            {submission.decision === 'Timed' && submission.startTime && submission.endTime && (
-                              <div className="mb-4">
-                                <div className="flex items-center gap-3 text-sm font-semibold text-slate-700 mb-3">
-                                  <div className="w-6 h-6 bg-amber-100 rounded-md flex items-center justify-center">
-                                    <Calendar className="w-4 h-4 text-amber-600" />
-                                  </div>
-                                  Scheduled Time Window
-                                </div>
-                                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                                  <p className="text-sm text-slate-700">
-                                    <span className="font-medium">From:</span> {formatDate(submission.startTime)}
-                                  </p>
-                                  <p className="text-sm text-slate-700 mt-1">
-                                    <span className="font-medium">To:</span> {formatDate(submission.endTime)}
-                                  </p>
-                                </div>
+                            <div className="flex items-center gap-3 text-sm font-semibold text-slate-700 mb-3">
+                              <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
+                                <FileText className="w-4 h-4 text-blue-600" />
                               </div>
-                            )}
-                            {submission.comments && (
-                              <div>
-                                <div className="flex items-center gap-3 text-sm font-semibold text-slate-700 mb-3">
-                                  <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
-                                    <FileText className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  Additional Comments
-                                </div>
-                                <div className="bg-white rounded-lg p-4 border border-slate-200">
-                                  <p className="text-sm text-slate-700 leading-relaxed italic">
-                                    "{submission.comments}"
-                                  </p>
-                                </div>
-                              </div>
-                            )}
+                              Additional Comments
+                            </div>
+                            <div className="bg-white rounded-lg p-4 border border-slate-200">
+                              <p className="text-sm text-slate-700 leading-relaxed italic">
+                                "{submission.comments}"
+                              </p>
+                            </div>
                           </div>
                         )}
                       </div>
