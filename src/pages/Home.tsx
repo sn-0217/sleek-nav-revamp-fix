@@ -315,25 +315,63 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Enhanced Apps Grid */}
-            {filteredApps.length === 0 ? <div className="text-center py-20" data-state="no-results">
+            {/* Loading State */}
+            {isLoading && (
+              <div className="text-center py-20" data-state="loading">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
-                    <Search className="w-12 h-12 text-slate-400" />
-                  </div>
-                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                    <XCircle className="w-4 h-4 text-white" />
-                  </div>
+                  <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+                  <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+                    animationDirection: 'reverse',
+                    animationDuration: '1.5s'
+                  }}></div>
                 </div>
-                <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
+                <div className="space-y-2">
+                  <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
+                  <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
+                </div>
+              </div>
+            )}
+
+            {/* Error State or No Results */}
+            {!isLoading && (filteredApps.length === 0 || error) && (
+              <div className="text-center py-20" data-state="no-results">
+                <div className="relative mb-8">
+                  <div className={`w-24 h-24 ${error ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-slate-100 to-slate-200'} rounded-full flex items-center justify-center mx-auto shadow-lg`}>
+                    {error ? <XCircle className="w-12 h-12 text-red-600" /> : <Search className="w-12 h-12 text-slate-400" />}
+                  </div>
+                  {error && (
+                    <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                      <XCircle className="w-4 h-4 text-white" />
+                    </div>
+                  )}
+                </div>
+                <h3 className="text-2xl font-bold text-slate-700 mb-3">
+                  {error ? 'Failed to Load Applications' : 'No Applications Found'}
+                </h3>
                 <p className="text-slate-500 max-w-md mx-auto mb-6">
                   {error ? 'Unable to load applications from server. Please check your connection and try again.' : 'Your search didn\'t match any applications in the current environment. Try adjusting your search criteria.'}
                 </p>
-                <Button variant="outline" onClick={() => setSearchTerm('')} className="gap-2 hover:scale-105 transition-transform">
-                  <XCircle className="w-4 h-4" />
-                  Clear Search
-                </Button>
-              </div> : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
+                {error && <p className="text-slate-400 text-xs mb-6">Error: {error}</p>}
+                <div className="flex gap-3 justify-center">
+                  {error && (
+                    <Button onClick={() => window.location.reload()} className="gap-2">
+                      <Activity className="w-4 h-4" />
+                      Retry
+                    </Button>
+                  )}
+                  {!error && (
+                    <Button variant="outline" onClick={() => setSearchTerm('')} className="gap-2 hover:scale-105 transition-transform">
+                      <XCircle className="w-4 h-4" />
+                      Clear Search
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Apps Grid */}
+            {!isLoading && !error && filteredApps.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
                 {filteredApps.map((app, index) => {
               const status = getAppStatus(app);
               const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
@@ -365,7 +403,8 @@ const Home = () => {
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                     </Card>;
             })}
-              </div>}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
