@@ -354,93 +354,93 @@ const Index = () => {
                                 <Badge variant="outline" className="font-mono text-xs bg-slate-50 hover:bg-slate-100 transition-colors">
                                   {submission.changeNo}
                                 </Badge>
-                              </div>
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button 
-                                    variant="outline" 
-                                    size="sm"
-                                    className="gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
-                                  >
-                                    <Info className="w-4 h-4" />
-                                    Request Details
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                                  <DialogHeader>
-                                    <DialogTitle className="flex items-center gap-3 text-xl">
-                                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                        <Info className="w-4 h-4 text-white" />
-                                      </div>
-                                      Change Request Details - {submission.changeNo}
-                                    </DialogTitle>
-                                  </DialogHeader>
-                                  
-                                  <div className="space-y-6 mt-6">
-                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                                      <div className="space-y-3">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
-                                            <User className="w-2.5 h-2.5 text-emerald-600" />
-                                          </div>
-                                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button 
+                                      variant="outline" 
+                                      size="sm"
+                                      className="gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
+                                    >
+                                      <Info className="w-4 h-4" />
+                                      Request Details
+                                    </Button>
+                                  </DialogTrigger>
+                                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                                    <DialogHeader>
+                                      <DialogTitle className="flex items-center gap-3 text-xl">
+                                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                          <Info className="w-4 h-4 text-white" />
                                         </div>
-                                        <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.requestedBy}</p>
+                                        Change Request Details - {submission.changeNo}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    
+                                    <div className="space-y-6 mt-6">
+                                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                        <div className="space-y-3">
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                              <User className="w-2.5 h-2.5 text-emerald-600" />
+                                            </div>
+                                            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
+                                          </div>
+                                          <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.requestedBy}</p>
+                                        </div>
+                                        
+                                        <div className="space-y-3">
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
+                                              <Clock className="w-2.5 h-2.5 text-amber-600" />
+                                            </div>
+                                            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance Window</p>
+                                          </div>
+                                          <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.deploymentWindow}</p>
+                                        </div>
                                       </div>
                                       
+                                      <Separator />
+
                                       <div className="space-y-3">
                                         <div className="flex items-center gap-2">
-                                          <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
-                                            <Clock className="w-2.5 h-2.5 text-amber-600" />
+                                          <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                            <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
                                           </div>
-                                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance Window</p>
+                                          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
                                         </div>
-                                        <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.deploymentWindow}</p>
-                                      </div>
-                                    </div>
-                                    
-                                    <Separator />
-
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                          <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
+                                        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
+                                          <p className="text-slate-700 leading-relaxed text-sm">{changeRequestDetails.description}</p>
                                         </div>
-                                        <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
                                       </div>
-                                      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
-                                        <p className="text-slate-700 leading-relaxed text-sm">{changeRequestDetails.description}</p>
-                                      </div>
-                                    </div>
 
-                                    <Separator />
+                                      <Separator />
 
-                                    <div className="space-y-3">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
-                                          <Database className="w-2.5 h-2.5 text-green-600" />
+                                      <div className="space-y-3">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
+                                            <Database className="w-2.5 h-2.5 text-green-600" />
+                                          </div>
+                                          <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
                                         </div>
-                                        <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
-                                      </div>
-                                      <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-slate-300 shadow-inner">
-                                        <div className="space-y-3">
-                                          {changeRequestDetails.affectedServers.map((server, serverIndex) => (
-                                            <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                                              <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
-                                              <span className="font-mono text-sm text-slate-700">{server}</span>
-                                            </div>
-                                          ))}
+                                        <div className="bg-white rounded-lg p-3 max-h-40 overflow-y-auto border border-slate-200">
+                                          <div className="space-y-1">
+                                            {changeRequestDetails.affectedServers.map((server, serverIndex) => (
+                                              <div key={serverIndex} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${serverIndex}`}>
+                                                <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
+                                                <span className="font-mono">{server}</span>
+                                              </div>
+                                            ))}
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </DialogContent>
-                              </Dialog>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                              <Badge className={`gap-2 ${statusConfig.className}`}>
+                                {getStatusIcon(submission.decision)}
+                                {submission.decision}
+                              </Badge>
                             </div>
-                            <Badge className={`gap-2 ${statusConfig.className}`}>
-                              {getStatusIcon(submission.decision)}
-                              {submission.decision}
-                            </Badge>
                           </div>
                         </div>
                         
