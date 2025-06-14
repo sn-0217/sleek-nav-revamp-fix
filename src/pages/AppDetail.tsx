@@ -36,17 +36,7 @@ const AppDetail = () => {
       `${appName?.toLowerCase()}-api-02.prod.company.com`,
       `${appName?.toLowerCase()}-db-01.prod.company.com`,
       `${appName?.toLowerCase()}-cache-01.prod.company.com`,
-      `${appName?.toLowerCase()}-lb-01.prod.company.com`,
-      `${appName?.toLowerCase()}-worker-01.prod.company.com`,
-      `${appName?.toLowerCase()}-worker-02.prod.company.com`,
-      `${appName?.toLowerCase()}-monitor-01.prod.company.com`,
-      `${appName?.toLowerCase()}-backup-01.prod.company.com`,
-      `${appName?.toLowerCase()}-proxy-01.prod.company.com`,
-      `${appName?.toLowerCase()}-queue-01.prod.company.com`,
-      `${appName?.toLowerCase()}-search-01.prod.company.com`,
-      `${appName?.toLowerCase()}-auth-01.prod.company.com`,
-      `${appName?.toLowerCase()}-log-01.prod.company.com`,
-      `${appName?.toLowerCase()}-metrics-01.prod.company.com`
+      `${appName?.toLowerCase()}-lb-01.prod.company.com`
     ]
   });
 
