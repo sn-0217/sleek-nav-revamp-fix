@@ -1,3 +1,4 @@
+
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 interface ChangeRequest {
@@ -30,21 +31,20 @@ const ChangeRequestDetails = ({
                 <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
                   <User className="w-2.5 h-2.5 text-emerald-600" />
                 </div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Requested By</p>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
               </div>
               <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.requestedBy}</p>
             </div>
             
-          </div>
-
-          <div className="mt-4 space-y-1.5" data-field="deployment-window">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
-                <Clock className="w-2.5 h-2.5 text-amber-600" />
+            <div className="space-y-1.5" data-field="deployment-window">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <Clock className="w-2.5 h-2.5 text-amber-600" />
+                </div>
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTENANCE WINDOW</p>
               </div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTAINANCE WINDOW</p>
+              <p className="font-medium text-slate-900 text-sm pl-6">25 June 10:00AM to 30 June 10:00PM EST</p>
             </div>
-            <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.deploymentWindow}</p>
           </div>
           
           <Separator className="my-3" />
@@ -70,11 +70,11 @@ const ChangeRequestDetails = ({
               </div>
               <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-3 max-h-40 overflow-y-auto border shadow-sm">
+            <div className="bg-white rounded-lg p-3 max-h-40 overflow-y-auto border border-slate-200">
               <div className="space-y-1">
-                {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs font-mono text-slate-600 hover:text-slate-800 transition-colors" data-server={`server-${index}`}>
-                    <div className="w-1.5 h-1.5 bg-blue-400 rounded-full flex-shrink-0"></div>
-                    <span className="truncate">{server}</span>
+                {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
+                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
+                    <span className="font-mono">{server}</span>
                   </div>)}
               </div>
             </div>
