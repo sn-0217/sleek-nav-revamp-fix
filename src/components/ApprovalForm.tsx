@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CheckCircle, User, Mail, MessageSquare, Send, RotateCcw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -123,20 +122,20 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
   };
 
   return (
-    <div className="p-8 bg-gradient-to-br from-white/50 to-slate-50/30" data-section="approval-form">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-          <CheckCircle className="w-5 h-5 text-white" />
+    <div className="p-12 bg-gradient-to-br from-white/50 to-slate-50/30" data-section="approval-form">
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center">
+          <CheckCircle className="w-6 h-6 text-white" />
         </div>
-        <h3 className="text-xl font-bold text-slate-900">Approval Decision</h3>
+        <h3 className="text-2xl font-bold text-slate-900">Approval Decision</h3>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6" data-form="approval">
-        <div className="space-y-4">
-          <div className="space-y-3" data-field="approver-name">
-            <label htmlFor="approver-name" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-              <div className="w-5 h-5 bg-blue-100 rounded-lg flex items-center justify-center">
-                <User className="w-3 h-3 text-blue-600" />
+      <form onSubmit={handleSubmit} className="space-y-8" data-form="approval">
+        <div className="space-y-6">
+          <div className="space-y-4" data-field="approver-name">
+            <label htmlFor="approver-name" className="flex items-center gap-3 text-base font-semibold text-slate-700">
+              <div className="w-6 h-6 bg-blue-100 rounded-xl flex items-center justify-center">
+                <User className="w-4 h-4 text-blue-600" />
               </div>
               Approver Name
             </label>
@@ -147,15 +146,15 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
               value={approverName}
               onChange={(e) => setApproverName(e.target.value)}
               required
-              className="h-11 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200"
+              className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200 text-base"
               data-input="approver-name"
             />
           </div>
 
-          <div className="space-y-3" data-field="approver-email">
-            <label htmlFor="approver-email" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-              <div className="w-5 h-5 bg-emerald-100 rounded-lg flex items-center justify-center">
-                <Mail className="w-3 h-3 text-emerald-600" />
+          <div className="space-y-4" data-field="approver-email">
+            <label htmlFor="approver-email" className="flex items-center gap-3 text-base font-semibold text-slate-700">
+              <div className="w-6 h-6 bg-emerald-100 rounded-xl flex items-center justify-center">
+                <Mail className="w-4 h-4 text-emerald-600" />
               </div>
               Approver Email
             </label>
@@ -166,15 +165,15 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
               value={approverEmail}
               onChange={(e) => setApproverEmail(e.target.value)}
               required
-              className="h-11 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200"
+              className="h-12 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200 text-base"
               data-input="approver-email"
             />
           </div>
 
-          <div className="space-y-4" data-field="decision">
-            <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-              <div className="w-5 h-5 bg-purple-100 rounded-lg flex items-center justify-center">
-                <CheckCircle className="w-3 h-3 text-purple-600" />
+          <div className="space-y-5" data-field="decision">
+            <label className="flex items-center gap-3 text-base font-semibold text-slate-700">
+              <div className="w-6 h-6 bg-purple-100 rounded-xl flex items-center justify-center">
+                <CheckCircle className="w-4 h-4 text-purple-600" />
               </div>
               Decision
             </label>
@@ -193,10 +192,10 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
             />
           )}
 
-          <div className="space-y-3" data-field="comments">
-            <label htmlFor="comments" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-              <div className="w-5 h-5 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-3 h-3 text-indigo-600" />
+          <div className="space-y-4" data-field="comments">
+            <label htmlFor="comments" className="flex items-center gap-3 text-base font-semibold text-slate-700">
+              <div className="w-6 h-6 bg-indigo-100 rounded-xl flex items-center justify-center">
+                <MessageSquare className="w-4 h-4 text-indigo-600" />
               </div>
               Additional Comments
             </label>
@@ -205,38 +204,38 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
               placeholder="Add any additional comments, notes, or requirements..."
               value={comments}
               onChange={(e) => setComments(e.target.value)}
-              rows={4}
-              className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white/90 hover:bg-white border-slate-200 text-sm"
+              rows={5}
+              className="transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 resize-none bg-white/90 hover:bg-white border-slate-200 text-base"
               data-input="comments"
             />
           </div>
         </div>
 
-        <div className="flex gap-3 pt-6 border-t border-slate-200/50" data-actions="form-buttons">
+        <div className="flex gap-4 pt-8 border-t border-slate-200/50" data-actions="form-buttons">
           <Button
             type="button"
             variant="outline"
             onClick={handleReset}
-            className="flex-1 gap-2 hover:scale-105 transition-transform h-11 bg-white/90 hover:bg-white border-slate-200"
+            className="flex-1 gap-3 hover:scale-105 transition-transform h-12 bg-white/90 hover:bg-white border-slate-200 text-base"
             data-action="reset"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
             Reset
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="flex-2 gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed h-11 min-w-[160px]"
+            className="flex-2 gap-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 hover:scale-105 transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed h-12 min-w-[180px] text-base"
             data-action="submit"
           >
             {isSubmitting ? (
               <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 Processing...
               </>
             ) : (
               <>
-                <Send className="w-4 h-4" />
+                <Send className="w-5 h-5" />
                 Submit Decision
               </>
             )}
