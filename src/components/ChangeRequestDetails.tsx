@@ -1,3 +1,4 @@
+
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 interface ChangeRequest {
@@ -42,7 +43,7 @@ const ChangeRequestDetails = ({
                 </div>
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTENANCE WINDOW</p>
               </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">June 25, 10:00 AM - June 26, 11:00 PM</p>
+              <p className="font-medium text-slate-900 text-sm pl-6">25 June 10:00AM to 30 June 10:00PM EST</p>
             </div>
           </div>
           
@@ -69,8 +70,8 @@ const ChangeRequestDetails = ({
               </div>
               <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
             </div>
-            <div className="bg-white rounded-lg p-3 max-h-40 overflow-y-auto border border-slate-200">
-              <div className="space-y-1">
+            <div className="bg-white rounded-lg p-3 border border-slate-200">
+              <div className="grid grid-cols-1 gap-1">
                 {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
                     <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
                     <span className="font-mono">{server}</span>
