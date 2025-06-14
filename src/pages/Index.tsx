@@ -174,67 +174,63 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="submissions-content">
-        {/* Enhanced Statistics with Modern Cards */}
+        {/* Enhanced Statistics with Modern Cards - Removed Background Colors */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-section="statistics">
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100 border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-blue-600 mb-1 tracking-wide">Total Submissions</p>
-                  <p className="text-3xl font-bold text-blue-900 group-hover:scale-105 transition-transform">{statistics.total}</p>
-                  <p className="text-xs text-blue-700 mt-1">All time records</p>
+                  <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Total Submissions</p>
+                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.total}</p>
+                  <p className="text-xs text-slate-500 mt-1">All time records</p>
                 </div>
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <FileText className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <FileText className="w-7 h-7 text-slate-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-emerald-50 to-green-100 border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/5 to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-emerald-600 mb-1 tracking-wide">Approved</p>
-                  <p className="text-3xl font-bold text-emerald-900 group-hover:scale-105 transition-transform">{statistics.approved}</p>
-                  <p className="text-xs text-emerald-700 mt-1">Success rate: {statistics.total ? Math.round((statistics.approved / statistics.total) * 100) : 0}%</p>
+                  <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Approved</p>
+                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.approved}</p>
+                  <p className="text-xs text-slate-500 mt-1">Success rate: {statistics.total ? Math.round((statistics.approved / statistics.total) * 100) : 0}%</p>
                 </div>
-                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <CheckCircle className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <CheckCircle className="w-7 h-7 text-slate-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-rose-50 to-red-100 border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-rose-600/5 to-red-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-rose-600 mb-1 tracking-wide">Rejected</p>
-                  <p className="text-3xl font-bold text-rose-900 group-hover:scale-105 transition-transform">{statistics.rejected}</p>
-                  <p className="text-xs text-rose-700 mt-1">Rejection rate: {statistics.total ? Math.round((statistics.rejected / statistics.total) * 100) : 0}%</p>
+                  <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Rejected</p>
+                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.rejected}</p>
+                  <p className="text-xs text-slate-500 mt-1">Rejection rate: {statistics.total ? Math.round((statistics.rejected / statistics.total) * 100) : 0}%</p>
                 </div>
-                <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-red-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <XCircle className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <XCircle className="w-7 h-7 text-slate-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100 border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-600/5 to-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-amber-600 mb-1 tracking-wide">Timed Approvals</p>
-                  <p className="text-3xl font-bold text-amber-900 group-hover:scale-105 transition-transform">{statistics.timed}</p>
-                  <p className="text-xs text-amber-700 mt-1">Scheduled changes</p>
+                  <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Timed Approvals</p>
+                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.timed}</p>
+                  <p className="text-xs text-slate-500 mt-1">Scheduled changes</p>
                 </div>
-                <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Timer className="w-7 h-7 text-white" />
+                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Timer className="w-7 h-7 text-slate-600" />
                 </div>
               </div>
             </CardContent>
