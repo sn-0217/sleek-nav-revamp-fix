@@ -1,12 +1,14 @@
 
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc } from 'lucide-react';
+import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc, Info, Database, MessageSquare } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
 
 interface Submission {
   id: string;
@@ -116,6 +118,24 @@ const Index = () => {
       minute: '2-digit'
     });
   };
+
+  // Mock change request data generator
+  const generateChangeRequestDetails = (submission: Submission) => ({
+    changeNo: submission.changeNo,
+    requestedBy: 'DevOps Engineering Team',
+    requestDate: new Date().toLocaleDateString(),
+    deploymentWindow: 'June 25, 10:00 AM - June 26, 11:00 PM',
+    description: `Critical security update and performance optimizations for ${submission.appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
+    affectedServers: [
+      `${submission.appName.toLowerCase()}-web-01.prod.company.com`,
+      `${submission.appName.toLowerCase()}-web-02.prod.company.com`,
+      `${submission.appName.toLowerCase()}-api-01.prod.company.com`,
+      `${submission.appName.toLowerCase()}-api-02.prod.company.com`,
+      `${submission.appName.toLowerCase()}-db-01.prod.company.com`,
+      `${submission.appName.toLowerCase()}-cache-01.prod.company.com`,
+      `${submission.appName.toLowerCase()}-lb-01.prod.company.com`
+    ]
+  });
 
   if (isLoading) {
     return (
@@ -311,6 +331,7 @@ const Index = () => {
               .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
               .map((submission, index) => {
                 const statusConfig = getStatusConfig(submission.decision);
+                const changeRequestDetails = generateChangeRequestDetails(submission);
                 return (
                   <Card 
                     key={submission.id} 
@@ -411,6 +432,90 @@ const Index = () => {
                               )}
                             </div>
                           )}
+                        </div>
+                        
+                        {/* Request Details Button */}
+                        <div className="p-8">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                className="gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
+                              >
+                                <Info className="w-4 h-4" />
+                                Request Details
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                              <DialogHeader>
+                                <DialogTitle className="flex items-center gap-3 text-xl">
+                                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                    <Info className="w-4 h-4 text-white" />
+                                  </div>
+                                  Change Request Details - {submission.changeNo}
+                                </DialogTitle>
+                              </DialogHeader>
+                              
+                              <div className="space-y-6 mt-6">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
+                                        <User className="w-2.5 h-2.5 text-emerald-600" />
+                                      </div>
+                                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
+                                    </div>
+                                    <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.requestedBy}</p>
+                                  </div>
+                                  
+                                  <div className="space-y-3">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
+                                        <Clock className="w-2.5 h-2.5 text-amber-600" />
+                                      </div>
+                                      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Maintenance Window</p>
+                                    </div>
+                                    <p className="font-medium text-slate-900 text-sm pl-6">{changeRequestDetails.deploymentWindow}</p>
+                                  </div>
+                                </div>
+                                
+                                <Separator />
+
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
+                                      <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
+                                    </div>
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
+                                  </div>
+                                  <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-4 border-l-4 border-blue-500 shadow-sm">
+                                    <p className="text-slate-700 leading-relaxed text-sm">{changeRequestDetails.description}</p>
+                                  </div>
+                                </div>
+
+                                <Separator />
+
+                                <div className="space-y-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
+                                      <Database className="w-2.5 h-2.5 text-green-600" />
+                                    </div>
+                                    <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequestDetails.affectedServers.length} servers)</h4>
+                                  </div>
+                                  <div className="bg-white rounded-lg p-4 max-h-40 overflow-y-auto border border-slate-200">
+                                    <div className="space-y-2">
+                                      {changeRequestDetails.affectedServers.map((server, serverIndex) => (
+                                        <div key={serverIndex} className="flex items-center gap-2 py-1 text-xs text-slate-600">
+                                          <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
+                                          <span className="font-mono">{server}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                       </div>
                     </CardContent>
