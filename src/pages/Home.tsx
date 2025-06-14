@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -169,8 +168,8 @@ const Home = () => {
             <div className="flex items-center gap-4" data-section="header-brand">
               <div className="relative">
                 <img 
-                  src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
-                  alt="Knitwell Group Logo"
+                  src="https://imgs.search.brave.com/pvTpRIiINF-2Jy1E1H9uAJl0yfB7XRbJuULRjE6dFj0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/amFzZWRsYWsuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIy/LzAxL2ltYWdlcy05/LnBuZw"
+                  alt="Company Logo"
                   className="w-12 h-12 object-contain hover:scale-110 transition-transform"
                 />
                 <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
@@ -210,8 +209,8 @@ const Home = () => {
             <div className="relative">
               <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500 p-2">
                 <img 
-                  src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
-                  alt="Knitwell Group Logo"
+                  src="https://imgs.search.brave.com/pvTpRIiINF-2Jy1E1H9uAJl0yfB7XRbJuULRjE6dFj0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/amFzZWRsYWsuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIy/LzAxL2ltYWdlcy05/LnBuZw"
+                  alt="Company Logo"
                   className="w-full h-full object-contain"
                 />
               </div>
@@ -265,8 +264,8 @@ const Home = () => {
                 <div className="relative">
                   <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg p-2">
                     <img 
-                      src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
-                      alt="Knitwell Group Logo"
+                      src="https://imgs.search.brave.com/pvTpRIiINF-2Jy1E1H9uAJl0yfB7XRbJuULRjE6dFj0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/amFzZWRsYWsuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIy/LzAxL2ltYWdlcy05/LnBuZw"
+                      alt="Company Logo"
                       className="w-full h-full object-contain"
                     />
                   </div>
@@ -387,8 +386,8 @@ const Home = () => {
           <div className="text-center">
             <div className="flex items-center justify-center gap-3 mb-4">
               <img 
-                src="https://imgs.search.brave.com/pU5hcGD-Lms-jlTviWoo41YoZh0or3fpQpi6W6XMvjU/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly9rbml0/d2VsbGdyb3VwLmNv/bS9pbWFnZXMva3ct/bG9nby0zLnN2Zw"
-                alt="Knitwell Group Logo"
+                src="https://imgs.search.brave.com/pvTpRIiINF-2Jy1E1H9uAJl0yfB7XRbJuULRjE6dFj0/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly93d3cu/amFzZWRsYWsuY29t/L3dwLWNvbnRlbnQv/dXBsb2Fkcy8yMDIy/LzAxL2ltYWdlcy05/LnBuZw"
+                alt="Company Logo"
                 className="w-6 h-6 object-contain"
               />
               <span className="text-slate-600 text-sm font-medium">Knitwell Group</span>
