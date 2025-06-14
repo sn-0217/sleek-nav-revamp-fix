@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CheckCircle, User, Mail, MessageSquare, Send, RotateCcw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -79,44 +78,93 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
 
     setIsSubmitting(true);
 
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      // Prepare the submission payload
+      const formSubmission = {
+        approverName,
+        approverEmail,
+        decision: selectedDecision,
+        ...(selectedDecision === 'Timed' && {
+          startTime,
+          endTime
+        }),
+        comments: comments || undefined
+      };
 
-    // Create comprehensive submission object with all change request details
-    const submission = {
-      id: Date.now().toString(),
-      appName: appName || '',
-      changeNo: changeNo, // Ensure changeNo is properly included
-      requester: 'DevOps Engineering Team',
-      title: `Critical security update and performance optimizations for ${appName}`,
-      description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
-      impact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com, ${appName?.toLowerCase()}-api-01.prod.company.com, ${appName?.toLowerCase()}-api-02.prod.company.com, ${appName?.toLowerCase()}-db-01.prod.company.com, ${appName?.toLowerCase()}-cache-01.prod.company.com, ${appName?.toLowerCase()}-lb-01.prod.company.com`,
-      decision: selectedDecision,
-      timestamp: new Date().toISOString(),
-      scheduledDate: selectedDecision === 'Timed' ? startTime : undefined,
-      comments: comments || undefined,
-      approverName,
-      approverEmail,
-      environment: currentEnv,
-      deploymentWindow: 'Maintenance Window (8 PM - 6 AM)'
-    };
+      const payload = {
+        appName,
+        changeNumber: changeNo,
+        applicationOwner: 'DevOps Engineering Team', // This would come from app data
+        maintenanceWindow: 'Maintenance Window (8 PM - 6 AM)', // This would come from app data
+        changeDescription: `Critical security update and performance optimizations for ${appName}`, // This would come from app data
+        infrastructureImpact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com`, // This would come from app data
+        hosts: [`${appName?.toLowerCase()}-web-01.prod.company.com`, `${appName?.toLowerCase()}-web-02.prod.company.com`], // This would come from app data
+        formSubmission,
+        submittedAt: new Date().toISOString()
+      };
 
-    console.log('Submitting with changeNo:', changeNo); // Debug log
-    console.log('Full submission object:', submission); // Debug log
+      console.log('Submitting to API:', payload);
 
-    // Save to localStorage
-    const existingSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    existingSubmissions.push(submission);
-    localStorage.setItem('changeSubmissions', JSON.stringify(existingSubmissions));
+      // Make POST request to the API
+      const response = await fetch(`/app/${encodeURIComponent(appName)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
 
-    // Show success toast
-    toast({
-      title: "Submission Successful",
-      description: `Change request ${selectedDecision.toLowerCase()} successfully.`
-    });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
-    // Reset form
-    handleReset();
+      const result = await response.json();
+      console.log('API response:', result);
+
+      // Show success toast
+      toast({
+        title: "Submission Successful",
+        description: `Change request ${selectedDecision.toLowerCase()} successfully.`
+      });
+
+      // Also save to localStorage as backup (keeping existing functionality)
+      const submission = {
+        id: Date.now().toString(),
+        appName: appName || '',
+        changeNo: changeNo,
+        requester: 'DevOps Engineering Team',
+        title: `Critical security update and performance optimizations for ${appName}`,
+        description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
+        impact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com, ${appName?.toLowerCase()}-api-01.prod.company.com, ${appName?.toLowerCase()}-api-02.prod.company.com, ${appName?.toLowerCase()}-db-01.prod.company.com, ${appName?.toLowerCase()}-cache-01.prod.company.com, ${appName?.toLowerCase()}-lb-01.prod.company.com`,
+        decision: selectedDecision,
+        timestamp: new Date().toISOString(),
+        scheduledDate: selectedDecision === 'Timed' ? startTime : undefined,
+        comments: comments || undefined,
+        approverName,
+        approverEmail,
+        environment: currentEnv,
+        deploymentWindow: 'Maintenance Window (8 PM - 6 AM)'
+      };
+
+      const existingSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+      existingSubmissions.push(submission);
+      localStorage.setItem('changeSubmissions', JSON.stringify(existingSubmissions));
+
+      // Reset form
+      handleReset();
+
+    } catch (error) {
+      console.error('Failed to submit form:', error);
+      
+      // Show error toast
+      toast({
+        title: "Submission Failed",
+        description: `Failed to submit change request: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
