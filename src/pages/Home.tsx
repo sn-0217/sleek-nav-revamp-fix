@@ -113,6 +113,9 @@ const Home = () => {
   const handleViewSubmissions = () => {
     navigate('/');
   };
+  const handleAdminClick = () => {
+    navigate('/admin');
+  };
   if (isLoading) {
     return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
@@ -158,7 +161,7 @@ const Home = () => {
                 <List className="w-4 h-4" />
                 Analytics
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 text-orange-700 hover:from-orange-100 hover:to-red-100" data-action="admin">
+              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 text-orange-700 hover:from-orange-100 hover:to-red-100" onClick={handleAdminClick} data-action="admin">
                 <Settings className="w-4 h-4" />
                 Admin
               </Button>
