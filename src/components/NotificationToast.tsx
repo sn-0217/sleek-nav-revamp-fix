@@ -89,7 +89,7 @@ const NotificationToast: React.FC<NotificationToastProps> = ({
   return (
     <div
       className={`
-        fixed top-4 right-4 z-50 w-96 max-w-sm
+        w-96 max-w-sm
         bg-white border-l-4 ${getBorderColor()} ${getBackgroundColor()}
         rounded-lg shadow-lg
         transform transition-all duration-300 ease-in-out

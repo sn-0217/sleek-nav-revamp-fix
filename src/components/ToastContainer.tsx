@@ -1,13 +1,13 @@
 
 import React from 'react';
 import NotificationToast from './NotificationToast';
-import { useNotificationToast } from '@/hooks/useNotificationToast';
+import { useToastContext } from '@/contexts/ToastContext';
 
 const ToastContainer: React.FC = () => {
-  const { toasts, removeToast } = useNotificationToast();
+  const { toasts, removeToast } = useToastContext();
 
   return (
-    <div className="fixed top-0 right-0 z-50 p-4 space-y-2">
+    <div className="fixed top-4 right-4 z-50 space-y-2">
       {toasts.map((toast, index) => (
         <div
           key={toast.id}
