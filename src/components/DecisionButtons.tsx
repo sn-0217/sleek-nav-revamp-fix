@@ -15,27 +15,24 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
         icon: CheckCircle,
         gradient: 'from-emerald-500 to-green-600',
         hoverGradient: 'from-emerald-600 to-green-700',
-        bgColor: 'bg-emerald-50',
-        borderColor: 'border-emerald-200',
         textColor: 'text-emerald-700',
+        borderColor: 'border-emerald-200',
         glowColor: 'shadow-emerald-200'
       },
       Rejected: {
         icon: XCircle,
         gradient: 'from-rose-500 to-red-600',
         hoverGradient: 'from-rose-600 to-red-700',
-        bgColor: 'bg-rose-50',
-        borderColor: 'border-rose-200',
         textColor: 'text-rose-700',
+        borderColor: 'border-rose-200',
         glowColor: 'shadow-rose-200'
       },
       Timed: {
         icon: Timer,
         gradient: 'from-amber-500 to-orange-600',
         hoverGradient: 'from-amber-600 to-orange-700',
-        bgColor: 'bg-amber-50',
-        borderColor: 'border-amber-200',
         textColor: 'text-amber-700',
+        borderColor: 'border-amber-200',
         glowColor: 'shadow-amber-200'
       }
     };
@@ -59,7 +56,7 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
               hover:scale-105 active:scale-95 min-h-[70px] flex flex-col items-center justify-center gap-2
               ${isSelected 
                 ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg ${config.glowColor} shadow-lg` 
-                : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-lg hover:${config.bgColor}`
+                : `bg-transparent ${config.borderColor} ${config.textColor} hover:shadow-lg`
               }
             `}
             data-decision={decision.toLowerCase()}
