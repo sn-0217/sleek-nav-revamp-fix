@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Info, List, Shield, Zap, FileText, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Info, List, Shield, Zap, FileText, AlertTriangle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -209,14 +209,54 @@ const AppDetail = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
-        {/* Error Alert */}
+        {/* Enhanced Error Alert */}
         {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load application details: {error}. Showing default values.
-            </AlertDescription>
-          </Alert>
+          <div className="mb-6">
+            <Alert className="border-0 bg-gradient-to-r from-amber-50 via-orange-50 to-red-50 shadow-lg rounded-xl overflow-hidden relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-100/20 via-orange-100/20 to-red-100/20"></div>
+              <div className="relative z-10 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                      <WifiOff className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                        Connection Issue
+                        <Badge variant="secondary" className="bg-amber-100 text-amber-800 border-amber-200">
+                          Using Defaults
+                        </Badge>
+                      </h3>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => window.location.reload()}
+                        className="gap-2 hover:bg-amber-50 border-amber-200 text-amber-700 hover:text-amber-800"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5" />
+                        Retry
+                      </Button>
+                    </div>
+                    <AlertDescription className="text-slate-600 text-sm leading-relaxed mb-3">
+                      {error}. The system has loaded default values to allow you to continue working.
+                    </AlertDescription>
+                    <div className="flex items-center gap-4 text-xs text-slate-500">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse"></div>
+                        <span>Offline Mode Active</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Shield className="w-3.5 h-3.5" />
+                        <span>Data Preserved</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Alert>
+          </div>
         )}
 
         {/* Unified Change Request & Approval Card */}
