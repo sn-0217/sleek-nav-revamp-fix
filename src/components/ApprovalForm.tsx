@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { CheckCircle, User, Mail, MessageSquare, Send, RotateCcw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -132,8 +131,8 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
       </div>
 
       <div className="flex-1 flex flex-col">
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col justify-between" data-form="approval">
-          <div className="space-y-6">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col" data-form="approval">
+          <div className="flex-1 space-y-6">
             <div className="space-y-4">
               <div className="space-y-3" data-field="approver-name">
                 <label htmlFor="approver-name" className="flex items-center gap-2 text-sm font-semibold text-slate-700">
@@ -165,7 +164,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
                   id="approver-email"
                   type="email"
                   placeholder="Enter your email address"
-                  value={aproverEmail}
+                  value={approverEmail}
                   onChange={(e) => setApproverEmail(e.target.value)}
                   required
                   className="h-9 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500 bg-white/90 hover:bg-white border-slate-200 text-sm"
