@@ -13,7 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 interface Submission {
   id: string;
   appName: string;
-  changeNumber: string;
+  changeNo: string;
   requester: string;
   title: string;
   description: string;
@@ -159,7 +159,7 @@ const Admin = () => {
                         <TableCell className="font-medium">{submission.appName}</TableCell>
                         <TableCell>
                           <code className="bg-slate-100 px-2 py-1 rounded text-sm">
-                            {submission.changeNumber}
+                            {submission.changeNo}
                           </code>
                         </TableCell>
                         <TableCell className="max-w-xs truncate">{submission.title}</TableCell>
@@ -235,8 +235,8 @@ const Admin = () => {
                       Change Number
                     </label>
                     <Input
-                      value={editForm.changeNumber}
-                      onChange={(e) => setEditForm({ ...editForm, changeNumber: e.target.value })}
+                      value={editForm.changeNo}
+                      onChange={(e) => setEditForm({ ...editForm, changeNo: e.target.value })}
                     />
                   </div>
                 </div>
