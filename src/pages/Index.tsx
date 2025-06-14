@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-
 interface Submission {
   id: string;
   appName: string;
@@ -22,7 +21,6 @@ interface Submission {
   endTime?: string;
   environment: string;
 }
-
 const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -37,13 +35,13 @@ const Index = () => {
     const fetchSubmissions = async () => {
       try {
         setIsLoading(true);
-        
+
         // Try API first
         const response = await fetch('/get-all-submissions');
         if (response.ok) {
           const apiSubmissions = await response.json();
           console.log('Fetched submissions from API:', apiSubmissions);
-          
+
           // Filter by current environment
           const envSubmissions = apiSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
           setSubmissions(envSubmissions);
@@ -52,7 +50,7 @@ const Index = () => {
         }
       } catch (error) {
         console.log('API fetch failed, falling back to localStorage:', error);
-        
+
         // Fallback to localStorage
         const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
         // Filter submissions by current environment
@@ -64,39 +62,32 @@ const Index = () => {
         if (searchQuery) {
           setSearchTerm(searchQuery);
         }
-        
+
         // Simulate loading for smooth animation
         setTimeout(() => setIsLoading(false), 600);
       }
     };
-
     fetchSubmissions();
   }, [currentEnv, searchParams]);
-
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
-      const matchesSearch = !searchTerm || 
-        submission.appName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        submission.changeNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        submission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
-      
+      const matchesSearch = !searchTerm || submission.appName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.changeNo.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === 'all' || submission.decision.toLowerCase() === statusFilter;
-      
       return matchesSearch && matchesStatus;
     });
   }, [submissions, searchTerm, statusFilter]);
-
   const statistics = useMemo(() => {
     const total = submissions.length;
     const approved = submissions.filter(s => s.decision === 'Approved').length;
     const rejected = submissions.filter(s => s.decision === 'Rejected').length;
     const timed = submissions.filter(s => s.decision === 'Timed').length;
-    
-    return { total, approved, rejected, timed };
+    return {
+      total,
+      approved,
+      rejected,
+      timed
+    };
   }, [submissions]);
-
   const getStatusIcon = (decision: string) => {
     switch (decision) {
       case 'Approved':
@@ -109,29 +100,30 @@ const Index = () => {
         return null;
     }
   };
-
   const getStatusConfig = (decision: string) => {
     switch (decision) {
       case 'Approved':
-        return { 
-          variant: 'default' as const, 
-          className: 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200 transition-colors' 
+        return {
+          variant: 'default' as const,
+          className: 'bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200 transition-colors'
         };
       case 'Rejected':
-        return { 
-          variant: 'destructive' as const, 
-          className: 'bg-rose-100 text-rose-800 border-rose-200 hover:bg-rose-200 transition-colors' 
+        return {
+          variant: 'destructive' as const,
+          className: 'bg-rose-100 text-rose-800 border-rose-200 hover:bg-rose-200 transition-colors'
         };
       case 'Timed':
-        return { 
-          variant: 'secondary' as const, 
-          className: 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 transition-colors' 
+        return {
+          variant: 'secondary' as const,
+          className: 'bg-amber-100 text-amber-800 border-amber-200 hover:bg-amber-200 transition-colors'
         };
       default:
-        return { variant: 'outline' as const, className: '' };
+        return {
+          variant: 'outline' as const,
+          className: ''
+        };
     }
   };
-
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('en-US', {
       year: 'numeric',
@@ -149,36 +141,26 @@ const Index = () => {
     requestDate: new Date().toLocaleDateString(),
     deploymentWindow: 'June 25, 10:00 AM - June 26, 11:00 PM',
     description: `Critical security update and performance optimizations for ${submission.appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
-    affectedServers: [
-      `${submission.appName.toLowerCase()}-web-01.prod.company.com`,
-      `${submission.appName.toLowerCase()}-web-02.prod.company.com`,
-      `${submission.appName.toLowerCase()}-api-01.prod.company.com`,
-      `${submission.appName.toLowerCase()}-api-02.prod.company.com`,
-      `${submission.appName.toLowerCase()}-db-01.prod.company.com`,
-      `${submission.appName.toLowerCase()}-cache-01.prod.company.com`,
-      `${submission.appName.toLowerCase()}-lb-01.prod.company.com`
-    ]
+    affectedServers: [`${submission.appName.toLowerCase()}-web-01.prod.company.com`, `${submission.appName.toLowerCase()}-web-02.prod.company.com`, `${submission.appName.toLowerCase()}-api-01.prod.company.com`, `${submission.appName.toLowerCase()}-api-02.prod.company.com`, `${submission.appName.toLowerCase()}-db-01.prod.company.com`, `${submission.appName.toLowerCase()}-cache-01.prod.company.com`, `${submission.appName.toLowerCase()}-lb-01.prod.company.com`]
   });
-
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative">
             <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+            animationDirection: 'reverse',
+            animationDuration: '1.5s'
+          }}></div>
           </div>
           <div className="space-y-2">
             <p className="text-slate-700 font-semibold text-lg">Loading submissions...</p>
             <p className="text-slate-500 text-sm">Fetching approval history</p>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="submissions">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="submissions">
       {/* Enhanced Header with Glass Effect */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -202,13 +184,7 @@ const Index = () => {
                 <Layers className="w-4 h-4" />
                 {currentEnv}
               </Badge>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2 hover:scale-105 transition-transform shadow-sm"
-                onClick={() => navigate('/home')}
-                data-action="back-home"
-              >
+              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm" onClick={() => navigate('/home')} data-action="back-home">
                 <Home className="w-4 h-4" />
                 Dashboard
               </Button>
@@ -291,13 +267,7 @@ const Index = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative flex-1 group">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors" />
-                <Input
-                  placeholder="Search by app, change number, approver..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 h-12"
-                  data-input="search"
-                />
+                <Input placeholder="Search by app, change number, approver..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 h-12" data-input="search" />
               </div>
               <div className="relative group">
                 <SortDesc className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-purple-600 transition-colors pointer-events-none" />
@@ -319,49 +289,32 @@ const Index = () => {
 
         {/* Enhanced Submissions List */}
         <div className="space-y-4" data-section="submissions-list">
-          {filteredSubmissions.length === 0 ? (
-            <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
+          {filteredSubmissions.length === 0 ? <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-lg">
               <CardContent className="p-16 text-center">
                 <div className="relative mb-8">
                   <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
                     <FileText className="w-12 h-12 text-slate-400" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
-                    <Search className="w-4 h-4 text-white" />
-                  </div>
+                  
                 </div>
                 <h3 className="text-xl font-bold text-slate-700 mb-3">No submissions found</h3>
                 <p className="text-slate-500 max-w-md mx-auto mb-6">
-                  {searchTerm || statusFilter !== 'all' 
-                    ? "Try adjusting your search criteria or filters to find submissions."
-                    : "No approval submissions have been recorded yet. Submit your first change request to get started!"
-                  }
+                  {searchTerm || statusFilter !== 'all' ? "Try adjusting your search criteria or filters to find submissions." : "No approval submissions have been recorded yet. Submit your first change request to get started!"}
                 </p>
-                {(searchTerm || statusFilter !== 'all') && (
-                  <Button 
-                    variant="outline" 
-                    onClick={() => { setSearchTerm(''); setStatusFilter('all'); }}
-                    className="gap-2"
-                  >
+                {(searchTerm || statusFilter !== 'all') && <Button variant="outline" onClick={() => {
+              setSearchTerm('');
+              setStatusFilter('all');
+            }} className="gap-2">
                     <XCircle className="w-4 h-4" />
                     Clear Filters
-                  </Button>
-                )}
+                  </Button>}
               </CardContent>
-            </Card>
-          ) : (
-            filteredSubmissions
-              .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-              .map((submission, index) => {
-                const statusConfig = getStatusConfig(submission.decision);
-                const changeRequestDetails = generateChangeRequestDetails(submission);
-                return (
-                  <Card 
-                    key={submission.id} 
-                    className="group bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                    data-submission={submission.id}
-                  >
+            </Card> : filteredSubmissions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).map((submission, index) => {
+          const statusConfig = getStatusConfig(submission.decision);
+          const changeRequestDetails = generateChangeRequestDetails(submission);
+          return <Card key={submission.id} className="group bg-white/70 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 relative overflow-hidden" style={{
+            animationDelay: `${index * 100}ms`
+          }} data-submission={submission.id}>
                     {/* Gradient accent line */}
                     <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
                     
@@ -385,12 +338,10 @@ const Index = () => {
                                   {getStatusIcon(submission.decision)}
                                   {submission.decision}
                                 </Badge>
-                                {submission.decision === 'Timed' && submission.startTime && submission.endTime && (
-                                  <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
+                                {submission.decision === 'Timed' && submission.startTime && submission.endTime && <div className="flex items-center gap-2 text-xs text-amber-700 bg-amber-50 px-2 py-1 rounded-md border border-amber-200">
                                     <Clock className="w-3 h-3" />
                                     <span className="font-medium">Scheduled</span>
-                                  </div>
-                                )}
+                                  </div>}
                               </div>
                             </div>
                           </div>
@@ -398,11 +349,7 @@ const Index = () => {
                           {/* Request Details Button - Better positioned */}
                           <Dialog>
                             <DialogTrigger asChild>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="flex-shrink-0 gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50"
-                              >
+                              <Button variant="outline" size="sm" className="flex-shrink-0 gap-2 hover:scale-105 transition-all duration-300 shadow-sm hover:shadow-md border-slate-300 hover:border-purple-300 hover:bg-purple-50">
                                 <Info className="w-4 h-4" />
                                 Details
                               </Button>
@@ -465,12 +412,10 @@ const Index = () => {
                                   </div>
                                   <div className="bg-slate-50 rounded-lg p-4 max-h-48 overflow-y-auto border border-slate-200 shadow-inner">
                                     <div className="space-y-2">
-                                      {changeRequestDetails.affectedServers.map((server, serverIndex) => (
-                                        <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                                      {changeRequestDetails.affectedServers.map((server, serverIndex) => <div key={serverIndex} className="flex items-center gap-3 py-2 px-3 bg-white rounded-md border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
                                           <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
                                           <span className="font-mono text-sm text-slate-700">{server}</span>
-                                        </div>
-                                      ))}
+                                        </div>)}
                                     </div>
                                   </div>
                                 </div>
@@ -490,8 +435,7 @@ const Index = () => {
                               <p className="font-semibold text-slate-900 truncate">{submission.approverName}</p>
                             </div>
                           </div>
-                          {submission.approverEmail && (
-                            <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
+                          {submission.approverEmail && <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                               <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
                                 <Mail className="w-4 h-4 text-emerald-600" />
                               </div>
@@ -499,8 +443,7 @@ const Index = () => {
                                 <p className="text-xs text-slate-500 font-medium">Email</p>
                                 <p className="font-semibold text-slate-900 truncate">{submission.approverEmail}</p>
                               </div>
-                            </div>
-                          )}
+                            </div>}
                           <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors">
                             <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
                               <Clock className="w-4 h-4 text-purple-600" />
@@ -513,8 +456,7 @@ const Index = () => {
                         </div>
                         
                         {/* Enhanced Timed Approval Section */}
-                        {submission.decision === 'Timed' && submission.startTime && submission.endTime && (
-                          <div className="mt-6 p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 shadow-sm">
+                        {submission.decision === 'Timed' && submission.startTime && submission.endTime && <div className="mt-6 p-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200 shadow-sm">
                             <div className="flex items-center gap-3 text-sm font-semibold text-amber-800 mb-4">
                               <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shadow-sm">
                                 <Calendar className="w-4 h-4 text-amber-600" />
@@ -531,12 +473,10 @@ const Index = () => {
                                 <p className="text-sm font-semibold text-slate-900">{formatDate(submission.endTime)}</p>
                               </div>
                             </div>
-                          </div>
-                        )}
+                          </div>}
                         
                         {/* Comments Section */}
-                        {submission.comments && (
-                          <div className="mt-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
+                        {submission.comments && <div className="mt-6 p-6 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl border border-slate-200">
                             <div className="flex items-center gap-3 text-sm font-semibold text-slate-700 mb-3">
                               <div className="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
                                 <FileText className="w-4 h-4 text-blue-600" />
@@ -548,14 +488,11 @@ const Index = () => {
                                 "{submission.comments}"
                               </p>
                             </div>
-                          </div>
-                        )}
+                          </div>}
                       </div>
                     </CardContent>
-                  </Card>
-                );
-              })
-          )}
+                  </Card>;
+        })}
         </div>
       </div>
 
@@ -574,8 +511,6 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
