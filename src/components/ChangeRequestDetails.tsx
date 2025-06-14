@@ -1,3 +1,4 @@
+
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 interface ChangeRequest {
@@ -73,12 +74,16 @@ const ChangeRequestDetails = ({
               </div>
               <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
             </div>
-            <div className="bg-white rounded-lg p-3 max-h-40 overflow-y-auto border border-slate-200">
-              <div className="space-y-1">
-                {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
-                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
-                    <span className="font-mono">{server}</span>
-                  </div>)}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-xl"></div>
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-xl p-3 border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-200 max-h-40 overflow-y-auto">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-green-500 to-emerald-600 rounded-l-xl"></div>
+                <div className="space-y-1 pl-3">
+                  {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
+                      <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
+                      <span className="font-mono">{server}</span>
+                    </div>)}
+                </div>
               </div>
             </div>
           </div>
