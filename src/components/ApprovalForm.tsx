@@ -86,7 +86,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
     const submission = {
       id: Date.now().toString(),
       appName: appName || '',
-      changeNo: changeNo,
+      changeNo: changeNo, // Ensure changeNo is properly included
       requester: 'DevOps Engineering Team',
       title: `Critical security update and performance optimizations for ${appName}`,
       description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
@@ -100,6 +100,9 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
       environment: currentEnv,
       deploymentWindow: 'Maintenance Window (8 PM - 6 AM)'
     };
+
+    console.log('Submitting with changeNo:', changeNo); // Debug log
+    console.log('Full submission object:', submission); // Debug log
 
     // Save to localStorage
     const existingSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
