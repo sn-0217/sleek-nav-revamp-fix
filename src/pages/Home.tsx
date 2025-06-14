@@ -31,7 +31,16 @@ const Home = () => {
         setIsLoading(true);
         setError(null);
         
-        const response = await fetch('/get-apps');
+        // Create a timeout promise that rejects after 3 seconds
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Request timeout after 3 seconds')), 3000)
+        );
+        
+        // Race between the API call and timeout
+        const fetchPromise = fetch('/get-apps');
+        
+        const response = await Promise.race([fetchPromise, timeoutPromise]) as Response;
+        
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -48,16 +57,7 @@ const Home = () => {
       } catch (err) {
         console.error('Failed to fetch apps:', err);
         setError(err instanceof Error ? err.message : 'Failed to load applications');
-        
-        // Fallback to hardcoded apps for development
-        const fallbackApps = ["WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot", "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL", "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch", "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"];
-        setApps(fallbackApps);
-        
-        toast({
-          title: "Warning",
-          description: "Failed to load apps from server. Using fallback data.",
-          variant: "destructive",
-        });
+        setApps([]); // Set empty array to show "no apps found"
       } finally {
         setIsLoading(false);
       }
@@ -65,7 +65,7 @@ const Home = () => {
 
     localStorage.setItem('currentEnv', currentEnv);
     fetchApps();
-  }, [currentEnv, toast]);
+  }, [currentEnv]);
 
   const getAppStatus = (appName: string): AppStatus => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
@@ -327,7 +327,7 @@ const Home = () => {
                 </div>
                 <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
                 <p className="text-slate-500 max-w-md mx-auto mb-6">
-                  Your search didn't match any applications in the current environment. Try adjusting your search criteria.
+                  {error ? 'Unable to load applications from server. Please check your connection and try again.' : 'Your search didn\'t match any applications in the current environment. Try adjusting your search criteria.'}
                 </p>
                 <Button variant="outline" onClick={() => setSearchTerm('')} className="gap-2 hover:scale-105 transition-transform">
                   <XCircle className="w-4 h-4" />
