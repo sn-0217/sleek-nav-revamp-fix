@@ -1,5 +1,7 @@
+
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+
 interface ChangeRequest {
   changeNo: string;
   requestedBy: string;
@@ -8,78 +10,101 @@ interface ChangeRequest {
   description: string;
   affectedServers: string[];
 }
+
 interface ChangeRequestDetailsProps {
   changeRequest: ChangeRequest;
 }
+
 const ChangeRequestDetails = ({
   changeRequest
 }: ChangeRequestDetailsProps) => {
-  return <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
-      <div className="space-y-3">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-            <MessageSquare className="w-3.5 h-3.5 text-white" />
+  return (
+    <div className="p-6 bg-white rounded-xl shadow-lg border border-slate-200/60 backdrop-blur-sm" data-section="change-details">
+      <div className="space-y-6">
+        {/* Enhanced Header */}
+        <div className="flex items-center gap-3 pb-4 border-b border-slate-200/60">
+          <div className="relative">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <MessageSquare className="w-5 h-5 text-white" />
+            </div>
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-emerald-400 to-green-500 rounded-full border-2 border-white"></div>
           </div>
-          <h3 className="text-base font-bold text-slate-900">Request Details</h3>
+          <div>
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Request Details</h3>
+            <p className="text-sm text-slate-500 font-medium">Comprehensive change information</p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3" data-content="change-info">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            <div className="space-y-1.5" data-field="requested-by">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-emerald-100 rounded-lg flex items-center justify-center">
-                  <User className="w-2.5 h-2.5 text-emerald-600" />
-                </div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Application Owner</p>
+        {/* Modern Info Cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" data-content="change-info">
+          {/* Application Owner Card */}
+          <div className="group p-4 bg-gradient-to-br from-emerald-50 to-green-50 rounded-xl border border-emerald-200/60 hover:shadow-md transition-all duration-300" data-field="requested-by">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 bg-emerald-500 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                <User className="w-4 h-4 text-white" />
               </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.requestedBy}</p>
-            </div>
-            
-            <div className="space-y-1.5" data-field="deployment-window">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
-                  <Clock className="w-2.5 h-2.5 text-amber-600" />
-                </div>
-                <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTENANCE WINDOW</p>
+              <div>
+                <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider">Application Owner</p>
+                <p className="text-sm font-semibold text-slate-900">{changeRequest.requestedBy}</p>
               </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">June 25, 10:00 AM - June 26, 11:00 PM</p>
             </div>
           </div>
           
-          <Separator className="my-3" />
-
-          <div className="space-y-2" data-field="description">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
+          {/* Maintenance Window Card */}
+          <div className="group p-4 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border border-amber-200/60 hover:shadow-md transition-all duration-300" data-field="deployment-window">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 bg-amber-500 rounded-xl flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                <Clock className="w-4 h-4 text-white" />
               </div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
-            </div>
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2.5 border-l-4 border-blue-500 shadow-sm">
-              <p className="text-slate-700 leading-relaxed text-sm">{changeRequest.description}</p>
+              <div>
+                <p className="text-xs font-bold text-amber-700 uppercase tracking-wider">Maintenance Window</p>
+                <p className="text-sm font-semibold text-slate-900">June 25, 10:00 AM - June 26, 11:00 PM</p>
+              </div>
             </div>
           </div>
-
-          <Separator className="my-3" />
-
-          <div className="space-y-2" data-section="affected-servers">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
-                <Database className="w-2.5 h-2.5 text-green-600" />
-              </div>
-              <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
+        </div>
+        
+        {/* Description Section */}
+        <div className="space-y-3" data-field="description">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-indigo-500 rounded-xl flex items-center justify-center shadow-sm">
+              <MessageSquare className="w-4 h-4 text-white" />
             </div>
-            <div className="bg-white rounded-lg p-3 max-h-40 overflow-y-auto border border-slate-200">
-              <div className="space-y-1">
-                {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
-                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
-                    <span className="font-mono">{server}</span>
-                  </div>)}
-              </div>
+            <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Description</h4>
+          </div>
+          <div className="relative p-5 bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50 rounded-xl border border-indigo-200/60 shadow-inner">
+            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-500 to-purple-600 rounded-l-xl"></div>
+            <p className="text-slate-700 leading-relaxed text-sm pl-3">{changeRequest.description}</p>
+          </div>
+        </div>
+
+        {/* Infrastructure Impact Section */}
+        <div className="space-y-4" data-section="affected-servers">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-green-500 rounded-xl flex items-center justify-center shadow-sm">
+              <Database className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Infrastructure Impact</h4>
+              <p className="text-xs text-slate-600 font-medium">{changeRequest.affectedServers.length} servers affected</p>
+            </div>
+          </div>
+          
+          <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-xl p-4 border border-slate-200/60 shadow-inner max-h-48 overflow-y-auto">
+            <div className="space-y-2">
+              {changeRequest.affectedServers.map((server, index) => (
+                <div key={index} className="group flex items-center gap-3 p-3 bg-white rounded-lg border border-slate-200/60 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-200" data-server={`server-${index}`}>
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0 group-hover:scale-125 transition-transform"></div>
+                  <span className="font-mono text-sm text-slate-700 group-hover:text-slate-900 transition-colors">{server}</span>
+                  <div className="ml-auto w-2 h-2 bg-green-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default ChangeRequestDetails;
