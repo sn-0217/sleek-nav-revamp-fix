@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
+import { Search, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow, Settings } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
+
 interface AppStatus {
   text: string;
   color: string;
@@ -156,6 +157,10 @@ const Home = () => {
               <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md" onClick={handleViewSubmissions} data-action="view-submissions">
                 <List className="w-4 h-4" />
                 Analytics
+              </Button>
+              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-gradient-to-r from-orange-50 to-red-50 border-orange-200 text-orange-700 hover:from-orange-100 hover:to-red-100" data-action="admin">
+                <Settings className="w-4 h-4" />
+                Admin
               </Button>
             </div>
           </div>
