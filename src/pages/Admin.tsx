@@ -21,6 +21,8 @@ interface Submission {
   decision: string;
   timestamp: string;
   scheduledDate?: string;
+  startTime?: string;
+  endTime?: string;
   comments?: string;
 }
 
@@ -302,6 +304,37 @@ const Admin = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                {editForm.decision === 'Timed' && (
+                  <div className="space-y-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Clock className="w-4 h-4 text-amber-600" />
+                      <span className="text-sm font-medium text-amber-800">Timed Approval Window</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-slate-700 mb-2 block">
+                          Start Time
+                        </label>
+                        <Input
+                          type="datetime-local"
+                          value={editForm.startTime || ''}
+                          onChange={(e) => setEditForm({ ...editForm, startTime: e.target.value })}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-slate-700 mb-2 block">
+                          End Time
+                        </label>
+                        <Input
+                          type="datetime-local"
+                          value={editForm.endTime || ''}
+                          onChange={(e) => setEditForm({ ...editForm, endTime: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {editForm.scheduledDate && (
                   <div>
