@@ -192,9 +192,12 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="submissions-content">
-        {/* Enhanced Statistics with Colored Numbers and Icons */}
+        {/* Enhanced Statistics with Click Functionality */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-section="statistics">
-          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+          <Card 
+            className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+            onClick={() => handleStatisticClick('all')}
+          >
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
@@ -205,10 +208,16 @@ const Index = () => {
                   <FileText className="w-7 h-7 text-blue-600" />
                 </div>
               </div>
+              {statusFilter === 'all' && (
+                <div className="absolute inset-0 bg-blue-500/10 border-2 border-blue-500 rounded-lg"></div>
+              )}
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+          <Card 
+            className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+            onClick={() => handleStatisticClick('approved')}
+          >
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
@@ -219,10 +228,16 @@ const Index = () => {
                   <CheckCircle className="w-7 h-7 text-green-600" />
                 </div>
               </div>
+              {statusFilter === 'approved' && (
+                <div className="absolute inset-0 bg-green-500/10 border-2 border-green-500 rounded-lg"></div>
+              )}
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+          <Card 
+            className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+            onClick={() => handleStatisticClick('rejected')}
+          >
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
@@ -233,10 +248,16 @@ const Index = () => {
                   <XCircle className="w-7 h-7 text-red-600" />
                 </div>
               </div>
+              {statusFilter === 'rejected' && (
+                <div className="absolute inset-0 bg-red-500/10 border-2 border-red-500 rounded-lg"></div>
+              )}
             </CardContent>
           </Card>
 
-          <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
+          <Card 
+            className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+            onClick={() => handleStatisticClick('timed')}
+          >
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
@@ -247,6 +268,9 @@ const Index = () => {
                   <Timer className="w-7 h-7 text-amber-600" />
                 </div>
               </div>
+              {statusFilter === 'timed' && (
+                <div className="absolute inset-0 bg-amber-500/10 border-2 border-amber-500 rounded-lg"></div>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -511,4 +535,5 @@ const Index = () => {
       </footer>
     </div>;
 };
+
 export default Index;
