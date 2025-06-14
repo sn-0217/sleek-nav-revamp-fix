@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useMemo } from 'react';
 import { Search, Calendar, User, Mail, Clock, CheckCircle, XCircle, Timer, FileText, ArrowLeft, Layers, Home, TrendingUp, BarChart3, Filter, SortDesc } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -174,18 +175,18 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="submissions-content">
-        {/* Enhanced Statistics with Modern Cards - Removed Background Colors */}
+        {/* Enhanced Statistics with Colored Numbers and Icons */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8" data-section="statistics">
           <Card className="group relative overflow-hidden border shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2">
             <CardContent className="p-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Total Submissions</p>
-                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.total}</p>
+                  <p className="text-3xl font-bold text-blue-600 group-hover:scale-105 transition-transform">{statistics.total}</p>
                   <p className="text-xs text-slate-500 mt-1">All time records</p>
                 </div>
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <FileText className="w-7 h-7 text-slate-600" />
+                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <FileText className="w-7 h-7 text-blue-600" />
                 </div>
               </div>
             </CardContent>
@@ -196,11 +197,11 @@ const Index = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Approved</p>
-                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.approved}</p>
+                  <p className="text-3xl font-bold text-green-600 group-hover:scale-105 transition-transform">{statistics.approved}</p>
                   <p className="text-xs text-slate-500 mt-1">Success rate: {statistics.total ? Math.round((statistics.approved / statistics.total) * 100) : 0}%</p>
                 </div>
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <CheckCircle className="w-7 h-7 text-slate-600" />
+                <div className="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <CheckCircle className="w-7 h-7 text-green-600" />
                 </div>
               </div>
             </CardContent>
@@ -211,11 +212,11 @@ const Index = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Rejected</p>
-                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.rejected}</p>
+                  <p className="text-3xl font-bold text-red-600 group-hover:scale-105 transition-transform">{statistics.rejected}</p>
                   <p className="text-xs text-slate-500 mt-1">Rejection rate: {statistics.total ? Math.round((statistics.rejected / statistics.total) * 100) : 0}%</p>
                 </div>
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <XCircle className="w-7 h-7 text-slate-600" />
+                <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <XCircle className="w-7 h-7 text-red-600" />
                 </div>
               </div>
             </CardContent>
@@ -226,11 +227,11 @@ const Index = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-slate-600 mb-1 tracking-wide">Timed Approvals</p>
-                  <p className="text-3xl font-bold text-slate-900 group-hover:scale-105 transition-transform">{statistics.timed}</p>
+                  <p className="text-3xl font-bold text-amber-600 group-hover:scale-105 transition-transform">{statistics.timed}</p>
                   <p className="text-xs text-slate-500 mt-1">Scheduled changes</p>
                 </div>
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Timer className="w-7 h-7 text-slate-600" />
+                <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Timer className="w-7 h-7 text-amber-600" />
                 </div>
               </div>
             </CardContent>
