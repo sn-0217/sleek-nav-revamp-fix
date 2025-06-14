@@ -44,45 +44,45 @@ const AppDetail = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="app-detail">
       {/* Modern Header with Glass Effect */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-8 py-6">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-6" data-section="header-info">
+            <div className="flex items-center gap-4" data-section="header-info">
               <div className="relative">
-                <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <FileText className="w-7 h-7 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <FileText className="w-5 h-5 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
-                  <Zap className="w-3.5 h-3.5 text-white" />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center">
+                  <Zap className="w-2.5 h-2.5 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-slate-900 tracking-tight">{appName} - Change Approval</h1>
-                <p className="text-slate-600 text-base mt-1">Enterprise change management workflow</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appName} - Change Approval</h1>
+                <p className="text-slate-600 text-sm mt-1">Enterprise change management workflow</p>
               </div>
             </div>
-            <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge variant="secondary" className="gap-2 px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 text-sm">
-                <Shield className="w-4 h-4" />
+            <div className="flex items-center gap-3" data-section="header-actions">
+              <Badge variant="secondary" className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 text-sm">
+                <Shield className="w-3.5 h-3.5" />
                 {currentEnv}
               </Badge>
               <Button 
                 variant="outline" 
-                size="default" 
-                className="gap-2 hover:scale-105 transition-transform shadow-sm px-6"
+                size="sm" 
+                className="gap-2 hover:scale-105 transition-transform shadow-sm px-4"
                 onClick={() => navigate('/')}
                 data-action="view-submissions"
               >
-                <List className="w-4 h-4" />
+                <List className="w-3.5 h-3.5" />
                 Analytics
               </Button>
               <Button 
                 variant="outline" 
-                size="default" 
-                className="gap-2 hover:scale-105 transition-transform shadow-sm px-6"
+                size="sm" 
+                className="gap-2 hover:scale-105 transition-transform shadow-sm px-4"
                 onClick={() => navigate('/home')}
                 data-action="back-home"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-3.5 h-3.5" />
                 Dashboard
               </Button>
             </div>
@@ -90,30 +90,30 @@ const AppDetail = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-8 py-12" data-main="app-detail-content">
+      <div className="max-w-7xl mx-auto px-6 py-8" data-main="app-detail-content">
         {/* Unified Change Request & Approval Card */}
         <Card className="group hover:shadow-2xl transition-all duration-700 border-0 shadow-xl bg-white/90 backdrop-blur-lg relative overflow-hidden" data-card="unified-workflow">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-pink-600/5 opacity-60 group-hover:opacity-100 transition-opacity duration-700"></div>
           
-          <CardHeader className="bg-gradient-to-r from-slate-50/90 to-blue-50/90 border-b border-slate-200/50 relative z-10 backdrop-blur-sm px-12 py-8">
+          <CardHeader className="bg-gradient-to-r from-slate-50/90 to-blue-50/90 border-b border-slate-200/50 relative z-10 backdrop-blur-sm px-8 py-6">
             <CardTitle className="flex items-center justify-between text-slate-900">
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-3xl flex items-center justify-center shadow-lg">
-                  <Info className="w-8 h-8 text-white" />
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Info className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <span className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Change Request Workflow</span>
-                  <p className="text-base text-slate-600 font-normal mt-2">Review details and provide approval decision</p>
+                  <span className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Change Request Workflow</span>
+                  <p className="text-sm text-slate-600 font-normal mt-1">Review details and provide approval decision</p>
                 </div>
               </div>
-              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-6 py-3 text-base font-semibold">
+              <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 text-sm font-semibold">
                 {changeRequest.changeNo}
               </Badge>
             </CardTitle>
           </CardHeader>
 
           <CardContent className="p-0 relative z-10">
-            <div className="grid grid-cols-1 xl:grid-cols-5 min-h-[700px]">
+            <div className="grid grid-cols-1 xl:grid-cols-5 min-h-[600px]">
               <div className="xl:col-span-3">
                 <ChangeRequestDetails changeRequest={changeRequest} />
               </div>

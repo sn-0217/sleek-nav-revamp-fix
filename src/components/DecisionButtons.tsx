@@ -43,7 +43,7 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
   };
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 gap-3">
       {(['Approved', 'Rejected', 'Timed'] as const).map((decision) => {
         const config = getDecisionConfig(decision);
         const Icon = config.icon;
@@ -55,8 +55,8 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
             type="button"
             onClick={() => onDecisionSelect(decision)}
             className={`
-              relative overflow-hidden group/btn p-6 rounded-2xl border-2 font-semibold transition-all duration-300
-              hover:scale-105 active:scale-95 min-h-[90px] flex flex-col items-center justify-center gap-3
+              relative overflow-hidden group/btn p-4 rounded-xl border-2 font-semibold transition-all duration-300
+              hover:scale-105 active:scale-95 min-h-[70px] flex flex-col items-center justify-center gap-2
               ${isSelected 
                 ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-lg ${config.glowColor} shadow-lg` 
                 : `${config.bgColor} ${config.borderColor} ${config.textColor} hover:shadow-lg hover:${config.bgColor}`
@@ -64,8 +64,8 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
             `}
             data-decision={decision.toLowerCase()}
           >
-            <Icon className={`w-6 h-6 ${isSelected ? 'text-white' : config.textColor}`} />
-            <span className="text-sm font-medium">{decision}</span>
+            <Icon className={`w-5 h-5 ${isSelected ? 'text-white' : config.textColor}`} />
+            <span className="text-xs font-medium">{decision}</span>
             {isSelected && (
               <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/btn:opacity-100 transition-opacity" />
             )}
