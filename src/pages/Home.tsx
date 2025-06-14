@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +6,7 @@ import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
+import { loadTestData } from '@/utils/testData';
 
 interface AppStatus {
   text: string;
@@ -20,39 +20,32 @@ const Home = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv] = useState('DEV');
+  const [currentEnv] = useState('PROD'); // Changed to PROD to see more test data
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch apps from API
+  // Load test data from localStorage
   useEffect(() => {
     const fetchApps = async () => {
       try {
         setIsLoading(true);
         setError(null);
         
-        const response = await fetch('/get-apps');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        console.log('Loading test data for testing...');
         
-        const data = await response.json();
+        // Load test data first
+        const { testApps } = loadTestData();
+        setApps(testApps);
         
-        // Assuming the API returns an array of app names or objects with name property
-        if (Array.isArray(data)) {
-          const appNames = data.map(app => typeof app === 'string' ? app : app.name);
-          setApps(appNames);
-        } else {
-          throw new Error('Invalid response format');
-        }
+        console.log('Test apps loaded:', testApps);
+        
       } catch (err) {
-        console.error('Failed to fetch apps:', err);
-        // For testing purposes, use test app when API fails without showing error
-        setApps(['Test Application']);
-        setError(null); // Don't show error when we have test app
+        console.error('Failed to load test data:', err);
+        setError('Failed to load applications');
       } finally {
-        setIsLoading(false);
+        // Simulate loading delay for smooth animation
+        setTimeout(() => setIsLoading(false), 800);
       }
     };
 

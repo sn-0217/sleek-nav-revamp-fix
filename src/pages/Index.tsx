@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+import { loadTestData } from '@/utils/testData';
+
 interface Submission {
   id: string;
   appName: string;
@@ -21,6 +23,7 @@ interface Submission {
   endTime?: string;
   environment: string;
 }
+
 const Index = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -30,32 +33,26 @@ const Index = () => {
   const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load submissions with API first, localStorage as fallback
+  // Load test data from localStorage
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
         setIsLoading(true);
 
-        // Try API first
-        const response = await fetch('/get-all-submissions');
-        if (response.ok) {
-          const apiSubmissions = await response.json();
-          console.log('Fetched submissions from API:', apiSubmissions);
-
-          // Filter by current environment
-          const envSubmissions = apiSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
-          setSubmissions(envSubmissions);
-        } else {
-          throw new Error(`API call failed with status: ${response.status}`);
-        }
-      } catch (error) {
-        console.log('API fetch failed, falling back to localStorage:', error);
-
-        // Fallback to localStorage
-        const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-        // Filter submissions by current environment
-        const envSubmissions = storedSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
+        console.log('Loading test submissions for testing...');
+        
+        // Load test data
+        const { testSubmissions } = loadTestData();
+        
+        // Filter by current environment
+        const envSubmissions = testSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
         setSubmissions(envSubmissions);
+        
+        console.log('Test submissions loaded:', envSubmissions);
+
+      } catch (error) {
+        console.log('Failed to load test data:', error);
+        setSubmissions([]);
       } finally {
         // Check for search parameter in URL
         const searchQuery = searchParams.get('search');
@@ -69,6 +66,7 @@ const Index = () => {
     };
     fetchSubmissions();
   }, [currentEnv, searchParams]);
+
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
       const matchesSearch = !searchTerm || submission.appName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.changeNo.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) || submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -154,8 +152,8 @@ const Index = () => {
           }}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Loading submissions...</p>
-            <p className="text-slate-500 text-sm">Fetching approval history</p>
+            <p className="text-slate-700 font-semibold text-lg">Loading test submissions...</p>
+            <p className="text-slate-500 text-sm">Fetching test approval history</p>
           </div>
         </div>
       </div>;
@@ -176,7 +174,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-900 tracking-tight">Submission Analytics</h1>
-                <p className="text-slate-600 text-sm">Comprehensive approval history & insights</p>
+                <p className="text-slate-600 text-sm">Comprehensive approval history & insights (Test Data)</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
@@ -505,7 +503,7 @@ const Index = () => {
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
-              <span className="text-xs text-slate-500">Powered by Modern Web Technologies</span>
+              <span className="text-xs text-slate-500">Powered by Modern Web Technologies (Using Test Data)</span>
               <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
             </div>
           </div>
