@@ -1,11 +1,9 @@
-
 import React from 'react';
 import { Search, Layers, AlertTriangle, XCircle, Activity } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import AppCard from './AppCard';
-
 interface AppStatus {
   text: string;
   color: string;
@@ -13,7 +11,6 @@ interface AppStatus {
   bgColor: string;
   borderColor: string;
 }
-
 interface ApplicationsGridProps {
   searchTerm: string;
   setSearchTerm: (term: string) => void;
@@ -24,7 +21,6 @@ interface ApplicationsGridProps {
   handleAppClick: (appName: string) => void;
   handleStatusClick: (appName: string, e: React.MouseEvent) => void;
 }
-
 const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   searchTerm,
   setSearchTerm,
@@ -35,8 +31,7 @@ const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
   handleAppClick,
   handleStatusClick
 }) => {
-  return (
-    <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
+  return <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
       {/* Subtle animated background */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
       
@@ -63,45 +58,35 @@ const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
         </div>
 
         {/* Enhanced Apps Grid */}
-        {isLoading ? (
-          <div className="text-center py-20" data-state="loading">
+        {isLoading ? <div className="text-center py-20" data-state="loading">
             <div className="relative">
               <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
               <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
-                animationDirection: 'reverse',
-                animationDuration: '1.5s'
-              }}></div>
+            animationDirection: 'reverse',
+            animationDuration: '1.5s'
+          }}></div>
             </div>
             <div className="space-y-2 mt-6">
               <p className="text-slate-700 font-semibold text-lg">Loading Applications...</p>
               <p className="text-slate-500 text-sm">Fetching application portfolio from server</p>
             </div>
-          </div>
-        ) : error ? (
-          <div className="text-center py-20" data-state="error">
+          </div> : error ? <div className="text-center py-20" data-state="error">
             <div className="relative mb-8">
               <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
                 <AlertTriangle className="w-12 h-12 text-red-600" />
               </div>
-              <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-red-500 to-rose-500 rounded-full flex items-center justify-center">
-                <XCircle className="w-4 h-4 text-white" />
-              </div>
+              
             </div>
             <h3 className="text-2xl font-bold text-slate-700 mb-3">Failed to Load Applications</h3>
             <p className="text-slate-600 max-w-md mx-auto mb-2">
               Unable to connect to the server. Please contact admin for assistance.
             </p>
-            <p className="text-slate-500 text-xs mb-6">Error: {error}</p>
-            <Button 
-              onClick={() => window.location.reload()} 
-              className="gap-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white"
-            >
+            
+            <Button onClick={() => window.location.reload()} className="gap-2 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white">
               <Activity className="w-4 h-4" />
               Retry
             </Button>
-          </div>
-        ) : filteredApps.length === 0 ? (
-          <div className="text-center py-20" data-state="no-results">
+          </div> : filteredApps.length === 0 ? <div className="text-center py-20" data-state="no-results">
             <div className="relative mb-8">
               <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
                 <Search className="w-12 h-12 text-slate-400" />
@@ -118,32 +103,16 @@ const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
               <XCircle className="w-4 h-4" />
               Clear Search
             </Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
+          </div> : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
             {filteredApps.map((app, index) => {
-              const status = getAppStatus(app);
-              const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-              const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
-              const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
-              
-              return (
-                <AppCard
-                  key={app}
-                  app={app}
-                  index={index}
-                  status={status}
-                  hasValidSubmissions={hasValidSubmissions}
-                  onAppClick={handleAppClick}
-                  onStatusClick={handleStatusClick}
-                />
-              );
-            })}
-          </div>
-        )}
+          const status = getAppStatus(app);
+          const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+          const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
+          const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
+          return <AppCard key={app} app={app} index={index} status={status} hasValidSubmissions={hasValidSubmissions} onAppClick={handleAppClick} onStatusClick={handleStatusClick} />;
+        })}
+          </div>}
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default ApplicationsGrid;
