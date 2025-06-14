@@ -48,15 +48,19 @@ const ChangeRequestDetails = ({
           
           <Separator className="my-3" />
 
-          <div className="space-y-2" data-field="description">
+          <div className="space-y-3" data-field="description">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-indigo-100 rounded-lg flex items-center justify-center">
-                <MessageSquare className="w-2.5 h-2.5 text-indigo-600" />
+              <div className="w-5 h-5 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-sm">
+                <MessageSquare className="w-3 h-3 text-white" />
               </div>
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Description</p>
+              <p className="text-sm font-semibold text-slate-700 uppercase tracking-wide">Change Description</p>
             </div>
-            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-lg p-2.5 border-l-4 border-blue-500 shadow-sm">
-              <p className="text-slate-700 leading-relaxed text-sm">{changeRequest.description}</p>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 rounded-xl"></div>
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-slate-200/60 shadow-sm hover:shadow-md transition-shadow duration-200">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-blue-500 to-indigo-600 rounded-l-xl"></div>
+                <p className="text-slate-700 leading-relaxed text-sm font-medium pl-3">{changeRequest.description}</p>
+              </div>
             </div>
           </div>
 
