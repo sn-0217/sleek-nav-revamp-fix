@@ -1,12 +1,22 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Info, List, Shield, Zap, FileText } from 'lucide-react';
+import { ArrowLeft, Info, List, Shield, Zap, FileText, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import ChangeRequestDetails from '@/components/ChangeRequestDetails';
 import ApprovalForm from '@/components/ApprovalForm';
+
+interface AppDetailData {
+  appName: string;
+  changeNumber: string;
+  applicationOwner: string;
+  maintenanceWindow: string;
+  changeDescription: string;
+  infrastructureImpact: string;
+  hosts: string[];
+}
 
 interface ChangeRequest {
   changeNo: string;
@@ -21,24 +31,109 @@ const AppDetail = () => {
   const { appName } = useParams<{ appName: string }>();
   const navigate = useNavigate();
   const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'DEV');
+  const [appData, setAppData] = useState<AppDetailData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock change request data
-  const [changeRequest] = useState<ChangeRequest>({
-    changeNo: `CHG-2024-${Math.floor(Math.random() * 999) + 1}`,
-    requestedBy: 'DevOps Engineering Team',
-    requestDate: new Date().toLocaleDateString(),
-    deploymentWindow: 'Maintenance Window (8 PM - 6 AM)',
-    description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
-    affectedServers: [
-      `${appName?.toLowerCase()}-web-01.prod.company.com`,
-      `${appName?.toLowerCase()}-web-02.prod.company.com`,
-      `${appName?.toLowerCase()}-api-01.prod.company.com`,
-      `${appName?.toLowerCase()}-api-02.prod.company.com`,
-      `${appName?.toLowerCase()}-db-01.prod.company.com`,
-      `${appName?.toLowerCase()}-cache-01.prod.company.com`,
-      `${appName?.toLowerCase()}-lb-01.prod.company.com`
-    ]
-  });
+  // Fetch app-specific details
+  useEffect(() => {
+    const fetchAppDetails = async () => {
+      if (!appName) return;
+      
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        const response = await fetch(`/app/${encodeURIComponent(appName)}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Application not found');
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setAppData(data);
+      } catch (err) {
+        console.error('Failed to fetch app details:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load application details');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAppDetails();
+  }, [appName]);
+
+  // Convert API data to ChangeRequest format for the existing component
+  const getChangeRequest = (): ChangeRequest | null => {
+    if (!appData) return null;
+    
+    return {
+      changeNo: appData.changeNumber,
+      requestedBy: appData.applicationOwner,
+      requestDate: new Date().toLocaleDateString(),
+      deploymentWindow: appData.maintenanceWindow,
+      description: appData.changeDescription,
+      affectedServers: appData.hosts
+    };
+  };
+
+  const changeRequest = getChangeRequest();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="relative mb-8">
+            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+              animationDirection: 'reverse',
+              animationDuration: '1.5s'
+            }}></div>
+          </div>
+          <div className="space-y-2">
+            <p className="text-slate-700 font-semibold text-lg">Loading Application Details...</p>
+            <p className="text-slate-500 text-sm">Fetching {appName} configuration</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !changeRequest) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="relative mb-8">
+            <div className="w-24 h-24 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+              <AlertTriangle className="w-12 h-12 text-red-600" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-bold text-slate-700 mb-3">Application Not Found</h3>
+          <p className="text-slate-600 mb-6">
+            {error || `The application "${appName}" could not be found or is not available.`}
+          </p>
+          <div className="space-y-3">
+            <Button 
+              onClick={() => navigate('/home')} 
+              className="gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white w-full"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+            <Button 
+              variant="outline" 
+              onClick={() => window.location.reload()} 
+              className="gap-2 w-full"
+            >
+              Retry
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="app-detail">
@@ -56,7 +151,7 @@ const AppDetail = () => {
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appName} - Change Approval</h1>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">{appData.appName} - Change Approval</h1>
                 <p className="text-slate-600 text-sm mt-1">Enterprise change management workflow</p>
               </div>
             </div>
@@ -119,7 +214,7 @@ const AppDetail = () => {
               </div>
               <div className="xl:col-span-2">
                 <ApprovalForm 
-                  appName={appName || ''}
+                  appName={appData.appName}
                   changeNo={changeRequest.changeNo}
                   currentEnv={currentEnv}
                 />

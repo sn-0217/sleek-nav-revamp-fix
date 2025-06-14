@@ -1,5 +1,7 @@
+
 import { Calendar, Clock, User, MessageSquare, Database, Globe } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+
 interface ChangeRequest {
   changeNo: string;
   requestedBy: string;
@@ -8,13 +10,16 @@ interface ChangeRequest {
   description: string;
   affectedServers: string[];
 }
+
 interface ChangeRequestDetailsProps {
   changeRequest: ChangeRequest;
 }
+
 const ChangeRequestDetails = ({
   changeRequest
 }: ChangeRequestDetailsProps) => {
-  return <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
+  return (
+    <div className="p-5 border-r border-slate-200/50 bg-gradient-to-br from-slate-50/30 to-white/30" data-section="change-details">
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-3 py-[12px]">
           <div className="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -24,6 +29,16 @@ const ChangeRequestDetails = ({
         </div>
 
         <div className="grid grid-cols-1 gap-3" data-content="change-info">
+          <div className="space-y-1.5" data-field="change-number">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-blue-100 rounded-lg flex items-center justify-center">
+                <MessageSquare className="w-2.5 h-2.5 text-blue-600" />
+              </div>
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">Change No</p>
+            </div>
+            <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.changeNo}</p>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
             <div className="space-y-1.5" data-field="requested-by">
               <div className="flex items-center gap-2">
@@ -42,7 +57,7 @@ const ChangeRequestDetails = ({
                 </div>
                 <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">MAINTENANCE WINDOW</p>
               </div>
-              <p className="font-medium text-slate-900 text-sm pl-6">June 25, 10:00 AM - June 26, 11:00 PM</p>
+              <p className="font-medium text-slate-900 text-sm pl-6">{changeRequest.deploymentWindow}</p>
             </div>
           </div>
           
@@ -71,7 +86,7 @@ const ChangeRequestDetails = ({
               <div className="w-4 h-4 bg-green-100 rounded-lg flex items-center justify-center">
                 <Database className="w-2.5 h-2.5 text-green-600" />
               </div>
-              <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers)</h4>
+              <h4 className="font-medium text-slate-900 text-sm">Infrastructure Impact ({changeRequest.affectedServers.length} servers affected)</h4>
             </div>
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 rounded-xl"></div>
@@ -79,10 +94,12 @@ const ChangeRequestDetails = ({
                 <div className="absolute top-0 left-0 w-1 bg-gradient-to-b from-green-500 to-emerald-600" style={{height: '100%'}}></div>
                 <div className="max-h-40 overflow-y-auto p-3 pl-6">
                   <div className="space-y-1">
-                    {changeRequest.affectedServers.map((server, index) => <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
+                    {changeRequest.affectedServers.map((server, index) => (
+                      <div key={index} className="flex items-center gap-2 py-1 text-xs text-slate-600" data-server={`server-${index}`}>
                         <div className="w-1.5 h-1.5 bg-slate-400 rounded-full flex-shrink-0"></div>
                         <span className="font-mono">{server}</span>
-                      </div>)}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -90,6 +107,8 @@ const ChangeRequestDetails = ({
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default ChangeRequestDetails;
