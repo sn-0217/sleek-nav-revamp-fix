@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
-
 interface AppStatus {
   text: string;
   color: string;
@@ -14,72 +12,58 @@ interface AppStatus {
   bgColor: string;
   borderColor: string;
 }
-
 const Home = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentEnv] = useState('DEV');
   const [isLoading, setIsLoading] = useState(true);
-
-  const apps = [
-    "WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot",
-    "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL",
-    "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch",
-    "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"
-  ];
-
+  const apps = ["WebLogic", "Jenkins", "Docker", "GitHub", "Kafka", "Redis", "Spring Boot", "MySQL", "MongoDB", "Nginx", "Node.js", "React", "Vue", "Angular", "PostgreSQL", "Kubernetes", "Ansible", "Terraform", "Prometheus", "Grafana", "Elasticsearch", "Logstash", "Fluentd", "RabbitMQ", "Consul", "Vault"];
   useEffect(() => {
     localStorage.setItem('currentEnv', currentEnv);
     // Simulate loading for smooth animation
     setTimeout(() => setIsLoading(false), 800);
   }, [currentEnv]);
-
   const getAppStatus = (appName: string): AppStatus => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
-    
     if (appSubmissions.length === 0) {
-      return { 
-        text: 'No Changes', 
+      return {
+        text: 'No Changes',
         color: 'text-slate-600',
         icon: <Activity className="w-4 h-4" />,
         bgColor: 'bg-slate-50',
         borderColor: 'border-slate-200'
       };
     }
-
-    const latestSubmission = appSubmissions.sort((a: any, b: any) => 
-      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    )[0];
-
+    const latestSubmission = appSubmissions.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
     switch (latestSubmission.decision) {
       case 'Approved':
-        return { 
-          text: 'Approved', 
+        return {
+          text: 'Approved',
           color: 'text-emerald-700',
           icon: <CheckCircle className="w-4 h-4" />,
           bgColor: 'bg-emerald-50',
           borderColor: 'border-emerald-200'
         };
       case 'Rejected':
-        return { 
-          text: 'Rejected', 
+        return {
+          text: 'Rejected',
           color: 'text-rose-700',
           icon: <XCircle className="w-4 h-4" />,
           bgColor: 'bg-rose-50',
           borderColor: 'border-rose-200'
         };
       case 'Timed':
-        return { 
-          text: 'Timed Approval', 
+        return {
+          text: 'Timed Approval',
           color: 'text-amber-700',
           icon: <Clock className="w-4 h-4" />,
           bgColor: 'bg-amber-50',
           borderColor: 'border-amber-200'
         };
       default:
-        return { 
-          text: 'Pending', 
+        return {
+          text: 'Pending',
           color: 'text-slate-600',
           icon: <Activity className="w-4 h-4" />,
           bgColor: 'bg-slate-50',
@@ -87,15 +71,10 @@ const Home = () => {
         };
     }
   };
-
-  const filteredApps = apps
-    .filter(app => app.toLowerCase().includes(searchTerm.toLowerCase()))
-    .sort((a, b) => a.localeCompare(b));
-
+  const filteredApps = apps.filter(app => app.toLowerCase().includes(searchTerm.toLowerCase())).sort((a, b) => a.localeCompare(b));
   const handleAppClick = (appName: string) => {
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
-    
     if (appSubmissions.length === 0) {
       // No submissions exist - redirect to form for new submission
       navigate(`/app/${encodeURIComponent(appName)}`);
@@ -103,10 +82,7 @@ const Home = () => {
     }
 
     // Only navigate to submissions if there are submissions with approved/rejected/timed status
-    const hasValidSubmissions = appSubmissions.some((s: any) => 
-      s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
-    );
-    
+    const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
     } else {
@@ -114,12 +90,10 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
-
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
     const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
-    
     if (appSubmissions.length === 0) {
       // No submissions exist - redirect to form for new submission
       navigate(`/app/${encodeURIComponent(appName)}`);
@@ -127,10 +101,7 @@ const Home = () => {
     }
 
     // Only navigate to submissions if there are submissions with approved/rejected/timed status
-    const hasValidSubmissions = appSubmissions.some((s: any) => 
-      s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
-    );
-    
+    const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
     } else {
@@ -138,30 +109,27 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
-
   const handleViewSubmissions = () => {
     navigate('/');
   };
-
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative">
             <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+            animationDirection: 'reverse',
+            animationDuration: '1.5s'
+          }}></div>
           </div>
           <div className="space-y-2">
             <p className="text-slate-700 font-semibold text-lg">Initializing Dashboard...</p>
             <p className="text-slate-500 text-sm">Loading application portfolio</p>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
       {/* Enhanced Header with Glass Effect */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
@@ -185,13 +153,7 @@ const Home = () => {
                 <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md"
-                onClick={handleViewSubmissions}
-                data-action="view-submissions"
-              >
+              <Button variant="outline" size="sm" className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md" onClick={handleViewSubmissions} data-action="view-submissions">
                 <List className="w-4 h-4" />
                 Analytics
               </Button>
@@ -217,7 +179,7 @@ const Home = () => {
               </div>
             </div>
             <div className="text-left">
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2 mx-0 my-0 py-[11px]">
                 Change Control Center
               </h1>
               <div className="flex items-center justify-center gap-3">
@@ -271,19 +233,12 @@ const Home = () => {
               </div>
               <div className="relative group" data-component="search">
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors duration-300" />
-                <Input
-                  placeholder="Search applications..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70"
-                  data-input="search"
-                />
+                <Input placeholder="Search applications..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70" data-input="search" />
               </div>
             </div>
 
             {/* Enhanced Apps Grid */}
-            {filteredApps.length === 0 ? (
-              <div className="text-center py-20" data-state="no-results">
+            {filteredApps.length === 0 ? <div className="text-center py-20" data-state="no-results">
                 <div className="relative mb-8">
                   <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
                     <Search className="w-12 h-12 text-slate-400" />
@@ -296,41 +251,20 @@ const Home = () => {
                 <p className="text-slate-500 max-w-md mx-auto mb-6">
                   Your search didn't match any applications in the current environment. Try adjusting your search criteria.
                 </p>
-                <Button 
-                  variant="outline" 
-                  onClick={() => setSearchTerm('')}
-                  className="gap-2 hover:scale-105 transition-transform"
-                >
+                <Button variant="outline" onClick={() => setSearchTerm('')} className="gap-2 hover:scale-105 transition-transform">
                   <XCircle className="w-4 h-4" />
                   Clear Search
                 </Button>
-              </div>
-            ) : (
-              <div 
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                data-grid="applications"
-              >
+              </div> : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
                 {filteredApps.map((app, index) => {
-                  const status = getAppStatus(app);
-                  const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-                  const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
-                  const hasValidSubmissions = appSubmissions.some((s: any) => 
-                    s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed'
-                  );
-                  
-                  return (
-                    <Card 
-                      key={app} 
-                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${
-                        hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
-                      }`}
-                      style={{ 
-                        animationDelay: `${index * 50}ms`,
-                        animation: 'fadeInUp 0.6s ease-out forwards'
-                      }}
-                      onClick={() => handleAppClick(app)}
-                      data-app={app.toLowerCase().replace(/\s+/g, '-')}
-                    >
+              const status = getAppStatus(app);
+              const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
+              const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
+              const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
+              return <Card key={app} className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} style={{
+                animationDelay: `${index * 50}ms`,
+                animation: 'fadeInUp 0.6s ease-out forwards'
+              }} onClick={() => handleAppClick(app)} data-app={app.toLowerCase().replace(/\s+/g, '-')}>
                       {/* Gradient overlay on hover */}
                       <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
                       
@@ -340,21 +274,10 @@ const Home = () => {
                             <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
                           </div>
                           {/* Status indicator dot */}
-                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${
-                            status.text === 'Approved' ? 'bg-emerald-500' :
-                            status.text === 'Rejected' ? 'bg-rose-500' :
-                            status.text === 'Timed Approval' ? 'bg-amber-500' :
-                            'bg-slate-400'
-                          } group-hover:scale-125 transition-transform`}></div>
+                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${status.text === 'Approved' ? 'bg-emerald-500' : status.text === 'Rejected' ? 'bg-rose-500' : status.text === 'Timed Approval' ? 'bg-amber-500' : 'bg-slate-400'} group-hover:scale-125 transition-transform`}></div>
                         </div>
                         <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
-                        <Badge 
-                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${
-                            hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
-                          }`}
-                          onClick={(e) => handleStatusClick(app, e)}
-                          data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
-                        >
+                        <Badge className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} onClick={e => handleStatusClick(app, e)} data-status={status.text.toLowerCase().replace(/\s+/g, '-')}>
                           {status.icon}
                           {status.text}
                         </Badge>
@@ -362,11 +285,9 @@ const Home = () => {
                       
                       {/* Animated bottom accent line */}
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
+                    </Card>;
+            })}
+              </div>}
           </CardContent>
         </Card>
       </div>
@@ -399,8 +320,6 @@ const Home = () => {
           }
         }
       `}</style>
-    </div>
-  );
+    </div>;
 };
-
 export default Home;
