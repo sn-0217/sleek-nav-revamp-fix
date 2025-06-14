@@ -39,11 +39,11 @@ const TimedApprovalCard = ({
                 type="datetime-local"
                 value={startTime}
                 onChange={(e) => onStartTimeChange(e.target.value)}
-                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10"
+                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-8 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                 data-input="start-time"
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
+                <Calendar className="h-4 w-4 text-amber-500" aria-hidden="true" />
               </div>
             </div>
           </div>
@@ -57,11 +57,11 @@ const TimedApprovalCard = ({
                 type="datetime-local"
                 value={endTime}
                 onChange={(e) => onEndTimeChange(e.target.value)}
-                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10"
+                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:right-0 [&::-webkit-calendar-picker-indicator]:w-8 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
                 data-input="end-time"
               />
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
+                <Calendar className="h-4 w-4 text-amber-500" aria-hidden="true" />
               </div>
             </div>
           </div>
