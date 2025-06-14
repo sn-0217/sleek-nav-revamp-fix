@@ -34,17 +34,17 @@ const TimedApprovalCard = ({
               Start Date & Time
             </label>
             <div className="relative rounded-md">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
-              </div>
               <Input
                 id="start-time"
                 type="datetime-local"
                 value={startTime}
                 onChange={(e) => onStartTimeChange(e.target.value)}
-                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pl-10"
+                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10"
                 data-input="start-time"
               />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
+              </div>
             </div>
           </div>
           <div className="space-y-2">
@@ -52,17 +52,17 @@ const TimedApprovalCard = ({
               End Date & Time
             </label>
             <div className="relative rounded-md">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
-              </div>
               <Input
                 id="end-time"
                 type="datetime-local"
                 value={endTime}
                 onChange={(e) => onEndTimeChange(e.target.value)}
-                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pl-10"
+                className="border-amber-300 focus:border-amber-500 focus:ring-amber-500/20 bg-white h-9 text-sm pr-10"
                 data-input="end-time"
               />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                <Clock className="h-4 w-4 text-amber-500" aria-hidden="true" />
+              </div>
             </div>
           </div>
         </div>
