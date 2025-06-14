@@ -167,10 +167,10 @@ const Home = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                   <Workflow className="w-6 h-6 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-pulse">
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
                   <Zap className="w-3 h-3 text-white" />
                 </div>
               </div>
@@ -180,7 +180,7 @@ const Home = () => {
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-violet-100 via-purple-100 to-fuchsia-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
                 <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
@@ -205,13 +205,13 @@ const Home = () => {
         <div className="text-center mb-12 space-y-6">
           <div className="flex items-center justify-center gap-6 mb-8">
             <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+              <div className="w-20 h-20 bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-bounce">
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                 <Zap className="w-3 h-3 text-white" />
               </div>
             </div>
@@ -220,9 +220,9 @@ const Home = () => {
                 Change Control Center
               </h1>
               <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full animate-pulse"></div>
                 <span className="text-lg text-slate-600 font-medium">Enterprise Ready • Secure • Compliant</span>
-                <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+                <div className="w-3 h-3 bg-gradient-to-r from-violet-500 to-purple-600 rounded-full animate-pulse"></div>
               </div>
             </div>
           </div>
@@ -256,10 +256,10 @@ const Home = () => {
             <div className="flex items-center justify-between mb-8" data-section="apps-header">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
                     <Server className="w-6 h-6 text-white" />
                   </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
                     {filteredApps.length}
                   </div>
                 </div>
@@ -320,7 +320,7 @@ const Home = () => {
                   return (
                     <Card 
                       key={app} 
-                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative ${
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden ${
                         hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
                       }`}
                       style={{ 
