@@ -36,27 +36,7 @@ const AppDetail = () => {
       `${appName?.toLowerCase()}-api-02.prod.company.com`,
       `${appName?.toLowerCase()}-db-01.prod.company.com`,
       `${appName?.toLowerCase()}-cache-01.prod.company.com`,
-      `${appName?.toLowerCase()}-lb-01.prod.company.com`,
-      `${appName?.toLowerCase()}-web-03.prod.company.com`,
-      `${appName?.toLowerCase()}-web-04.prod.company.com`,
-      `${appName?.toLowerCase()}-web-05.prod.company.com`,
-      `${appName?.toLowerCase()}-api-03.prod.company.com`,
-      `${appName?.toLowerCase()}-api-04.prod.company.com`,
-      `${appName?.toLowerCase()}-api-05.prod.company.com`,
-      `${appName?.toLowerCase()}-db-02.prod.company.com`,
-      `${appName?.toLowerCase()}-db-03.prod.company.com`,
-      `${appName?.toLowerCase()}-cache-02.prod.company.com`,
-      `${appName?.toLowerCase()}-cache-03.prod.company.com`,
-      `${appName?.toLowerCase()}-queue-01.prod.company.com`,
-      `${appName?.toLowerCase()}-queue-02.prod.company.com`,
-      `${appName?.toLowerCase()}-search-01.prod.company.com`,
-      `${appName?.toLowerCase()}-search-02.prod.company.com`,
-      `${appName?.toLowerCase()}-monitor-01.prod.company.com`,
-      `${appName?.toLowerCase()}-monitor-02.prod.company.com`,
-      `${appName?.toLowerCase()}-backup-01.prod.company.com`,
-      `${appName?.toLowerCase()}-backup-02.prod.company.com`,
-      `${appName?.toLowerCase()}-log-01.prod.company.com`,
-      `${appName?.toLowerCase()}-log-02.prod.company.com`
+      `${appName?.toLowerCase()}-lb-01.prod.company.com`
     ]
   });
 
