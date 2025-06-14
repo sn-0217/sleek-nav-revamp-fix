@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -260,7 +261,7 @@ const Home = () => {
           
           <CardContent className="p-8 relative z-10">
             <div className="flex items-center justify-between mb-8" data-section="apps-header">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center gap-4 w-full">
                 <div className="relative">
                   <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-lg p-2">
                     <img 
@@ -273,7 +274,7 @@ const Home = () => {
                     {filteredApps.length}
                   </div>
                 </div>
-                <div>
+                <div className="text-center">
                   <h2 className="text-2xl font-bold text-slate-900">Application Portfolio</h2>
                   <p className="text-slate-600 text-sm">Select an application to initiate change requests</p>
                 </div>
