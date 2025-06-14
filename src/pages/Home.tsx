@@ -116,8 +116,8 @@ const Home = () => {
     return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
-            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{
+            <div className="w-20 h-20 border-4 border-gradient-to-r from-purple-300 via-pink-300 to-violet-300 border-t-gradient-to-r from-purple-600 via-pink-600 to-violet-600 rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 rounded-full animate-spin mx-auto" style={{
             animationDirection: 'reverse',
             animationDuration: '1.5s'
           }}></div>
@@ -139,7 +139,7 @@ const Home = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                   <Workflow className="w-6 h-6 text-white" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center animate-pulse">
                   <Zap className="w-3 h-3 text-white" />
                 </div>
               </div>
@@ -168,13 +168,13 @@ const Home = () => {
         <div className="text-center mb-12 space-y-6">
           <div className="flex items-center justify-center gap-6 mb-8">
             <div className="relative">
-              <div className="w-20 h-20 bg-gradient-to-br from-violet-600 via-purple-600 to-fuchsia-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+              <div className="w-20 h-20 bg-gradient-to-br from-violet-500 via-purple-600 to-fuchsia-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <CheckCircle className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-amber-400 via-orange-500 to-red-500 rounded-full flex items-center justify-center animate-bounce">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
-              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
+              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                 <Zap className="w-3 h-3 text-white" />
               </div>
             </div>
@@ -191,15 +191,15 @@ const Home = () => {
             </p>
             <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full"></div>
                 <span>Real-time Processing</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"></div>
                 <span>Audit Trail</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full"></div>
                 <span>Automated Workflows</span>
               </div>
             </div>
@@ -215,10 +215,10 @@ const Home = () => {
             <div className="flex items-center justify-between mb-8" data-section="apps-header">
               <div className="flex items-center gap-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-600 rounded-xl flex items-center justify-center shadow-lg">
                     <Server className="w-6 h-6 text-white" />
                   </div>
-                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
                     {filteredApps.length}
                   </div>
                 </div>
@@ -236,10 +236,10 @@ const Home = () => {
             {/* Enhanced Apps Grid */}
             {filteredApps.length === 0 ? <div className="text-center py-20" data-state="no-results">
                 <div className="relative mb-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 rounded-full flex items-center justify-center mx-auto shadow-lg">
                     <Search className="w-12 h-12 text-slate-400" />
                   </div>
-                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 rounded-full flex items-center justify-center">
                     <XCircle className="w-4 h-4 text-white" />
                   </div>
                 </div>
@@ -262,15 +262,23 @@ const Home = () => {
                 animation: 'fadeInUp 0.6s ease-out forwards'
               }} onClick={() => handleAppClick(app)} data-app={app.toLowerCase().replace(/\s+/g, '-')}>
                       {/* Gradient overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 via-pink-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:via-pink-600/5 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
                       
                       <CardContent className="p-6 text-center relative z-10">
                         <div className="relative mb-4">
-                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
+                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 group-hover:from-purple-100 group-hover:via-pink-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
                             <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
                           </div>
-                          {/* Status indicator dot */}
-                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${status.text === 'Approved' ? 'bg-emerald-500' : status.text === 'Rejected' ? 'bg-rose-500' : status.text === 'Timed Approval' ? 'bg-amber-500' : 'bg-slate-400'} group-hover:scale-125 transition-transform`}></div>
+                          {/* Enhanced Status indicator dot with gradients */}
+                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg group-hover:scale-125 transition-transform ${
+                            status.text === 'Approved' 
+                              ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' 
+                              : status.text === 'Rejected' 
+                                ? 'bg-gradient-to-br from-rose-400 to-rose-600' 
+                                : status.text === 'Timed Approval' 
+                                  ? 'bg-gradient-to-br from-amber-400 to-amber-600' 
+                                  : 'bg-gradient-to-br from-slate-400 to-slate-600'
+                          }`}></div>
                         </div>
                         <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
                         <Badge className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'}`} onClick={e => handleStatusClick(app, e)} data-status={status.text.toLowerCase().replace(/\s+/g, '-')}>
@@ -279,8 +287,8 @@ const Home = () => {
                         </Badge>
                       </CardContent>
                       
-                      {/* Animated bottom accent line */}
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
+                      {/* Enhanced Animated bottom accent line with gradient */}
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                     </Card>;
             })}
               </div>}
@@ -296,9 +304,9 @@ const Home = () => {
               © 2025 Apptech Knitwell. All rights reserved.
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
+              <div className="w-1 h-1 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full animate-pulse"></div>
               <span className="text-xs text-slate-500">Enterprise-Grade Change Management Platform</span>
-              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
+              <div className="w-1 h-1 bg-gradient-to-r from-purple-400 to-purple-600 rounded-full animate-pulse"></div>
             </div>
           </div>
         </div>
