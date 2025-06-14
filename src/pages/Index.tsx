@@ -4,7 +4,8 @@ import { BarChart3, TrendingUp, Layers, Home } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { loadTestData } from '@/utils/testData';
+import { useToast } from '@/hooks/use-toast';
+import { loadSubmissions } from '@/utils/testData';
 import SubmissionStatistics from '@/components/SubmissionStatistics';
 import SubmissionFilters from '@/components/SubmissionFilters';
 import SubmissionsList from '@/components/SubmissionsList';
@@ -25,33 +26,39 @@ interface Submission {
 
 const Index = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'PROD');
+  const [currentEnv] = useState('PROD');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load test data from localStorage
+  // Load submissions from API
   useEffect(() => {
     const fetchSubmissions = async () => {
       try {
         setIsLoading(true);
 
-        console.log('Loading test submissions for testing...');
+        console.log('Loading submissions from API...');
         
-        // Load test data
-        const { testSubmissions } = loadTestData();
+        // Load submissions from API
+        const submissionsData = await loadSubmissions();
         
         // Filter by current environment
-        const envSubmissions = testSubmissions.filter((sub: Submission) => sub.environment === currentEnv);
+        const envSubmissions = submissionsData.filter((sub: Submission) => sub.environment === currentEnv);
         setSubmissions(envSubmissions);
         
-        console.log('Test submissions loaded:', envSubmissions);
+        console.log('Submissions loaded:', envSubmissions);
 
       } catch (error) {
-        console.log('Failed to load test data:', error);
+        console.error('Failed to load submissions:', error);
         setSubmissions([]);
+        toast({
+          title: "Error",
+          description: "Failed to load submissions. Please try again.",
+          variant: "destructive",
+        });
       } finally {
         // Check for search parameter in URL
         const searchQuery = searchParams.get('search');
@@ -59,14 +66,12 @@ const Index = () => {
           setSearchTerm(searchQuery);
         }
 
-        // Simulate loading for smooth animation
         setTimeout(() => setIsLoading(false), 600);
       }
     };
     fetchSubmissions();
-  }, [currentEnv, searchParams]);
+  }, [currentEnv, searchParams, toast]);
 
-  // Handle statistic card clicks for filtering
   const handleStatisticClick = (filterType: string) => {
     setStatusFilter(filterType);
   };
@@ -101,8 +106,8 @@ const Index = () => {
             }}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-slate-700 font-semibold text-lg">Loading test submissions...</p>
-            <p className="text-slate-500 text-sm">Fetching test approval history</p>
+            <p className="text-slate-700 font-semibold text-lg">Loading submissions...</p>
+            <p className="text-slate-500 text-sm">Fetching approval history</p>
           </div>
         </div>
       </div>
@@ -126,7 +131,7 @@ const Index = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-900 tracking-tight">Submission Analytics</h1>
-                <p className="text-slate-600 text-sm">Comprehensive approval history & insights (Test Data)</p>
+                <p className="text-slate-600 text-sm">Comprehensive approval history & insights</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
@@ -144,14 +149,12 @@ const Index = () => {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="submissions-content">
-        {/* Statistics Section */}
         <SubmissionStatistics 
           submissions={submissions}
           statusFilter={statusFilter}
           onStatisticClick={handleStatisticClick}
         />
 
-        {/* Search and Filters Section */}
         <SubmissionFilters 
           searchTerm={searchTerm}
           statusFilter={statusFilter}
@@ -159,7 +162,6 @@ const Index = () => {
           onStatusFilterChange={setStatusFilter}
         />
 
-        {/* Submissions List Section */}
         <SubmissionsList 
           submissions={filteredSubmissions}
           searchTerm={searchTerm}
@@ -177,7 +179,7 @@ const Index = () => {
             </p>
             <div className="flex items-center justify-center gap-2 mt-2">
               <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
-              <span className="text-xs text-slate-500">Powered by Modern Web Technologies (Using Test Data)</span>
+              <span className="text-xs text-slate-500">Powered by Modern Web Technologies</span>
               <div className="w-1 h-1 bg-purple-500 rounded-full"></div>
             </div>
           </div>

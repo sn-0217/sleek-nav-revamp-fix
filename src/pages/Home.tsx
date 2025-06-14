@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +7,7 @@ import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
-import { loadTestData } from '@/utils/testData';
+import { loadApps, loadSubmissions } from '@/utils/testData';
 
 interface AppStatus {
   text: string;
@@ -20,42 +21,51 @@ const Home = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv] = useState('PROD'); // Changed to PROD to see more test data
+  const [currentEnv] = useState('PROD');
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<string[]>([]);
+  const [submissions, setSubmissions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Load test data from localStorage
+  // Load apps and submissions from API
   useEffect(() => {
-    const fetchApps = async () => {
+    const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
         
-        console.log('Loading test data for testing...');
+        console.log('Loading applications from API...');
         
-        // Load test data first
-        const { testApps } = loadTestData();
-        setApps(testApps);
+        // Load apps and submissions from API
+        const [appsData, submissionsData] = await Promise.all([
+          loadApps(),
+          loadSubmissions()
+        ]);
         
-        console.log('Test apps loaded:', testApps);
+        setApps(appsData);
+        setSubmissions(submissionsData.filter((s: any) => s.environment === currentEnv));
+        
+        console.log('Apps loaded:', appsData);
+        console.log('Submissions loaded:', submissionsData);
         
       } catch (err) {
-        console.error('Failed to load test data:', err);
+        console.error('Failed to load data:', err);
         setError('Failed to load applications');
+        toast({
+          title: "Error",
+          description: "Failed to load applications. Please try again.",
+          variant: "destructive",
+        });
       } finally {
-        // Simulate loading delay for smooth animation
         setTimeout(() => setIsLoading(false), 800);
       }
     };
 
-    localStorage.setItem('currentEnv', currentEnv);
-    fetchApps();
-  }, [currentEnv]);
+    fetchData();
+  }, [currentEnv, toast]);
 
   const getAppStatus = (appName: string): AppStatus => {
-    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
+    const appSubmissions = submissions.filter(s => s.appName === appName);
     if (appSubmissions.length === 0) {
       return {
         text: 'No Changes',
@@ -65,7 +75,7 @@ const Home = () => {
         borderColor: 'border-slate-200'
       };
     }
-    const latestSubmission = appSubmissions.sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+    const latestSubmission = appSubmissions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
     switch (latestSubmission.decision) {
       case 'Approved':
         return {
@@ -105,40 +115,32 @@ const Home = () => {
   const filteredApps = apps.filter(app => app.toLowerCase().includes(searchTerm.toLowerCase())).sort((a, b) => a.localeCompare(b));
   
   const handleAppClick = (appName: string) => {
-    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
+    const appSubmissions = submissions.filter(s => s.appName === appName);
     if (appSubmissions.length === 0) {
-      // No submissions exist - redirect to form for new submission
       navigate(`/app/${encodeURIComponent(appName)}`);
       return;
     }
 
-    // Only navigate to submissions if there are submissions with approved/rejected/timed status
-    const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
+    const hasValidSubmissions = appSubmissions.some(s => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
     } else {
-      // Has submissions but none with valid status - redirect to form
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
   
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === appName) : [];
+    const appSubmissions = submissions.filter(s => s.appName === appName);
     if (appSubmissions.length === 0) {
-      // No submissions exist - redirect to form for new submission
       navigate(`/app/${encodeURIComponent(appName)}`);
       return;
     }
 
-    // Only navigate to submissions if there are submissions with approved/rejected/timed status
-    const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
+    const hasValidSubmissions = appSubmissions.some(s => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
     if (hasValidSubmissions) {
       navigate(`/?search=${encodeURIComponent(appName)}`);
     } else {
-      // Has submissions but none with valid status - redirect to form
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
@@ -159,7 +161,6 @@ const Home = () => {
         onAdminClick={handleAdminClick}
       />
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="home-content">
         <HomeHero />
 
