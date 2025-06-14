@@ -58,10 +58,10 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
             type="button"
             onClick={() => onDecisionSelect(decision)}
             className={`
-              relative overflow-hidden group/btn p-5 rounded-2xl border-2 font-semibold 
+              relative overflow-hidden group/btn p-3 rounded-2xl border-2 font-semibold 
               transition-all duration-300 ease-out transform
-              hover:scale-[1.02] active:scale-[0.98] min-h-[85px] 
-              flex flex-col items-center justify-center gap-3
+              hover:scale-[1.02] active:scale-[0.98] min-h-[65px] 
+              flex flex-col items-center justify-center gap-2
               backdrop-blur-sm
               ${isSelected 
                 ? `bg-gradient-to-r ${config.gradient} text-white border-transparent shadow-xl ${config.glowColor} shadow-2xl ring-4 ring-white/20` 
@@ -72,17 +72,17 @@ const DecisionButtons = ({ selectedDecision, onDecisionSelect }: DecisionButtons
           >
             {/* Icon container */}
             <div className={`
-              w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300
+              w-6 h-6 rounded-xl flex items-center justify-center transition-all duration-300
               ${isSelected 
                 ? 'bg-white/20 shadow-inner' 
                 : `${config.iconBg} group-hover/btn:scale-110`
               }
             `}>
-              <Icon className={`w-5 h-5 transition-all duration-300 ${isSelected ? 'text-white' : config.textColor}`} />
+              <Icon className={`w-4 h-4 transition-all duration-300 ${isSelected ? 'text-white' : config.textColor}`} />
             </div>
             
             {/* Label */}
-            <span className={`text-sm font-bold tracking-wide transition-all duration-300 ${isSelected ? 'text-white' : config.textColor}`}>
+            <span className={`text-xs font-bold tracking-wide transition-all duration-300 ${isSelected ? 'text-white' : config.textColor}`}>
               {decision}
             </span>
             
