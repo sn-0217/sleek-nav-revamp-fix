@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Search, Server, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow, FileText } from 'lucide-react';
+import { Search, Server, Layers, List, CheckCircle, XCircle, Clock, Sparkles, Zap, Shield, Activity, Workflow } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { useNavigate } from 'react-router-dom';
 
 interface AppStatus {
@@ -145,14 +144,15 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center">
         <div className="text-center space-y-6">
           <div className="relative">
-            <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto"></div>
+            <div className="w-20 h-20 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin mx-auto"></div>
+            <div className="absolute inset-0 w-20 h-20 border-4 border-transparent border-b-blue-400 rounded-full animate-spin mx-auto" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
           </div>
           <div className="space-y-2">
-            <p className="text-foreground font-semibold text-lg">Initializing Dashboard...</p>
-            <p className="text-muted-foreground text-sm">Loading application portfolio</p>
+            <p className="text-slate-700 font-semibold text-lg">Initializing Dashboard...</p>
+            <p className="text-slate-500 text-sm">Loading application portfolio</p>
           </div>
         </div>
       </div>
@@ -160,38 +160,40 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background" data-page="home">
-      {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/80 border-b border-border/50 shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
+      {/* Enhanced Header with Glass Effect */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4" data-section="header-brand">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                   <Workflow className="w-6 h-6 text-white" />
+                </div>
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-pulse">
+                  <Zap className="w-3 h-3 text-white" />
                 </div>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground tracking-tight">Apptech Knitwell</h1>
-                <p className="text-muted-foreground text-sm">Enterprise Change Management</p>
+                <h1 className="text-xl font-bold text-slate-900 tracking-tight">Apptech Knitwell</h1>
+                <p className="text-slate-600 text-sm">Enterprise Change Management</p>
               </div>
             </div>
             <div className="flex items-center gap-4" data-section="header-actions">
-              <Badge variant="secondary" className="gap-2 px-3 py-1.5">
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200 hover:scale-105 transition-transform">
                 <Shield className="w-4 h-4" />
                 {currentEnv}
               </Badge>
               <Button 
                 variant="outline" 
                 size="sm" 
-                className="gap-2"
+                className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md"
                 onClick={handleViewSubmissions}
                 data-action="view-submissions"
               >
                 <List className="w-4 h-4" />
                 Analytics
               </Button>
-              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -199,104 +201,104 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="home-content">
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-0 shadow-sm bg-card">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Total Submissions</p>
-                  <p className="text-2xl font-bold text-foreground">1</p>
-                </div>
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-                  <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
+        {/* Enhanced Dashboard Header */}
+        <div className="text-center mb-12 space-y-6">
+          <div className="flex items-center justify-center gap-6 mb-8">
+            <div className="relative">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-500">
+                <CheckCircle className="w-10 h-10 text-white" />
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-sm bg-card">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Synced</p>
-                  <p className="text-2xl font-bold text-green-600">1</p>
-                </div>
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
+              <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center animate-bounce">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-sm bg-card">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Pending</p>
-                  <p className="text-2xl font-bold text-amber-600">0</p>
-                </div>
-                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/20 rounded-lg flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-amber-600 dark:text-amber-400" />
-                </div>
+              <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+                <Zap className="w-3 h-3 text-white" />
               </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-0 shadow-sm bg-card">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Failed</p>
-                  <p className="text-2xl font-bold text-red-600">0</p>
-                </div>
-                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
-                  <XCircle className="w-6 h-6 text-red-600 dark:text-red-400" />
-                </div>
+            </div>
+            <div className="text-left">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 bg-clip-text text-transparent mb-2">
+                Change Control Center
+              </h1>
+              <div className="flex items-center gap-3">
+                <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full animate-pulse"></div>
+                <span className="text-lg text-slate-600 font-medium">Enterprise Ready • Secure • Compliant</span>
+                <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
+          <div className="max-w-4xl mx-auto">
+            <p className="text-xl text-slate-600 leading-relaxed mb-6">
+              Streamline your change approval workflow with our intelligent platform. Review, approve, and track change requests across your entire application portfolio with enhanced visibility and control.
+            </p>
+            <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                <span>Real-time Processing</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <span>Audit Trail</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span>Automated Workflows</span>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Applications Section */}
-        <Card className="border-0 shadow-sm bg-card" data-section="applications">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6" data-section="apps-header">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/20 rounded-lg flex items-center justify-center">
-                  <Server className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        {/* Enhanced Applications Section */}
+        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl hover:shadow-2xl transition-all duration-500 relative overflow-hidden" data-section="applications">
+          {/* Subtle animated background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
+          
+          <CardContent className="p-8 relative z-10">
+            <div className="flex items-center justify-between mb-8" data-section="apps-header">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Server className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-emerald-500 to-green-500 rounded-full flex items-center justify-center text-xs text-white font-bold">
+                    {filteredApps.length}
+                  </div>
                 </div>
                 <div>
-                  <h2 className="text-xl font-semibold text-foreground">Application Portfolio</h2>
-                  <p className="text-muted-foreground text-sm">Select an application to initiate change requests</p>
+                  <h2 className="text-2xl font-bold text-slate-900">Application Portfolio</h2>
+                  <p className="text-slate-600 text-sm">Select an application to initiate change requests</p>
                 </div>
               </div>
-              <div className="relative" data-component="search">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <div className="relative group" data-component="search">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-purple-600 transition-colors duration-300" />
                 <Input
                   placeholder="Search applications..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 w-80 bg-background border-border"
+                  className="pl-12 w-80 bg-white/50 border-slate-200 focus:border-purple-300 focus:ring-purple-100 transition-all duration-300 focus:w-96 hover:bg-white/70"
                   data-input="search"
                 />
               </div>
             </div>
 
-            {/* Apps Grid */}
+            {/* Enhanced Apps Grid */}
             {filteredApps.length === 0 ? (
-              <div className="text-center py-12" data-state="no-results">
-                <div className="w-16 h-16 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-muted-foreground" />
+              <div className="text-center py-20" data-state="no-results">
+                <div className="relative mb-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Search className="w-12 h-12 text-slate-400" />
+                  </div>
+                  <div className="absolute -top-2 -right-8 w-8 h-8 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <XCircle className="w-4 h-4 text-white" />
+                  </div>
                 </div>
-                <h3 className="text-lg font-semibold text-foreground mb-2">No Applications Found</h3>
-                <p className="text-muted-foreground max-w-md mx-auto mb-4">
-                  Your search didn't match any applications in the current environment.
+                <h3 className="text-2xl font-bold text-slate-700 mb-3">No Applications Found</h3>
+                <p className="text-slate-500 max-w-md mx-auto mb-6">
+                  Your search didn't match any applications in the current environment. Try adjusting your search criteria.
                 </p>
                 <Button 
                   variant="outline" 
                   onClick={() => setSearchTerm('')}
-                  className="gap-2"
+                  className="gap-2 hover:scale-105 transition-transform"
                 >
                   <XCircle className="w-4 h-4" />
                   Clear Search
@@ -304,7 +306,7 @@ const Home = () => {
               </div>
             ) : (
               <div 
-                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+                className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
                 data-grid="applications"
               >
                 {filteredApps.map((app, index) => {
@@ -318,38 +320,47 @@ const Home = () => {
                   return (
                     <Card 
                       key={app} 
-                      className="group cursor-pointer hover:shadow-md transition-all duration-200 border-0 shadow-sm bg-card hover:-translate-y-1"
+                      className={`group transition-all duration-500 hover:shadow-xl hover:-translate-y-3 bg-white/80 backdrop-blur-sm border-0 shadow-lg overflow-hidden relative ${
+                        hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
+                      }`}
+                      style={{ 
+                        animationDelay: `${index * 50}ms`,
+                        animation: 'fadeInUp 0.6s ease-out forwards'
+                      }}
                       onClick={() => handleAppClick(app)}
                       data-app={app.toLowerCase().replace(/\s+/g, '-')}
                     >
-                      <CardContent className="p-6 text-center">
+                      {/* Gradient overlay on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/0 to-blue-600/0 group-hover:from-purple-600/10 group-hover:to-blue-600/10 transition-all duration-500 pointer-events-none" />
+                      
+                      <CardContent className="p-6 text-center relative z-10">
                         <div className="relative mb-4">
-                          <div className="w-12 h-12 bg-muted/50 group-hover:bg-primary/10 rounded-lg flex items-center justify-center mx-auto transition-colors">
-                            <Server className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                          <div className="w-16 h-16 bg-gradient-to-br from-slate-100 to-slate-200 group-hover:from-purple-100 group-hover:to-blue-100 rounded-2xl flex items-center justify-center mx-auto transition-all duration-500 group-hover:scale-110 shadow-lg group-hover:shadow-xl">
+                            <Server className="w-8 h-8 text-slate-600 group-hover:text-purple-600 transition-colors" />
                           </div>
-                          {/* Status indicator */}
-                          <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${
-                            status.text === 'Approved' ? 'bg-green-500' :
-                            status.text === 'Rejected' ? 'bg-red-500' :
+                          {/* Status indicator dot */}
+                          <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white shadow-lg ${
+                            status.text === 'Approved' ? 'bg-emerald-500' :
+                            status.text === 'Rejected' ? 'bg-rose-500' :
                             status.text === 'Timed Approval' ? 'bg-amber-500' :
-                            'bg-muted-foreground'
-                          }`}></div>
+                            'bg-slate-400'
+                          } group-hover:scale-125 transition-transform`}></div>
                         </div>
-                        <h3 className="font-semibold text-foreground mb-2 text-sm">{app}</h3>
+                        <h3 className="font-bold text-slate-900 mb-3 text-lg group-hover:text-purple-900 transition-colors leading-tight">{app}</h3>
                         <Badge 
-                          variant="secondary"
-                          className={`text-xs gap-1 ${
-                            status.text === 'Approved' ? 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400' :
-                            status.text === 'Rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' :
-                            status.text === 'Timed Approval' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400' :
-                            'bg-muted text-muted-foreground'
+                          className={`${status.bgColor} ${status.borderColor} ${status.color} border gap-2 font-medium transition-all duration-300 group-hover:scale-105 shadow-sm group-hover:shadow-md ${
+                            hasValidSubmissions ? 'cursor-pointer' : 'cursor-default'
                           }`}
                           onClick={(e) => handleStatusClick(app, e)}
+                          data-status={status.text.toLowerCase().replace(/\s+/g, '-')}
                         >
                           {status.icon}
                           {status.text}
                         </Badge>
                       </CardContent>
+                      
+                      {/* Animated bottom accent line */}
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                     </Card>
                   );
                 })}
@@ -359,16 +370,34 @@ const Home = () => {
         </Card>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-12 border-t border-border bg-background/50">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+      {/* Enhanced Footer */}
+      <footer className="mt-16 border-t border-slate-200 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-slate-600 text-sm">
               © 2025 Apptech Knitwell. All rights reserved.
             </p>
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
+              <span className="text-xs text-slate-500">Enterprise-Grade Change Management Platform</span>
+              <div className="w-1 h-1 bg-purple-500 rounded-full animate-pulse"></div>
+            </div>
           </div>
         </div>
       </footer>
+
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
     </div>
   );
 };
