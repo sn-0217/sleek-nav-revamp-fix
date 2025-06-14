@@ -48,7 +48,7 @@ const ChangeRequestDetails = ({ changeRequest }: ChangeRequestDetailsProps) => {
             </div>
           </div>
 
-          <div className="space-y-1.5" data-field="deployment-window">
+          <div className="mt-4 space-y-1.5" data-field="deployment-window">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-amber-100 rounded-lg flex items-center justify-center">
                 <Clock className="w-2.5 h-2.5 text-amber-600" />
