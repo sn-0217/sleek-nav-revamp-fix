@@ -48,10 +48,12 @@ const Home = () => {
           setCurrentEnv(envData.environment || 'PROD');
         }
         
-        setApps(appsData);
+        // Extract app names from the full AppData objects returned by backend
+        const appNames = appsData.map((app: any) => app.appName);
+        setApps(appNames);
         setSubmissions(submissionsData.filter((s: any) => s.environment === currentEnv));
         
-        console.log('Apps loaded:', appsData);
+        console.log('Apps loaded:', appNames);
         console.log('Submissions loaded:', submissionsData);
         console.log('Environment loaded:', currentEnv);
         

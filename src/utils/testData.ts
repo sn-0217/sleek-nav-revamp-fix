@@ -1,8 +1,9 @@
 
+
 // This file will be replaced with actual API calls
 export const loadApps = async () => {
-  // TODO: Replace with actual API call
-  const response = await fetch('/api/apps');
+  // Updated to match Spring Boot controller endpoint
+  const response = await fetch('/api/get-apps');
   if (!response.ok) {
     throw new Error('Failed to load applications');
   }
@@ -10,8 +11,8 @@ export const loadApps = async () => {
 };
 
 export const loadSubmissions = async () => {
-  // TODO: Replace with actual API call
-  const response = await fetch('/api/submissions');
+  // Updated to match Spring Boot controller endpoint
+  const response = await fetch('/api/get-all-submissions');
   if (!response.ok) {
     throw new Error('Failed to load submissions');
   }
@@ -19,7 +20,7 @@ export const loadSubmissions = async () => {
 };
 
 export const loadEnvironment = async () => {
-  // TODO: Replace with actual API call
+  // This endpoint matches your controller
   const response = await fetch('/api/environment');
   if (!response.ok) {
     throw new Error('Failed to load environment');
@@ -28,8 +29,8 @@ export const loadEnvironment = async () => {
 };
 
 export const createSubmission = async (submission: any) => {
-  // TODO: Replace with actual API call
-  const response = await fetch('/api/submissions', {
+  // Updated to match Spring Boot controller endpoint - using POST to /api/app/{appName}
+  const response = await fetch(`/api/app/${encodeURIComponent(submission.appName)}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

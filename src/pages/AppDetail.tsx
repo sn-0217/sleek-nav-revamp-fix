@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Info, List, Shield, Zap, FileText, AlertTriangle, RefreshCw, Wifi, WifiOff } from 'lucide-react';
@@ -45,7 +44,8 @@ const AppDetail = () => {
         setIsLoading(true);
         setError(null);
         
-        const response = await fetch(`/app/${encodeURIComponent(appName)}`);
+        // Updated to match Spring Boot controller endpoint
+        const response = await fetch(`/api/app/${encodeURIComponent(appName)}`);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error('Application not found');
@@ -187,7 +187,7 @@ const AppDetail = () => {
                 variant="outline" 
                 size="sm" 
                 className="gap-2 hover:scale-105 transition-transform shadow-sm px-4"
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/submissions')}
                 data-action="view-submissions"
               >
                 <List className="w-3.5 h-3.5" />
