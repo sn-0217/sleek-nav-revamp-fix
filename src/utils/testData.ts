@@ -1,45 +1,67 @@
 
-
-// This file will be replaced with actual API calls
+// API calls for Spring Boot backend
 export const loadApps = async () => {
-  // Updated to match Spring Boot controller endpoint
-  const response = await fetch('/api/get-apps');
-  if (!response.ok) {
-    throw new Error('Failed to load applications');
+  try {
+    const response = await fetch('/api/get-apps');
+    if (!response.ok) {
+      throw new Error(`Failed to load applications: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Apps API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error loading apps:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const loadSubmissions = async () => {
-  // Updated to match Spring Boot controller endpoint
-  const response = await fetch('/api/get-all-submissions');
-  if (!response.ok) {
-    throw new Error('Failed to load submissions');
+  try {
+    const response = await fetch('/api/get-all-submissions');
+    if (!response.ok) {
+      throw new Error(`Failed to load submissions: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Submissions API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error loading submissions:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const loadEnvironment = async () => {
-  // This endpoint matches your controller
-  const response = await fetch('/api/environment');
-  if (!response.ok) {
-    throw new Error('Failed to load environment');
+  try {
+    const response = await fetch('/api/environment');
+    if (!response.ok) {
+      throw new Error(`Failed to load environment: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log('Environment API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error loading environment:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const createSubmission = async (submission: any) => {
-  // Updated to match Spring Boot controller endpoint - using POST to /api/app/{appName}
-  const response = await fetch(`/api/app/${encodeURIComponent(submission.appName)}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(submission),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create submission');
+  try {
+    const response = await fetch(`/api/app/${encodeURIComponent(submission.appName)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submission),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to create submission: ${response.status}`);
+    }
+    const data = await response.text(); // Your controller returns a String
+    console.log('Submission API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error creating submission:', error);
+    throw error;
   }
-  return response.json();
 };
-

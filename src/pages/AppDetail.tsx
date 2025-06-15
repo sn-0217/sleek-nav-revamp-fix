@@ -30,7 +30,7 @@ interface ChangeRequest {
 const AppDetail = () => {
   const { appName } = useParams<{ appName: string }>();
   const navigate = useNavigate();
-  const [currentEnv] = useState(localStorage.getItem('currentEnv') || 'DEV');
+  const [currentEnv] = useState('DEV'); // Match your controller's default
   const [appData, setAppData] = useState<AppDetailData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,8 +44,11 @@ const AppDetail = () => {
         setIsLoading(true);
         setError(null);
         
-        // Updated to match Spring Boot controller endpoint
+        console.log(`Fetching app details for: ${appName}`);
+        
         const response = await fetch(`/api/app/${encodeURIComponent(appName)}`);
+        console.log('App detail response status:', response.status);
+        
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error('Application not found');
@@ -54,23 +57,12 @@ const AppDetail = () => {
         }
         
         const data = await response.json();
+        console.log('App detail data received:', data);
         setAppData(data);
       } catch (err) {
         console.error('Failed to fetch app details:', err);
-        let errorMessage = 'Unable to connect to the server. Using default values.';
-        
-        if (err instanceof Error) {
-          if (err.message.includes('JSON')) {
-            errorMessage = 'Server response format error. Using default values.';
-          } else if (err.message.includes('fetch')) {
-            errorMessage = 'Network connection failed. Using default values.';
-          } else {
-            errorMessage = err.message;
-          }
-        }
-        
-        setError(errorMessage);
-        // Set default "NA" data when there's an error
+        setError(err instanceof Error ? err.message : 'Unknown error occurred');
+        // Set default data when there's an error
         setAppData({
           appName: appName || 'N/A',
           changeNumber: 'N/A',

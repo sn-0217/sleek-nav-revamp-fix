@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +21,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { showError } = useToastContext();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv, setCurrentEnv] = useState('PROD'); // Will be loaded from backend
+  const [currentEnv, setCurrentEnv] = useState('DEV'); // Default to DEV to match your controller
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<string[]>([]);
   const [submissions, setSubmissions] = useState<any[]>([]);
@@ -33,36 +34,37 @@ const Home = () => {
         setIsLoading(true);
         setError(null);
         
-        console.log('Loading data from API...');
+        console.log('Starting API calls to Spring Boot backend...');
         
-        // Load environment, apps and submissions from API
-        const [envResponse, appsData, submissionsData] = await Promise.all([
-          fetch('/api/environment'),
-          loadApps(),
-          loadSubmissions()
-        ]);
+        // Load environment first
+        const envData = await loadEnvironment();
+        console.log('Environment loaded:', envData);
+        setCurrentEnv(envData.environment || 'DEV');
 
-        // Load environment from backend
-        if (envResponse.ok) {
-          const envData = await envResponse.json();
-          setCurrentEnv(envData.environment || 'PROD');
-        }
+        // Load apps
+        const appsData = await loadApps();
+        console.log('Apps data received:', appsData);
         
-        // Extract app names from the full AppData objects returned by backend
+        // Extract app names from AppData objects
         const appNames = appsData.map((app: any) => app.appName);
         setApps(appNames);
-        setSubmissions(submissionsData.filter((s: any) => s.environment === currentEnv));
+        console.log('App names extracted:', appNames);
+
+        // Load submissions
+        const submissionsData = await loadSubmissions();
+        console.log('Submissions data received:', submissionsData);
         
-        console.log('Apps loaded:', appNames);
-        console.log('Submissions loaded:', submissionsData);
-        console.log('Environment loaded:', currentEnv);
+        // Filter by current environment
+        const envSubmissions = submissionsData.filter((s: any) => s.environment === (envData.environment || 'DEV'));
+        setSubmissions(envSubmissions);
+        console.log('Filtered submissions for environment:', envSubmissions);
         
       } catch (err) {
-        console.error('Failed to load data:', err);
-        setError('Failed to load applications');
+        console.error('API Error:', err);
+        setError('Failed to connect to backend server');
         showError(
-          'Failed to Load Applications',
-          'Unable to fetch applications. Please check your connection and try again.'
+          'Backend Connection Failed',
+          'Could not connect to the Spring Boot backend. Please ensure the server is running.'
         );
       } finally {
         setTimeout(() => setIsLoading(false), 800);
