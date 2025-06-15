@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToastContext } from '@/contexts/ToastContext';
+import { useEnvironment } from '@/contexts/EnvironmentContext';
 import { loadSubmissions } from '@/utils/testData';
 import SubmissionStatistics from '@/components/SubmissionStatistics';
 import SubmissionFilters from '@/components/SubmissionFilters';
@@ -37,11 +38,11 @@ interface BackendSubmission {
 const Index = () => {
   const navigate = useNavigate();
   const { showError } = useToastContext();
+  const { currentEnv } = useEnvironment();
   const [searchParams] = useSearchParams();
   const [submissions, setSubmissions] = useState<BackendSubmission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [currentEnv] = useState('PROD');
   const [isLoading, setIsLoading] = useState(true);
 
   // Load submissions from API
@@ -59,15 +60,12 @@ const Index = () => {
         console.log('Submission environments:', submissionsData.map(sub => sub.formSubmission?.environment));
         console.log('Current environment filter:', currentEnv);
         
-        // Filter by current environment - temporarily disable filtering to see all submissions
-        // const envSubmissions = submissionsData.filter((sub: BackendSubmission) => 
-        //   sub.formSubmission && sub.formSubmission.environment === currentEnv);
-        // setSubmissions(envSubmissions);
+        // Filter by current environment
+        const envSubmissions = submissionsData.filter((sub: BackendSubmission) => 
+          sub.formSubmission && sub.formSubmission.environment === currentEnv);
+        setSubmissions(envSubmissions);
         
-        // Set all submissions without filtering for now
-        setSubmissions(submissionsData);
-        
-        console.log('Submissions loaded:', submissionsData);
+        console.log('Submissions loaded and filtered:', envSubmissions);
 
       } catch (error) {
         console.error('Failed to load submissions:', error);

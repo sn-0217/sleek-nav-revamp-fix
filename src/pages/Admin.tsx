@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText } from 'lucide-react';
+import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,8 +8,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { loadSubmissions, updateSubmission, deleteSubmission } from '@/utils/testData';
 import { useToastContext } from '@/contexts/ToastContext';
+import { useEnvironment } from '@/contexts/EnvironmentContext';
+import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog';
+import SubmissionJsonEditor from '@/components/SubmissionJsonEditor';
 
 // Backend submission interface to match the API response
 interface BackendSubmission {
@@ -126,11 +129,22 @@ const transformToBackend = (submission: Submission, originalBackendData?: Backen
 const Admin = () => {
   const navigate = useNavigate();
   const { showError, showSuccess } = useToastContext();
+  const { currentEnv } = useEnvironment();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [backendSubmissions, setBackendSubmissions] = useState<BackendSubmission[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Submission | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    submissionId: string;
+    submissionName: string;
+  }>({
+    isOpen: false,
+    submissionId: '',
+    submissionName: ''
+  });
+  const [activeTab, setActiveTab] = useState('submissions');
 
   useEffect(() => {
     const fetchSubmissions = async () => {
@@ -203,12 +217,23 @@ const Admin = () => {
     setEditForm(null);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDeleteClick = (id: string) => {
+    const submission = submissions.find(sub => sub.id === id);
+    if (submission) {
+      setDeleteDialog({
+        isOpen: true,
+        submissionId: id,
+        submissionName: `${submission.appName} - ${submission.changeNo}`
+      });
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
     try {
       setIsLoading(true);
       
       // Find the submission to delete
-      const submissionIndex = submissions.findIndex(sub => sub.id === id);
+      const submissionIndex = submissions.findIndex(sub => sub.id === deleteDialog.submissionId);
       if (submissionIndex === -1) {
         showError('Delete Failed', 'Could not find the submission to delete.');
         return;
@@ -233,7 +258,12 @@ const Admin = () => {
       showError('Delete Failed', 'Failed to delete the submission. Please try again.');
     } finally {
       setIsLoading(false);
+      setDeleteDialog({ isOpen: false, submissionId: '', submissionName: '' });
     }
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteDialog({ isOpen: false, submissionId: '', submissionName: '' });
   };
 
   const getStatusIcon = (decision: string) => {
@@ -280,112 +310,137 @@ const Admin = () => {
               </Button>
               <div>
                 <h1 className="text-2xl font-bold text-slate-900">Admin Panel</h1>
-                <p className="text-slate-600 text-sm">Manage change submissions</p>
+                <p className="text-slate-600 text-sm">Manage change submissions and configuration</p>
               </div>
             </div>
-            <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-red-100 to-orange-100 text-red-700 border-red-200">
-              <User className="w-4 h-4" />
-              Administrator
-            </Badge>
+            <div className="flex items-center gap-3">
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200">
+                <Settings className="w-4 h-4" />
+                {currentEnv}
+              </Badge>
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-red-100 to-orange-100 text-red-700 border-red-200">
+                <User className="w-4 h-4" />
+                Administrator
+              </Badge>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
-        <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-white" />
-              </div>
-              Submission Management
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                  <FileText className="w-10 h-10 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-700 mb-2">Loading Submissions...</h3>
-                <p className="text-slate-500">Please wait while we fetch the latest data.</p>
-              </div>
-            ) : submissions.length === 0 ? (
-              <div className="text-center py-20">
-                <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <FileText className="w-12 h-12 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-700 mb-2">No Submissions Found</h3>
-                <p className="text-slate-500">There are no change submissions to manage yet.</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>App</TableHead>
-                      <TableHead>Change #</TableHead>
-                      <TableHead>Title</TableHead>
-                      <TableHead>Requester</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {submissions.map((submission) => (
-                      <TableRow key={submission.id}>
-                        <TableCell className="font-medium">{submission.appName}</TableCell>
-                        <TableCell>
-                          <code className="bg-slate-100 px-2 py-1 rounded text-sm">
-                            {submission.changeNo}
-                          </code>
-                        </TableCell>
-                        <TableCell className="max-w-xs truncate">{submission.title}</TableCell>
-                        <TableCell>{submission.requester}</TableCell>
-                        <TableCell>
-                          <Badge className={`gap-2 ${getStatusColor(submission.decision)}`}>
-                            {getStatusIcon(submission.decision)}
-                            {submission.decision}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2 text-sm text-slate-600">
-                            <Calendar className="w-3 h-3" />
-                            {new Date(submission.timestamp).toLocaleDateString()}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEdit(submission)}
-                              className="gap-1 hover:scale-105 transition-transform"
-                            >
-                              <Edit3 className="w-3 h-3" />
-                              Edit
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleDelete(submission.id)}
-                              className="gap-1 hover:scale-105 transition-transform border-rose-200 text-rose-600 hover:bg-rose-50"
-                            >
-                              <Trash2 className="w-3 h-3" />
-                              Delete
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2 max-w-md">
+            <TabsTrigger value="submissions" className="gap-2">
+              <FileText className="w-4 h-4" />
+              Submissions
+            </TabsTrigger>
+            <TabsTrigger value="config" className="gap-2">
+              <Code className="w-4 h-4" />
+              Configuration
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="submissions">
+            <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-red-600 to-orange-600 rounded-lg flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-white" />
+                  </div>
+                  Submission Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                      <FileText className="w-10 h-10 text-slate-400" />
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-700 mb-2">Loading Submissions...</h3>
+                    <p className="text-slate-500">Please wait while we fetch the latest data.</p>
+                  </div>
+                ) : submissions.length === 0 ? (
+                  <div className="text-center py-20">
+                    <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <FileText className="w-12 h-12 text-slate-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-slate-700 mb-2">No Submissions Found</h3>
+                    <p className="text-slate-500">There are no change submissions to manage yet.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>App</TableHead>
+                          <TableHead>Change #</TableHead>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Requester</TableHead>
+                          <TableHead>Status</TableHead>
+                          <TableHead>Date</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {submissions.map((submission) => (
+                          <TableRow key={submission.id}>
+                            <TableCell className="font-medium">{submission.appName}</TableCell>
+                            <TableCell>
+                              <code className="bg-slate-100 px-2 py-1 rounded text-sm">
+                                {submission.changeNo}
+                              </code>
+                            </TableCell>
+                            <TableCell className="max-w-xs truncate">{submission.title}</TableCell>
+                            <TableCell>{submission.requester}</TableCell>
+                            <TableCell>
+                              <Badge className={`gap-2 ${getStatusColor(submission.decision)}`}>
+                                {getStatusIcon(submission.decision)}
+                                {submission.decision}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2 text-sm text-slate-600">
+                                <Calendar className="w-3 h-3" />
+                                {new Date(submission.timestamp).toLocaleDateString()}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEdit(submission)}
+                                  className="gap-1 hover:scale-105 transition-transform"
+                                >
+                                  <Edit3 className="w-3 h-3" />
+                                  Edit
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleDeleteClick(submission.id)}
+                                  className="gap-1 hover:scale-105 transition-transform border-rose-200 text-rose-600 hover:bg-rose-50"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                  Delete
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="config">
+            <SubmissionJsonEditor />
+          </TabsContent>
+        </Tabs>
 
         {/* Edit Modal */}
         {editingId && editForm && (
@@ -552,6 +607,16 @@ const Admin = () => {
             </Card>
           </div>
         )}
+
+        {/* Delete Confirmation Dialog */}
+        <DeleteConfirmationDialog
+          isOpen={deleteDialog.isOpen}
+          onClose={handleDeleteCancel}
+          onConfirm={handleDeleteConfirm}
+          title="Delete Submission"
+          description="Are you sure you want to delete this submission? This action cannot be undone and will permanently remove all associated data."
+          itemName={deleteDialog.submissionName}
+        />
       </div>
     </div>
   );

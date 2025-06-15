@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useEnvironment } from '@/contexts/EnvironmentContext';
 import ChangeRequestDetails from '@/components/ChangeRequestDetails';
 import ApprovalForm from '@/components/ApprovalForm';
 
@@ -30,7 +31,7 @@ interface ChangeRequest {
 const AppDetail = () => {
   const { appName } = useParams<{ appName: string }>();
   const navigate = useNavigate();
-  const [currentEnv] = useState('DEV'); // Match your controller's default
+  const { currentEnv } = useEnvironment();
   const [appData, setAppData] = useState<AppDetailData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

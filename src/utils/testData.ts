@@ -1,4 +1,3 @@
-
 // API calls for Spring Boot backend
 export const loadApps = async () => {
   try {
@@ -100,6 +99,27 @@ export const deleteSubmission = async (id: string) => {
     return data;
   } catch (error) {
     console.error('Error deleting submission:', error);
+    throw error;
+  }
+};
+
+export const updateSubmissionConfig = async (config: any) => {
+  try {
+    const response = await fetch('/api/update-submission-config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(config),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update submission config: ${response.status}`);
+    }
+    const data = await response.text();
+    console.log('Update submission config API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error updating submission config:', error);
     throw error;
   }
 };

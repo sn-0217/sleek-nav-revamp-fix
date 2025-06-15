@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToastContext } from '@/contexts/ToastContext';
+import { useEnvironment } from '@/contexts/EnvironmentContext';
 import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
-import { loadApps, loadEnvironment, loadSubmissions } from '../utils/testData';
+import { loadApps, loadSubmissions } from '../utils/testData';
 
 interface AppStatus {
   text: string;
@@ -19,14 +20,14 @@ interface AppStatus {
 const Home = () => {
   const navigate = useNavigate();
   const { showError } = useToastContext();
+  const { currentEnv } = useEnvironment();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv, setCurrentEnv] = useState('DEV'); // Default to DEV to match your controller
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<string[]>([]);
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Load environment, apps and submissions from API
+  // Load apps and submissions from API
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,11 +35,6 @@ const Home = () => {
         setError(null);
 
         console.log('Starting API calls to Spring Boot backend...');
-
-        // Load environment first
-        const envData = await loadEnvironment();
-        console.log('Environment loaded:', envData);
-        setCurrentEnv(envData.environment || 'DEV');
 
         // Load apps
         const appsData = await loadApps();
@@ -69,7 +65,7 @@ const Home = () => {
         }));
 
         // Filter by current environment
-        const envSubmissions = transformedSubmissions.filter((s: any) => s.environment === (envData.environment || 'DEV'));
+        const envSubmissions = transformedSubmissions.filter((s: any) => s.environment === currentEnv);
         setSubmissions(envSubmissions);
         console.log('Filtered submissions for environment:', envSubmissions);
 
@@ -86,7 +82,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, [showError]);
+  }, [showError, currentEnv]);
 
   const getAppStatus = (appName: string): AppStatus => {
     // Filter submissions for this app
