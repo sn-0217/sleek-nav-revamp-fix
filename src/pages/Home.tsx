@@ -7,7 +7,7 @@ import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
-import { loadApps, loadSubmissions } from '@/utils/testData';
+import { loadApps, loadEnvironment, loadSubmissions } from '../utils/testData';
 
 interface AppStatus {
   text: string;
@@ -33,9 +33,9 @@ const Home = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
+
         console.log('Starting API calls to Spring Boot backend...');
-        
+
         // Load environment first
         const envData = await loadEnvironment();
         console.log('Environment loaded:', envData);
@@ -44,7 +44,7 @@ const Home = () => {
         // Load apps
         const appsData = await loadApps();
         console.log('Apps data received:', appsData);
-        
+
         // Extract app names from AppData objects
         const appNames = appsData.map((app: any) => app.appName);
         setApps(appNames);
@@ -53,12 +53,12 @@ const Home = () => {
         // Load submissions
         const submissionsData = await loadSubmissions();
         console.log('Submissions data received:', submissionsData);
-        
+
         // Filter by current environment
         const envSubmissions = submissionsData.filter((s: any) => s.environment === (envData.environment || 'DEV'));
         setSubmissions(envSubmissions);
         console.log('Filtered submissions for environment:', envSubmissions);
-        
+
       } catch (err) {
         console.error('API Error:', err);
         setError('Failed to connect to backend server');
@@ -123,7 +123,7 @@ const Home = () => {
   };
 
   const filteredApps = apps.filter(app => app.toLowerCase().includes(searchTerm.toLowerCase())).sort((a, b) => a.localeCompare(b));
-  
+
   const handleAppClick = (appName: string) => {
     const appSubmissions = submissions.filter(s => s.appName === appName);
     if (appSubmissions.length === 0) {
@@ -138,7 +138,7 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
-  
+
   const handleStatusClick = (appName: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const appSubmissions = submissions.filter(s => s.appName === appName);
@@ -154,18 +154,18 @@ const Home = () => {
       navigate(`/app/${encodeURIComponent(appName)}`);
     }
   };
-  
+
   const handleViewSubmissions = () => {
     navigate('/submissions');
   };
-  
+
   const handleAdminClick = () => {
     navigate('/admin');
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100" data-page="home">
-      <HomeHeader 
+      <HomeHeader
         currentEnv={currentEnv}
         onViewSubmissions={handleViewSubmissions}
         onAdminClick={handleAdminClick}
@@ -174,7 +174,7 @@ const Home = () => {
       <div className="max-w-7xl mx-auto px-6 py-8" data-main="home-content">
         <HomeHero />
 
-        <ApplicationsGrid 
+        <ApplicationsGrid
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           isLoading={isLoading}
