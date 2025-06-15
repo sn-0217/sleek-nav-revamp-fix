@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -21,32 +20,40 @@ const Home = () => {
   const navigate = useNavigate();
   const { showError } = useToastContext();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentEnv] = useState('PROD');
+  const [currentEnv, setCurrentEnv] = useState('PROD'); // Will be loaded from backend
   const [isLoading, setIsLoading] = useState(true);
   const [apps, setApps] = useState<string[]>([]);
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Load apps and submissions from API
+  // Load environment, apps and submissions from API
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
         setError(null);
         
-        console.log('Loading applications from API...');
+        console.log('Loading data from API...');
         
-        // Load apps and submissions from API
-        const [appsData, submissionsData] = await Promise.all([
+        // Load environment, apps and submissions from API
+        const [envResponse, appsData, submissionsData] = await Promise.all([
+          fetch('/api/environment'),
           loadApps(),
           loadSubmissions()
         ]);
+
+        // Load environment from backend
+        if (envResponse.ok) {
+          const envData = await envResponse.json();
+          setCurrentEnv(envData.environment || 'PROD');
+        }
         
         setApps(appsData);
         setSubmissions(submissionsData.filter((s: any) => s.environment === currentEnv));
         
         console.log('Apps loaded:', appsData);
         console.log('Submissions loaded:', submissionsData);
+        console.log('Environment loaded:', currentEnv);
         
       } catch (err) {
         console.error('Failed to load data:', err);
@@ -61,7 +68,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, [currentEnv, showError]);
+  }, [showError]);
 
   const getAppStatus = (appName: string): AppStatus => {
     const appSubmissions = submissions.filter(s => s.appName === appName);

@@ -18,6 +18,15 @@ export const loadSubmissions = async () => {
   return response.json();
 };
 
+export const loadEnvironment = async () => {
+  // TODO: Replace with actual API call
+  const response = await fetch('/api/environment');
+  if (!response.ok) {
+    throw new Error('Failed to load environment');
+  }
+  return response.json();
+};
+
 export const createSubmission = async (submission: any) => {
   // TODO: Replace with actual API call
   const response = await fetch('/api/submissions', {
@@ -32,3 +41,4 @@ export const createSubmission = async (submission: any) => {
   }
   return response.json();
 };
+
