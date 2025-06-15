@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { CheckCircle, User, Mail, MessageSquare, Send, RotateCcw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
@@ -79,11 +80,14 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
     setIsSubmitting(true);
 
     try {
-      // Prepare the submission payload
-      const formSubmission = {
+      // Prepare the submission payload that matches your Spring Boot Submission model
+      const payload = {
+        appName,
+        changeNumber: changeNo,
         approverName,
         approverEmail,
         decision: selectedDecision,
+        environment: currentEnv,
         ...(selectedDecision === 'Timed' && {
           startTime,
           endTime
@@ -91,22 +95,10 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
         comments: comments || undefined
       };
 
-      const payload = {
-        appName,
-        changeNumber: changeNo,
-        applicationOwner: 'DevOps Engineering Team', // This would come from app data
-        maintenanceWindow: 'Maintenance Window (8 PM - 6 AM)', // This would come from app data
-        changeDescription: `Critical security update and performance optimizations for ${appName}`, // This would come from app data
-        infrastructureImpact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com`, // This would come from app data
-        hosts: [`${appName?.toLowerCase()}-web-01.prod.company.com`, `${appName?.toLowerCase()}-web-02.prod.company.com`], // This would come from app data
-        formSubmission,
-        submittedAt: new Date().toISOString()
-      };
+      console.log('Submitting to Spring Boot API:', payload);
 
-      console.log('Submitting to API:', payload);
-
-      // Make POST request to the API
-      const response = await fetch(`/app/${encodeURIComponent(appName)}`, {
+      // Make POST request to the correct Spring Boot endpoint
+      const response = await fetch(`/api/app/${encodeURIComponent(appName)}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -118,37 +110,14 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
-      console.log('API response:', result);
+      const result = await response.text(); // Your controller returns a String
+      console.log('Spring Boot API response:', result);
 
       // Show success toast
       toast({
         title: "Submission Successful",
         description: `Change request ${selectedDecision.toLowerCase()} successfully.`
       });
-
-      // Also save to localStorage as backup (keeping existing functionality)
-      const submission = {
-        id: Date.now().toString(),
-        appName: appName || '',
-        changeNo: changeNo,
-        requester: 'DevOps Engineering Team',
-        title: `Critical security update and performance optimizations for ${appName}`,
-        description: `Critical security update and performance optimizations for ${appName}. This comprehensive update includes latest security patches, database performance improvements, enhanced monitoring capabilities, and infrastructure modernization to ensure optimal system reliability and security compliance.`,
-        impact: `Affected servers: ${appName?.toLowerCase()}-web-01.prod.company.com, ${appName?.toLowerCase()}-web-02.prod.company.com, ${appName?.toLowerCase()}-api-01.prod.company.com, ${appName?.toLowerCase()}-api-02.prod.company.com, ${appName?.toLowerCase()}-db-01.prod.company.com, ${appName?.toLowerCase()}-cache-01.prod.company.com, ${appName?.toLowerCase()}-lb-01.prod.company.com`,
-        decision: selectedDecision,
-        timestamp: new Date().toISOString(),
-        scheduledDate: selectedDecision === 'Timed' ? startTime : undefined,
-        comments: comments || undefined,
-        approverName,
-        approverEmail,
-        environment: currentEnv,
-        deploymentWindow: 'Maintenance Window (8 PM - 6 AM)'
-      };
-
-      const existingSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-      existingSubmissions.push(submission);
-      localStorage.setItem('changeSubmissions', JSON.stringify(existingSubmissions));
 
       // Reset form
       handleReset();

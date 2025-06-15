@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { CheckCircle, XCircle, Clock, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +6,7 @@ import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
-import { loadApps, loadEnvironment, loadSubmissions } from '../utils/testData';
+import { loadApps, loadSubmissions } from '@/utils/testData';
 
 interface AppStatus {
   text: string;
