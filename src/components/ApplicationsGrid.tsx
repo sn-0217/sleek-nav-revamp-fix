@@ -106,10 +106,7 @@ const ApplicationsGrid: React.FC<ApplicationsGridProps> = ({
           </div> : <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6" data-grid="applications">
             {filteredApps.map((app, index) => {
           const status = getAppStatus(app);
-          const submissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-          const appSubmissions = Array.isArray(submissions) ? submissions.filter((s: any) => s.appName === app) : [];
-          const hasValidSubmissions = appSubmissions.some((s: any) => s.decision === 'Approved' || s.decision === 'Rejected' || s.decision === 'Timed');
-          return <AppCard key={app} app={app} index={index} status={status} hasValidSubmissions={hasValidSubmissions} onAppClick={handleAppClick} onStatusClick={handleStatusClick} />;
+          return <AppCard key={app} app={app} index={index} status={status} hasValidSubmissions={status.text !== 'No Changes'} onAppClick={handleAppClick} onStatusClick={handleStatusClick} />;
         })}
           </div>}
       </CardContent>

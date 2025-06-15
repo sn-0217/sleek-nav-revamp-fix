@@ -2,22 +2,32 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { FileText, CheckCircle, XCircle, Timer } from 'lucide-react';
 
-interface Submission {
-  id: string;
-  appName: string;
-  changeNo: string;
-  approverName: string;
-  approverEmail?: string;
-  decision: 'Approved' | 'Rejected' | 'Timed';
-  timestamp: string;
-  comments?: string;
-  startTime?: string;
-  endTime?: string;
-  environment: string;
+interface BackendSubmission {
+  appData: {
+    appName: string;
+    changeNumber: string;
+    applicationOwner: string;
+    maintenanceWindow: string;
+    changeDescription: string;
+    infrastructureImpact: string;
+    hosts: string[];
+  };
+  formSubmission: {
+    changeNumber: string;
+    approverName: string;
+    approverEmail: string;
+    decision: 'Approved' | 'Rejected' | 'Timed';
+    environment: string;
+    startTime?: string;
+    endTime?: string;
+    comments?: string;
+  };
+  submittedAt: string;
+  status: string;
 }
 
 interface SubmissionStatisticsProps {
-  submissions: Submission[];
+  submissions: BackendSubmission[];
   statusFilter: string;
   onStatisticClick: (filterType: string) => void;
 }
@@ -25,9 +35,9 @@ interface SubmissionStatisticsProps {
 const SubmissionStatistics = ({ submissions, statusFilter, onStatisticClick }: SubmissionStatisticsProps) => {
   const statistics = {
     total: submissions.length,
-    approved: submissions.filter(s => s.decision === 'Approved').length,
-    rejected: submissions.filter(s => s.decision === 'Rejected').length,
-    timed: submissions.filter(s => s.decision === 'Timed').length
+    approved: submissions.filter(s => s.formSubmission && s.formSubmission.decision === 'Approved').length,
+    rejected: submissions.filter(s => s.formSubmission && s.formSubmission.decision === 'Rejected').length,
+    timed: submissions.filter(s => s.formSubmission && s.formSubmission.decision === 'Timed').length
   };
 
   return (

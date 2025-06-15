@@ -65,3 +65,41 @@ export const createSubmission = async (submission: any) => {
     throw error;
   }
 };
+
+export const updateSubmission = async (id: string, submission: any) => {
+  try {
+    const response = await fetch(`/api/submission/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(submission),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to update submission: ${response.status}`);
+    }
+    const data = await response.text();
+    console.log('Update submission API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error updating submission:', error);
+    throw error;
+  }
+};
+
+export const deleteSubmission = async (id: string) => {
+  try {
+    const response = await fetch(`/api/submission/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete submission: ${response.status}`);
+    }
+    const data = await response.text();
+    console.log('Delete submission API response:', data);
+    return data;
+  } catch (error) {
+    console.error('Error deleting submission:', error);
+    throw error;
+  }
+};

@@ -9,25 +9,36 @@ import SubmissionStatistics from '@/components/SubmissionStatistics';
 import SubmissionFilters from '@/components/SubmissionFilters';
 import SubmissionsList from '@/components/SubmissionsList';
 
-interface Submission {
-  id: string;
-  appName: string;
-  changeNo: string;
-  approverName: string;
-  approverEmail?: string;
-  decision: 'Approved' | 'Rejected' | 'Timed';
-  timestamp: string;
-  comments?: string;
-  startTime?: string;
-  endTime?: string;
-  environment: string;
+// Backend submission interface to match the API response
+interface BackendSubmission {
+  appData: {
+    appName: string;
+    changeNumber: string;
+    applicationOwner: string;
+    maintenanceWindow: string;
+    changeDescription: string;
+    infrastructureImpact: string;
+    hosts: string[];
+  };
+  formSubmission: {
+    changeNumber: string;
+    approverName: string;
+    approverEmail: string;
+    decision: 'Approved' | 'Rejected' | 'Timed';
+    environment: string;
+    startTime?: string;
+    endTime?: string;
+    comments?: string;
+  };
+  submittedAt: string;
+  status: string;
 }
 
 const Index = () => {
   const navigate = useNavigate();
   const { showError } = useToastContext();
   const [searchParams] = useSearchParams();
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [submissions, setSubmissions] = useState<BackendSubmission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [currentEnv] = useState('PROD');
@@ -44,11 +55,19 @@ const Index = () => {
         // Load submissions from API
         const submissionsData = await loadSubmissions();
         
-        // Filter by current environment
-        const envSubmissions = submissionsData.filter((sub: Submission) => sub.environment === currentEnv);
-        setSubmissions(envSubmissions);
+        // Log the environment values in the submissions for debugging
+        console.log('Submission environments:', submissionsData.map(sub => sub.formSubmission?.environment));
+        console.log('Current environment filter:', currentEnv);
         
-        console.log('Submissions loaded:', envSubmissions);
+        // Filter by current environment - temporarily disable filtering to see all submissions
+        // const envSubmissions = submissionsData.filter((sub: BackendSubmission) => 
+        //   sub.formSubmission && sub.formSubmission.environment === currentEnv);
+        // setSubmissions(envSubmissions);
+        
+        // Set all submissions without filtering for now
+        setSubmissions(submissionsData);
+        
+        console.log('Submissions loaded:', submissionsData);
 
       } catch (error) {
         console.error('Failed to load submissions:', error);
@@ -81,13 +100,18 @@ const Index = () => {
 
   const filteredSubmissions = useMemo(() => {
     return submissions.filter(submission => {
+      if (!submission.appData || !submission.formSubmission) return false;
+      
       const matchesSearch = !searchTerm || 
-        submission.appName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        submission.changeNo.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        submission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        submission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        submission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStatus = statusFilter === 'all' || submission.decision.toLowerCase() === statusFilter;
+        submission.appData.appName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        submission.formSubmission.changeNumber.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        submission.formSubmission.approverName.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        submission.formSubmission.approverEmail?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        submission.formSubmission.comments?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesStatus = statusFilter === 'all' || 
+        submission.formSubmission.decision.toLowerCase() === statusFilter.toLowerCase();
+      
       return matchesSearch && matchesStatus;
     });
   }, [submissions, searchTerm, statusFilter]);

@@ -6,7 +6,7 @@ import HomeHeader from '@/components/HomeHeader';
 import HomeHero from '@/components/HomeHero';
 import ApplicationsGrid from '@/components/ApplicationsGrid';
 import HomeFooter from '@/components/HomeFooter';
-import { loadApps, loadSubmissions } from '@/utils/testData';
+import { loadApps, loadEnvironment, loadSubmissions } from '../utils/testData';
 
 interface AppStatus {
   text: string;
@@ -53,8 +53,23 @@ const Home = () => {
         const submissionsData = await loadSubmissions();
         console.log('Submissions data received:', submissionsData);
 
+        // Transform backend submissions to frontend format
+        const transformedSubmissions = submissionsData.map((submission: any, index: number) => ({
+          id: `${submission.appData.appName}-${submission.formSubmission.changeNumber}-${index}`,
+          appName: submission.appData.appName,
+          changeNo: submission.formSubmission.changeNumber,
+          approverName: submission.formSubmission.approverName,
+          approverEmail: submission.formSubmission.approverEmail,
+          decision: submission.formSubmission.decision,
+          timestamp: submission.submittedAt,
+          comments: submission.formSubmission.comments,
+          startTime: submission.formSubmission.startTime,
+          endTime: submission.formSubmission.endTime,
+          environment: submission.formSubmission.environment
+        }));
+
         // Filter by current environment
-        const envSubmissions = submissionsData.filter((s: any) => s.environment === (envData.environment || 'DEV'));
+        const envSubmissions = transformedSubmissions.filter((s: any) => s.environment === (envData.environment || 'DEV'));
         setSubmissions(envSubmissions);
         console.log('Filtered submissions for environment:', envSubmissions);
 
@@ -74,7 +89,10 @@ const Home = () => {
   }, [showError]);
 
   const getAppStatus = (appName: string): AppStatus => {
+    // Filter submissions for this app
     const appSubmissions = submissions.filter(s => s.appName === appName);
+    
+    // If no submissions found, return 'No Changes' status
     if (appSubmissions.length === 0) {
       return {
         text: 'No Changes',
@@ -84,7 +102,11 @@ const Home = () => {
         borderColor: 'border-slate-200'
       };
     }
+    
+    // Sort submissions by timestamp (newest first) and get the latest one
     const latestSubmission = appSubmissions.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())[0];
+    
+    // Return status based on the decision of the latest submission
     switch (latestSubmission.decision) {
       case 'Approved':
         return {

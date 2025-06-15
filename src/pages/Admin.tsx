@@ -9,7 +9,35 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { loadSubmissions, updateSubmission, deleteSubmission } from '@/utils/testData';
+import { useToastContext } from '@/contexts/ToastContext';
 
+// Backend submission interface to match the API response
+interface BackendSubmission {
+  appData: {
+    appName: string;
+    changeNumber: string;
+    applicationOwner: string;
+    maintenanceWindow: string;
+    changeDescription: string;
+    infrastructureImpact: string;
+    hosts: string[];
+  };
+  formSubmission: {
+    changeNumber: string;
+    approverName: string;
+    approverEmail: string;
+    decision: 'Approved' | 'Rejected' | 'Timed';
+    environment: string;
+    startTime?: string;
+    endTime?: string;
+    comments?: string;
+  };
+  submittedAt: string;
+  status: string;
+}
+
+// Frontend submission interface for the UI
 interface Submission {
   id: string;
   appName: string;
@@ -26,33 +54,148 @@ interface Submission {
   comments?: string;
 }
 
+// Transform function to convert backend data to frontend format
+const transformSubmission = (backendSubmission: BackendSubmission, index: number): Submission => {
+  return {
+    id: `${backendSubmission.appData.appName}-${backendSubmission.formSubmission.changeNumber}-${index}`,
+    appName: backendSubmission.appData.appName,
+    changeNo: backendSubmission.formSubmission.changeNumber,
+    requester: backendSubmission.appData.applicationOwner,
+    title: backendSubmission.appData.changeDescription,
+    description: backendSubmission.appData.changeDescription,
+    impact: backendSubmission.appData.infrastructureImpact,
+    decision: backendSubmission.formSubmission.decision,
+    timestamp: backendSubmission.submittedAt,
+    startTime: backendSubmission.formSubmission.startTime,
+    endTime: backendSubmission.formSubmission.endTime,
+    comments: backendSubmission.formSubmission.comments
+  };
+};
+
+// Transform function to convert frontend format back to backend data
+const transformToBackend = (submission: Submission, originalBackendData?: BackendSubmission): BackendSubmission => {
+  // If we have the original backend data, use it as a base
+  if (originalBackendData) {
+    return {
+      ...originalBackendData,
+      appData: {
+        ...originalBackendData.appData,
+        changeNumber: submission.changeNo,
+        applicationOwner: submission.requester,
+        changeDescription: submission.title,
+        infrastructureImpact: submission.impact
+      },
+      formSubmission: {
+        ...originalBackendData.formSubmission,
+        changeNumber: submission.changeNo,
+        decision: submission.decision as 'Approved' | 'Rejected' | 'Timed',
+        startTime: submission.startTime,
+        endTime: submission.endTime,
+        comments: submission.comments
+      }
+    };
+  }
+  
+  // If we don't have the original backend data, create a new one
+  // This is a simplified version and might need to be adjusted
+  return {
+    appData: {
+      appName: submission.appName,
+      changeNumber: submission.changeNo,
+      applicationOwner: submission.requester,
+      maintenanceWindow: '',
+      changeDescription: submission.title,
+      infrastructureImpact: submission.impact,
+      hosts: []
+    },
+    formSubmission: {
+      changeNumber: submission.changeNo,
+      approverName: '',
+      approverEmail: '',
+      decision: submission.decision as 'Approved' | 'Rejected' | 'Timed',
+      environment: 'DEV',
+      startTime: submission.startTime,
+      endTime: submission.endTime,
+      comments: submission.comments
+    },
+    submittedAt: submission.timestamp,
+    status: 'PENDING'
+  };
+};
+
 const Admin = () => {
   const navigate = useNavigate();
+  const { showError, showSuccess } = useToastContext();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [backendSubmissions, setBackendSubmissions] = useState<BackendSubmission[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Submission | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedSubmissions = JSON.parse(localStorage.getItem('changeSubmissions') || '[]');
-    setSubmissions(storedSubmissions);
-  }, []);
+    const fetchSubmissions = async () => {
+      try {
+        setIsLoading(true);
+        const data = await loadSubmissions();
+        const transformedSubmissions = data.map((sub: BackendSubmission, index: number) => 
+          transformSubmission(sub, index)
+        );
+        setBackendSubmissions(data);
+        setSubmissions(transformedSubmissions);
+      } catch (error) {
+        console.error('Failed to load submissions:', error);
+        showError('Failed to Load Submissions', 'Unable to fetch submission data. Please check your connection and try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSubmissions();
+  }, [showError]);
 
   const handleEdit = (submission: Submission) => {
     setEditingId(submission.id);
     setEditForm({ ...submission });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editForm) return;
-
-    const updatedSubmissions = submissions.map(sub => 
-      sub.id === editForm.id ? editForm : sub
-    );
     
-    setSubmissions(updatedSubmissions);
-    localStorage.setItem('changeSubmissions', JSON.stringify(updatedSubmissions));
-    setEditingId(null);
-    setEditForm(null);
+    try {
+      setIsLoading(true);
+      
+      // Find the original backend submission that corresponds to this frontend submission
+      const submissionIndex = submissions.findIndex(sub => sub.id === editForm.id);
+      if (submissionIndex === -1) {
+        showError('Update Failed', 'Could not find the submission to update.');
+        return;
+      }
+      
+      const originalBackendSubmission = backendSubmissions[submissionIndex];
+      
+      // Transform the edited frontend submission back to backend format
+      const updatedBackendSubmission = transformToBackend(editForm, originalBackendSubmission);
+      
+      // Call the API to update the submission
+      await updateSubmission(editForm.changeNo, updatedBackendSubmission);
+      
+      // Refresh the submissions list
+      const data = await loadSubmissions();
+      const transformedSubmissions = data.map((sub: BackendSubmission, index: number) => 
+        transformSubmission(sub, index)
+      );
+      
+      setBackendSubmissions(data);
+      setSubmissions(transformedSubmissions);
+      showSuccess('Success', 'Submission updated successfully');
+    } catch (error) {
+      console.error('Failed to update submission:', error);
+      showError('Update Failed', 'Failed to update the submission. Please try again.');
+    } finally {
+      setIsLoading(false);
+      setEditingId(null);
+      setEditForm(null);
+    }
   };
 
   const handleCancel = () => {
@@ -60,10 +203,37 @@ const Admin = () => {
     setEditForm(null);
   };
 
-  const handleDelete = (id: string) => {
-    const updatedSubmissions = submissions.filter(sub => sub.id !== id);
-    setSubmissions(updatedSubmissions);
-    localStorage.setItem('changeSubmissions', JSON.stringify(updatedSubmissions));
+  const handleDelete = async (id: string) => {
+    try {
+      setIsLoading(true);
+      
+      // Find the submission to delete
+      const submissionIndex = submissions.findIndex(sub => sub.id === id);
+      if (submissionIndex === -1) {
+        showError('Delete Failed', 'Could not find the submission to delete.');
+        return;
+      }
+      
+      const submissionToDelete = submissions[submissionIndex];
+      
+      // Call the API to delete the submission
+      await deleteSubmission(submissionToDelete.changeNo);
+      
+      // Refresh the submissions list
+      const data = await loadSubmissions();
+      const transformedSubmissions = data.map((sub: BackendSubmission, index: number) => 
+        transformSubmission(sub, index)
+      );
+      
+      setBackendSubmissions(data);
+      setSubmissions(transformedSubmissions);
+      showSuccess('Success', 'Submission deleted successfully');
+    } catch (error) {
+      console.error('Failed to delete submission:', error);
+      showError('Delete Failed', 'Failed to delete the submission. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getStatusIcon = (decision: string) => {
@@ -133,7 +303,15 @@ const Admin = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {submissions.length === 0 ? (
+            {isLoading ? (
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                  <FileText className="w-10 h-10 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-700 mb-2">Loading Submissions...</h3>
+                <p className="text-slate-500">Please wait while we fetch the latest data.</p>
+              </div>
+            ) : submissions.length === 0 ? (
               <div className="text-center py-20">
                 <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center mx-auto mb-6">
                   <FileText className="w-12 h-12 text-slate-400" />

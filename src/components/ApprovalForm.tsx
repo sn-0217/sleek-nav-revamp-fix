@@ -35,11 +35,11 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
         });
         return false;
       }
-      
+
       const start = new Date(startTime);
       const end = new Date(endTime);
       const now = new Date();
-      
+
       if (start <= now) {
         toast({
           title: "Validation Error",
@@ -48,7 +48,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
         });
         return false;
       }
-      
+
       if (end <= start) {
         toast({
           title: "Validation Error",
@@ -63,7 +63,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!approverName || !approverEmail || !selectedDecision) {
       toast({
         title: "Validation Error",
@@ -82,17 +82,18 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
     try {
       // Prepare the submission payload that matches your Spring Boot Submission model
       const payload = {
-        appName,
-        changeNumber: changeNo,
-        approverName,
-        approverEmail,
-        decision: selectedDecision,
-        environment: currentEnv,
-        ...(selectedDecision === 'Timed' && {
-          startTime,
-          endTime
-        }),
-        comments: comments || undefined
+        formSubmission: {
+          environment: currentEnv,
+          changeNumber: changeNo,
+          approverName,
+          approverEmail,
+          decision: selectedDecision,
+          ...(selectedDecision === 'Timed' && {
+            startTime,
+            endTime
+          }),
+          comments: comments || undefined
+        }
       };
 
       console.log('Submitting to Spring Boot API:', payload);
@@ -124,7 +125,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
 
     } catch (error) {
       console.error('Failed to submit form:', error);
-      
+
       // Show error toast
       toast({
         title: "Submission Failed",
@@ -202,7 +203,7 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
               </div>
               Decision
             </label>
-            <DecisionButtons 
+            <DecisionButtons
               selectedDecision={selectedDecision}
               onDecisionSelect={setSelectedDecision}
             />
