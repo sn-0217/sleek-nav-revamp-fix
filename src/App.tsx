@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { ToastProvider } from '@/contexts/ToastContext';
 import { EnvironmentProvider } from '@/contexts/EnvironmentContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import ToastContainer from '@/components/ToastContainer';
 import Home from './pages/Home';
 import AppDetail from './pages/AppDetail';
@@ -13,20 +14,22 @@ function App() {
   return (
     <Router>
       <EnvironmentProvider>
-        <ToastProvider>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/submissions" element={<Index />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/app/:appName" element={<AppDetail />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Toaster />
-            <ToastContainer />
-          </div>
-        </ToastProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <div className="App">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/submissions" element={<Index />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/app/:appName" element={<AppDetail />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+              <Toaster />
+              <ToastContainer />
+            </div>
+          </ToastProvider>
+        </AuthProvider>
       </EnvironmentProvider>
     </Router>
   );

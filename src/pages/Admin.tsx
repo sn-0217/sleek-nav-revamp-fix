@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings } from 'lucide-react';
+import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings, LogOut } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { loadSubmissions, updateSubmission, deleteSubmission } from '@/utils/testData';
 import { useToastContext } from '@/contexts/ToastContext';
 import { useEnvironment } from '@/contexts/EnvironmentContext';
+import { useAuth } from '@/contexts/AuthContext';
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog';
 import SubmissionJsonEditor from '@/components/SubmissionJsonEditor';
 
@@ -130,6 +131,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const { showError, showSuccess } = useToastContext();
   const { currentEnv } = useEnvironment();
+  const { logout } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [backendSubmissions, setBackendSubmissions] = useState<BackendSubmission[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -266,6 +268,11 @@ const Admin = () => {
     setDeleteDialog({ isOpen: false, submissionId: '', submissionName: '' });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/home');
+  };
+
   const getStatusIcon = (decision: string) => {
     switch (decision) {
       case 'Approved':
@@ -308,20 +315,29 @@ const Admin = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Back
               </Button>
+              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200">
+                <Settings className="w-4 h-4" />
+                {currentEnv}
+              </Badge>
               <div>
                 <h1 className="text-2xl font-bold text-slate-900">Admin Panel</h1>
                 <p className="text-slate-600 text-sm">Manage change submissions and configuration</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 border-purple-200">
-                <Settings className="w-4 h-4" />
-                {currentEnv}
-              </Badge>
               <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-red-100 to-orange-100 text-red-700 border-red-200">
                 <User className="w-4 h-4" />
                 Administrator
               </Badge>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleLogout}
+                className="gap-2 hover:scale-105 transition-transform shadow-sm hover:shadow-md bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200 text-gray-700 hover:from-gray-100 hover:to-slate-100"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </Button>
             </div>
           </div>
         </div>
