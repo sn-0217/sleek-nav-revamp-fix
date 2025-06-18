@@ -14,6 +14,16 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         secure: false,
       },
+      '/admin': {
+        target: 'http://localhost:8080', // Your Spring Boot backend
+        changeOrigin: true,
+        secure: false,
+      },
+      '/logout': {
+        target: 'http://localhost:8080', // Your Spring Boot backend
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   plugins: [

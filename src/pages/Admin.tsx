@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings, LogOut } from 'lucide-react';
+import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings, LogOut, Server, Database } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -131,7 +131,7 @@ const Admin = () => {
   const navigate = useNavigate();
   const { showError, showSuccess } = useToastContext();
   const { currentEnv } = useEnvironment();
-  const { logout } = useAuth();
+  const { logout, isAdmin } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [backendSubmissions, setBackendSubmissions] = useState<BackendSubmission[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -305,7 +305,11 @@ const Admin = () => {
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-900">Admin Panel</h1>
+              <p className="text-slate-600 text-sm">Manage change submissions and configuration</p>
+            </div>
+            <div className="flex items-center gap-3">
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -319,12 +323,6 @@ const Admin = () => {
                 <Settings className="w-4 h-4" />
                 {currentEnv}
               </Badge>
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900">Admin Panel</h1>
-                <p className="text-slate-600 text-sm">Manage change submissions and configuration</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
               <Badge className="gap-2 px-3 py-1.5 bg-gradient-to-r from-red-100 to-orange-100 text-red-700 border-red-200">
                 <User className="w-4 h-4" />
                 Administrator
@@ -346,15 +344,27 @@ const Admin = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 max-w-md">
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-1'} max-w-md`}>
             <TabsTrigger value="submissions" className="gap-2">
               <FileText className="w-4 h-4" />
               Submissions
             </TabsTrigger>
-            <TabsTrigger value="config" className="gap-2">
-              <Code className="w-4 h-4" />
-              Configuration
-            </TabsTrigger>
+            {isAdmin && (
+              <>
+                <TabsTrigger value="back" className="gap-2">
+                  <Server className="w-4 h-4" />
+                  Back
+                </TabsTrigger>
+                <TabsTrigger value="dev" className="gap-2">
+                  <Database className="w-4 h-4" />
+                  Dev
+                </TabsTrigger>
+                <TabsTrigger value="config" className="gap-2">
+                  <Code className="w-4 h-4" />
+                  Configuration
+                </TabsTrigger>
+              </>
+            )}  
           </TabsList>
 
           <TabsContent value="submissions">
@@ -453,9 +463,87 @@ const Admin = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="config">
-            <SubmissionJsonEditor />
-          </TabsContent>
+          {isAdmin && (
+            <>
+              <TabsContent value="back">
+                <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                        <Server className="w-5 h-5 text-white" />
+                      </div>
+                      Backend Management
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-12">
+                      <h3 className="text-xl font-bold text-slate-700 mb-2">Backend Administration</h3>
+                      <p className="text-slate-500 mb-6">This section is restricted to administrators only.</p>
+                      <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Server Status</h4>
+                          <p className="text-sm text-slate-500">Monitor and manage server resources</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">API Management</h4>
+                          <p className="text-sm text-slate-500">Configure API endpoints and permissions</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Database</h4>
+                          <p className="text-sm text-slate-500">Manage database connections and backups</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Logs</h4>
+                          <p className="text-sm text-slate-500">View system logs and error reports</p>
+                        </Card>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="dev">
+                <Card className="bg-white/70 backdrop-blur-sm border-0 shadow-xl">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
+                        <Database className="w-5 h-5 text-white" />
+                      </div>
+                      Development Tools
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-12">
+                      <h3 className="text-xl font-bold text-slate-700 mb-2">Developer Options</h3>
+                      <p className="text-slate-500 mb-6">Advanced tools for development and testing.</p>
+                      <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Environment Variables</h4>
+                          <p className="text-sm text-slate-500">Configure application environment settings</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Feature Flags</h4>
+                          <p className="text-sm text-slate-500">Toggle experimental features</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">Test Data</h4>
+                          <p className="text-sm text-slate-500">Generate and manage test datasets</p>
+                        </Card>
+                        <Card className="p-4 hover:shadow-md transition-shadow">
+                          <h4 className="font-medium mb-2">API Testing</h4>
+                          <p className="text-sm text-slate-500">Test API endpoints and view responses</p>
+                        </Card>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="config">
+                <SubmissionJsonEditor />
+              </TabsContent>
+            </>
+          )}
         </Tabs>
 
         {/* Edit Modal */}

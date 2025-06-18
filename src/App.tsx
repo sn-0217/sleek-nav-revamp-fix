@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from '@/components/ui/toaster';
+import { CustomToaster } from "@/components/ui/custom-toaster";
 import { ToastProvider } from '@/contexts/ToastContext';
 import { EnvironmentProvider } from '@/contexts/EnvironmentContext';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -25,8 +25,7 @@ function App() {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              <Toaster />
-              <ToastContainer />
+              <CustomToaster />
             </div>
           </ToastProvider>
         </AuthProvider>

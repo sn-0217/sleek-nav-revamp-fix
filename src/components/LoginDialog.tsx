@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,13 +37,24 @@ const LoginDialog: React.FC<LoginDialogProps> = ({
       return;
     }
 
-    const success = await onLogin(username, password);
-    if (success) {
-      setUsername('');
-      setPassword('');
-      onClose();
-    } else {
-      setError('Invalid username or password');
+    try {
+      const success = await onLogin(username, password);
+      if (success) {
+        setUsername('');
+        setPassword('');
+        onClose();
+      } else {
+        setError('Authentication failed: Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      if (error instanceof SyntaxError) {
+        setError('Server error: Received invalid response format. Please contact administrator.');
+      } else if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('network'))) {
+        setError('Network error: Unable to connect to the server. Please check your connection.');
+      } else {
+        setError('Authentication error: Please try again later');
+      }
     }
   };
 
@@ -65,9 +77,9 @@ const LoginDialog: React.FC<LoginDialogProps> = ({
               <DialogTitle className="text-lg font-semibold text-slate-900">
                 Admin Authentication
               </DialogTitle>
-              <p className="text-sm text-slate-600 mt-1">
+              <DialogDescription className="text-sm text-slate-600 mt-1">
                 Please enter your credentials to access the admin panel
-              </p>
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>

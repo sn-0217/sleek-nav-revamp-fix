@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CheckCircle, User, Mail, MessageSquare, Send, RotateCcw } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -17,6 +18,7 @@ interface ApprovalFormProps {
 }
 
 const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
+  const navigate = useNavigate();
   const [approverName, setApproverName] = useState('');
   const [approverEmail, setApproverEmail] = useState('');
   const [selectedDecision, setSelectedDecision] = useState<Decision | null>(null);
@@ -114,14 +116,20 @@ const ApprovalForm = ({ appName, changeNo, currentEnv }: ApprovalFormProps) => {
       const result = await response.text(); // Your controller returns a String
       console.log('Spring Boot API response:', result);
 
-      // Show success toast
+      // Show success toast with consistent styling
       toast({
         title: "Submission Successful",
-        description: `Change request ${selectedDecision.toLowerCase()} successfully.`
+        description: `Change request ${selectedDecision.toLowerCase()} successfully.`,
+        variant: "default"
       });
 
       // Reset form
       handleReset();
+      
+      // Redirect to home page after a short delay to allow toast to be visible
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
 
     } catch (error) {
       console.error('Failed to submit form:', error);
