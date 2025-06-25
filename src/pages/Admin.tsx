@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings, LogOut, Server, Database } from 'lucide-react';
+import { ArrowLeft, Edit3, Save, X, CheckCircle, XCircle, Clock, Trash2, Calendar, User, FileText, Code, Settings, LogOut, Server, Database, Power } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ import { useEnvironment } from '@/contexts/EnvironmentContext';
 import { useAuth } from '@/contexts/AuthContext';
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog';
 import SubmissionJsonEditor from '@/components/SubmissionJsonEditor';
+import ApplicationsManager from '@/components/ApplicationsManager';
 
 // Backend submission interface to match the API response
 interface BackendSubmission {
@@ -270,7 +271,7 @@ const Admin = () => {
 
   const handleLogout = () => {
     logout();
-    navigate('/home');
+    // Navigation is now handled in the AuthContext logout method
   };
 
   const getStatusIcon = (decision: string) => {
@@ -344,24 +345,28 @@ const Admin = () => {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-4' : 'grid-cols-1'} max-w-md`}>
+          <TabsList className={`grid w-full ${isAdmin ? 'grid-cols-5' : 'grid-cols-1'} max-w-lg`}>
             <TabsTrigger value="submissions" className="gap-2">
               <FileText className="w-4 h-4" />
               Submissions
             </TabsTrigger>
             {isAdmin && (
               <>
+                <TabsTrigger value="applications" className="gap-2">
+                  <Power className="w-4 h-4" />
+                  Applications
+                </TabsTrigger>
                 <TabsTrigger value="back" className="gap-2">
                   <Server className="w-4 h-4" />
-                  Back
+                  Backend
                 </TabsTrigger>
                 <TabsTrigger value="dev" className="gap-2">
                   <Database className="w-4 h-4" />
-                  Dev
+                  Dev Tools
                 </TabsTrigger>
                 <TabsTrigger value="config" className="gap-2">
                   <Code className="w-4 h-4" />
-                  Configuration
+                  Config
                 </TabsTrigger>
               </>
             )}  
@@ -461,6 +466,10 @@ const Admin = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="applications">
+            <ApplicationsManager />
           </TabsContent>
 
           {isAdmin && (
